@@ -15,9 +15,9 @@ import com.example.danew.presentation.profile.MyPageScreen
 fun BottomNavGraph(navController: NavHostController, modifier: Modifier = Modifier) {
     NavHost(navController, startDestination = BottomNavItem.Home.route, modifier) {
         composable(BottomNavItem.Home.route) { HomeScreen() }
-        composable(BottomNavItem.News.route) { CategoryScreen() }
-        composable(BottomNavItem.Bookmark.route) { DiaryScreen() }
-        composable(BottomNavItem.History.route) { BookmarkScreen() }
+        composable(BottomNavItem.Category.route) { CategoryScreen() }
+        composable(BottomNavItem.Diary.route) { DiaryScreen() }
+        composable(BottomNavItem.Bookmark.route) { BookmarkScreen() }
         composable(BottomNavItem.My.route) { MyPageScreen() }
     }
 }

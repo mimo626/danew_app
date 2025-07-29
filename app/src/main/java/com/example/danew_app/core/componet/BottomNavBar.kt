@@ -1,10 +1,13 @@
 package com.example.danew.core.componet
 
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.danew.core.navigation.BottomNavItem
 
@@ -12,9 +15,9 @@ import com.example.danew.core.navigation.BottomNavItem
 fun BottomNavBar(navController: NavHostController) {
     val items = listOf(
         BottomNavItem.Home,
-        BottomNavItem.News,
+        BottomNavItem.Category,
+        BottomNavItem.Diary,
         BottomNavItem.Bookmark,
-        BottomNavItem.History,
         BottomNavItem.My
     )
     NavigationBar {
@@ -22,7 +25,7 @@ fun BottomNavBar(navController: NavHostController) {
             NavigationBarItem(
                 selected = navController.currentDestination?.route == item.route,
                 onClick = { navController.navigate(item.route) },
-                icon = { Icon(item.icon, contentDescription = item.title) },
+                icon = { Icon(item.icon(), contentDescription = item.title, modifier = Modifier.size(26.dp)) },
                 label = { Text(item.title) }
             )
         }
