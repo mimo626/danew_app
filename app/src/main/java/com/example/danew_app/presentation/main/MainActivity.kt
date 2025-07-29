@@ -1,4 +1,4 @@
-package com.example.danew_app
+package com.example.danew_app.presentation.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,6 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.example.danew.core.componet.BottomNavBar
+import com.example.danew.core.navigation.BottomNavGraph
 import com.example.danew_app.ui.theme.Danew_appTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,14 +21,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Danew_appTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+            DanewApp()
         }
     }
 }
@@ -43,5 +39,15 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 fun GreetingPreview() {
     Danew_appTheme {
         Greeting("Android")
+    }
+}
+
+@Composable
+fun DanewApp() {
+    val navController = rememberNavController()
+    Scaffold(
+        bottomBar = { BottomNavBar(navController) }
+    ) { innerPadding ->
+        BottomNavGraph(navController = navController, modifier = Modifier.padding(innerPadding))
     }
 }
