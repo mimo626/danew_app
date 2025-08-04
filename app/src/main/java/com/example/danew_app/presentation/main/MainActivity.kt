@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.danew.core.componet.BottomNavBar
 import com.example.danew.core.navigation.BottomNavGraph
 import com.example.danew_app.ui.theme.Danew_appTheme
+import com.example.myapp.ui.theme.MyAppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,22 +24,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             DanewApp()
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Danew_appTheme {
-        Greeting("Android")
     }
 }
 
