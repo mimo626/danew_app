@@ -1,4 +1,4 @@
-//package com.example.danew.data.repository.retrofit;
+package com.example.danew_app.data.remote//package com.example.danew.data.repository.retrofit;
 //
 //import com.example.danew.domain.model.User;
 //
