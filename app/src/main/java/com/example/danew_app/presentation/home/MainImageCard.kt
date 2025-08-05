@@ -14,13 +14,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import com.example.danew_app.domain.model.NewsModel
 
 //홈의 첫번째 이미지 카드
 @Composable
-fun MainImageCard(imageUrl: String, title: String) {
+fun MainImageCard(newsModel: NewsModel) {
     Column {
         Image(
-            painter = rememberAsyncImagePainter(imageUrl),
+            painter = rememberAsyncImagePainter(newsModel.imageUrl),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
@@ -28,7 +29,7 @@ fun MainImageCard(imageUrl: String, title: String) {
             contentScale = ContentScale.Crop
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Text(title, fontWeight = FontWeight.Bold, fontSize = 16.sp,
+        Text(newsModel.title, fontWeight = FontWeight.Bold, fontSize = 16.sp,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
     }
