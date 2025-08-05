@@ -14,11 +14,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.danew.presentation.home.Article
+import com.example.danew_app.domain.model.NewsModel
 
 // 현재 Top 뉴스 위젯
 @Composable
-fun NowTopNews(sectionTitle:String, articles: List<Article>){
+fun NowTopNews(sectionTitle:String, newsList: List<NewsModel>){
     Column (modifier = Modifier.padding(horizontal = 16.dp)){
         Row(
             modifier = Modifier
@@ -29,12 +29,12 @@ fun NowTopNews(sectionTitle:String, articles: List<Article>){
             Text(sectionTitle, fontWeight = FontWeight.Bold, fontSize = 16.sp)
             Text("전체보기", color = Color.Blue, fontSize = 12.sp)
         }
-        articles.get(0).thumbnailUrl?.let { TopImageCard(
-            imageUrl = it, title =  articles.get(0).title)
+        newsList.get(0).imageUrl?.let {
+            TopImageCard(newsList.get(0))
         }
         Spacer(modifier = Modifier.height(12.dp))
         Row {
-            articles.forEach {
+            newsList.forEach {
                 NewsCard(it)
             }
         }
