@@ -5,11 +5,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.danew_app.data.remote.RetrofitInstance
-import com.example.danew_app.domain.model.NewsModel
+import com.example.danew_app.data.entity.NewsEntity
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.setValue
+import com.example.danew_app.domain.model.NewsModel
+import com.example.danew_app.domain.usecase.GetNewsByCategoryUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class NewsViewModel : ViewModel() {
+@HiltViewModel
+class NewsViewModel @Inject constructor(
+    private val getNewsByCategoryUseCase: GetNewsByCategoryUseCase
+) : ViewModel() {
+
     var newsList by mutableStateOf<List<NewsModel>>(emptyList())
         private set
 
@@ -24,14 +32,13 @@ class NewsViewModel : ViewModel() {
             isLoading = true
             errorMessage = null
             try {
-                val response = RetrofitInstance.newsApi.fetchNewsByCategory(category = category)
-                newsList = response.results
-                println("카테고리별 뉴스 가져오기 성공: ${newsList}")
+                newsList = getNewsByCategoryUseCase(category)
             } catch (e: Exception) {
-                errorMessage = "카테고리별 뉴스 가져오기 실패: ${e.localizedMessage}"
+                errorMessage = e.localizedMessage
             } finally {
                 isLoading = false
             }
         }
     }
 }
+
