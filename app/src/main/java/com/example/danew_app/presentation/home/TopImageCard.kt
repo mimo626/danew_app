@@ -15,13 +15,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import com.example.danew_app.domain.model.NewsModel
 
 //현재 Top뉴스의 첫번째 카드
 @Composable
-fun TopImageCard(imageUrl: String, title: String) {
+fun TopImageCard(newsModel: NewsModel) {
     Column {
         Image(
-            painter = rememberAsyncImagePainter(imageUrl),
+            painter = rememberAsyncImagePainter(newsModel.imageUrl),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
@@ -30,6 +31,6 @@ fun TopImageCard(imageUrl: String, title: String) {
             contentScale = ContentScale.Crop
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Text(title, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+        Text(newsModel.title, fontWeight = FontWeight.Bold, fontSize = 16.sp)
     }
 }
