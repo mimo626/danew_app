@@ -1,10 +1,10 @@
-package com.example.danew_app.domain.model
+package com.example.danew_app.data.entity
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NewsModel(
+data class NewsEntity(
     @SerialName("article_id") val articleId: String? = null,
     val title: String? = null,
     val link: String? = null,
