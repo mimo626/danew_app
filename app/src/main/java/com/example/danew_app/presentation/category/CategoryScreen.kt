@@ -31,7 +31,7 @@ import com.example.danew_app.domain.model.NewsModel
 import com.example.danew_app.presentation.category.NewsCategory
 import androidx.hilt.navigation.compose.hiltViewModel
 
-val newsCategoryKr = NewsCategory.categoryEnToKr.keys.toList()
+val newsCategoryKr = NewsCategory.categoryKrToEn.keys.toList()
 
 @Composable
 fun CategoryScreen(viewModel: NewsViewModel = hiltViewModel()) {
