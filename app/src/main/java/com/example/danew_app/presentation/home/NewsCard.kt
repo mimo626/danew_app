@@ -16,12 +16,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.danew.presentation.home.Article
 import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.domain.model.NewsModel
 
 // 가로로 뉴스 카드(제목만)
 @Composable
-fun NewsCard(article: Article) {
+fun NewsCard(newsModel: NewsModel) {
     Box(
         modifier = Modifier
             .height(100.dp)
@@ -31,9 +31,10 @@ fun NewsCard(article: Article) {
         contentAlignment = Alignment.CenterStart
     ) {
         Column (modifier = Modifier.padding(horizontal = 16.dp)){
-            Text(article.title, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            Text(newsModel.title, maxLines = 2, overflow = TextOverflow.Ellipsis)
             Spacer(modifier = Modifier.height(8.dp))
-            Text(article.timeAgo, color = Color.Gray, fontSize = 12.sp)
+            // Todo 시간으로 계산
+            Text(newsModel.pubDate, color = Color.Gray, fontSize = 12.sp)
         }
     }
 }
