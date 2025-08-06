@@ -37,6 +37,7 @@ import com.example.danew_app.presentation.category.NewsCategory
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.presentation.home.MainTopAppBar
+import com.example.danew_app.presentation.home.NewsItem
 
 val newsCategoryKr = NewsCategory.categoryKrToEn.keys.toList()
 
@@ -112,18 +113,9 @@ fun CategoryScreen(viewModel: NewsViewModel = hiltViewModel()) {
             LazyColumn {
                 items(newsList) { news ->
                     val category = newsCategoryKr[selectedTabIndex]
-                    NewsItem(news = news, category = category)
+                    NewsItem(newsModel = news)
                 }
             }
         }
-    }
-}
-
-@Composable
-fun NewsItem(news: NewsModel, category: String) {
-    Column(modifier = Modifier.padding(8.dp)) {
-        Text(news.title, fontWeight = FontWeight.Bold)
-        Text(news.description, maxLines = 1, overflow = TextOverflow.Ellipsis)
-        Text(news.pubDate, style = MaterialTheme.typography.bodySmall)
     }
 }
