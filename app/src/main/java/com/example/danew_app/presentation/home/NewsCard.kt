@@ -39,7 +39,7 @@ fun NewsCard(newsModel: NewsModel) {
             Text(newsModel.title, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Spacer(modifier = Modifier.height(8.dp))
             // Todo 시간으로 계산
-            Text(newsModel.pubDate, color = Color.Gray, fontSize = 12.sp)
+            Text((newsModel.pubDate), color = Color.Gray, fontSize = 12.sp)
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.danew_app.presentation.home
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,17 +24,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.domain.model.NewsModel
 
 // 가로로 뉴스 카드(작은 사진)
 @Composable
 fun NewsItem(newsModel: NewsModel) {
+    //TODO 이미지 null인 거 해결
+    Log.e("ImageLoad", "Failed to load: ${newsModel.imageUrl}")
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -49,12 +56,22 @@ fun NewsItem(newsModel: NewsModel) {
             Text(newsModel.title, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Spacer(modifier = Modifier.height(2.dp))
             // Todo 시간으로 계산
-            Text(newsModel.pubDate, color = Color.Gray, fontSize = 12.sp)
+            Text((newsModel.pubDate), color = Color.Gray, fontSize = 12.sp)
         }
         Spacer(modifier = Modifier.width(16.dp))
         if(newsModel.imageUrl != null) {
-            Image(
-                painter = rememberAsyncImagePainter(newsModel.imageUrl),
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(newsModel.imageUrl)
+                    .listener(
+                        onError = { request, result ->
+                            Log.e("ImageLoad", "Failed to load: ${newsModel.imageUrl}")
+                        },
+                        onSuccess = { request, result ->
+                            Log.d("ImageLoad", "Success: ${newsModel.imageUrl}")
+                        }
+                    )
+                    .build(),
                 contentDescription = null,
                 modifier = Modifier
                     .height(60.dp)
