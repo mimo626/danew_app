@@ -2,6 +2,7 @@ package com.example.danew.presentation.diary
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -17,16 +18,23 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,28 +42,43 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.example.danew_app.core.gloabals.formatDateToString
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.presentation.home.MainTopAppBar
+import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 
 fun Int.isLeapYear(): Boolean {
     return (this % 4 == 0 && this % 100 != 0) || (this % 400 == 0)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DiaryScreen() {
-    var selectedTab by remember { mutableStateOf("일간") }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val scope = rememberCoroutineScope()
+    var showSheet by remember { mutableStateOf(false) }
     val today = remember { LocalDate.now() }
     var selectedDate by remember { mutableStateOf(today) }
-    var selectedMonth by remember { mutableStateOf(today.month.name) }
     val isLeap = selectedDate.year.isLeapYear()
     val lastDayOfMonth = (selectedDate.month).length(isLeap)
     val days = (1..lastDayOfMonth).toList()
+
+    val monthsList = remember {
+        val current = YearMonth.now()
+        val list = mutableListOf<YearMonth>()
+        for (i in 0..12) { // 작년까지 포함한 13개월
+            list.add(current.minusMonths(i.toLong()))
+        }
+        list
+    }
 
     Scaffold(
         containerColor = ColorsLight.whiteColor,
@@ -71,8 +94,56 @@ fun DiaryScreen() {
                 .padding(horizontal = 16.dp)
         ) {
             Spacer(modifier = Modifier.height(16.dp))
-            // Header
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            // 바텀시트
+            if (showSheet) {
+                ModalBottomSheet(
+                    containerColor = ColorsLight.whiteColor,
+                    onDismissRequest = { showSheet = false },
+                    sheetState = sheetState,
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp)
+                            .height(300.dp)
+                            .verticalScroll(rememberScrollState()),
+
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "월 선택하기",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier.padding(bottom = 12.dp)
+                        )
+
+                        monthsList.forEach { month ->
+                            val formatted = month.format(DateTimeFormatter.ofPattern("yyyy년 M월"))
+                            Text(
+                                text = formatted,
+                                fontSize = 18.sp,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        selectedDate = month.atDay(1)
+                                        showSheet = false
+                                    }
+                                    .padding(vertical = 12.dp, horizontal = 20.dp)
+                            )
+                        }
+                    }
+                }
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .clickable {
+                        showSheet = true
+                    }
+            ) {
                 Text(
                     text = "${selectedDate.monthValue}월",
                     fontSize = 20.sp,
@@ -81,7 +152,6 @@ fun DiaryScreen() {
                 Spacer(modifier = Modifier.width(8.dp))
                 Icon(Icons.Default.ArrowDropDown, contentDescription = "월 선택")
             }
-
             Spacer(modifier = Modifier.height(8.dp))
 
 
@@ -118,7 +188,7 @@ fun DiaryScreen() {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // 날짜 및 선
+            // 날짜
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(formatDateToString(selectedDate), fontSize = 16.sp)
                 Spacer(modifier = Modifier.width(8.dp))
