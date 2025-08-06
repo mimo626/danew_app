@@ -87,7 +87,7 @@ fun DiaryScreen() {
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 20.dp)
         ) {
             Spacer(modifier = Modifier.height(16.dp))
             // 바텀시트
@@ -135,23 +135,19 @@ fun DiaryScreen() {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .padding(16.dp)
                     .clickable {
                         showSheet = true
                     }
             ) {
                 Text(
                     text = "${selectedDate.monthValue}월",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Icon(Icons.Default.ArrowDropDown, contentDescription = "월 선택")
             }
-            Spacer(modifier = Modifier.height(8.dp))
-
-
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             // Horizontal Day Selector (1~31)
             LazyRow {
