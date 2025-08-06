@@ -32,7 +32,7 @@ fun MainTopAppBar(title:String, icon: ImageVector, isHome:Boolean) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp) // 원하는 높이 설정
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 20.dp),
             contentAlignment = Alignment.CenterStart
         ) {
             Row(
@@ -54,6 +54,7 @@ fun MainTopAppBar(title:String, icon: ImageVector, isHome:Boolean) {
                     Text(
                         title,
                         color = ColorsLight.blackColor,
+                        fontWeight = FontWeight.SemiBold,
                         fontSize = 18.sp,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
