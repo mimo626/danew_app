@@ -12,6 +12,7 @@ fun NewsEntity.toDomain(): NewsModel {
         sourceName = this.sourceName ?: "알 수 없음",
         pubDate = this.pubDate,
         category = this.category,
-        link = this.link
+        link = this.link,
+        creator = this.creator,
     )
 }
