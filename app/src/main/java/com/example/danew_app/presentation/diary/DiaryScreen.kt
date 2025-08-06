@@ -1,5 +1,7 @@
 package com.example.danew.presentation.diary
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -44,6 +46,7 @@ fun Int.isLeapYear(): Boolean {
     return (this % 4 == 0 && this % 100 != 0) || (this % 400 == 0)
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DiaryScreen() {
     var selectedTab by remember { mutableStateOf("일간") }
