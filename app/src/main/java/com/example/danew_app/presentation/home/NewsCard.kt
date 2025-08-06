@@ -25,13 +25,12 @@ import com.example.danew_app.domain.model.NewsModel
 fun NewsCard(newsModel: NewsModel) {
     Box(
         modifier = Modifier
-            .height(100.dp)
-            .width(200.dp)
+            .width(220.dp)
             .padding(end = 16.dp)
             .background(ColorsLight.lightGrayColor, shape = RoundedCornerShape(4.dp)),
         contentAlignment = Alignment.CenterStart
     ) {
-        Column (modifier = Modifier.padding(horizontal = 16.dp)){
+        Column (modifier = Modifier.padding(16.dp)){
             Text(newsModel.title, maxLines = 1, fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
                 overflow = TextOverflow.Ellipsis
