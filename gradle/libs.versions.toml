@@ -21,6 +21,7 @@ hilt-navigation = "1.0.0"
 storage = "1.5.0"
 calendar = "1.1.1"
 datetime = "0.6.0"
+protoliteWellKnownTypes = "18.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -50,6 +51,7 @@ hilt-navigation = {group = "androidx.hilt", name = "hilt-navigation-compose", ve
 androidx-storage = { group = "androidx.test.services", name = "storage", version.ref = "storage" }
 calendar = { group = "com.maxkeppeler.sheets-compose-dialogs", name = "calendar", version.ref = "calendar" }
 datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
+protolite-well-known-types = { group = "com.google.firebase", name = "protolite-well-known-types", version.ref = "protoliteWellKnownTypes" }
 
 
 [plugins]
