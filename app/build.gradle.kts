@@ -77,5 +77,7 @@ dependencies {
     implementation(libs.coroutines)
     implementation(libs.hilt)
     implementation(libs.hilt.navigation)
+    implementation(libs.calendar)
+    implementation(libs.datetime)
     kapt(libs.hilt.compiler)
 }
