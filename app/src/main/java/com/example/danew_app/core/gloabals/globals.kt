@@ -1,6 +1,7 @@
 package com.example.danew_app.core.gloabals
 
 import com.example.danew_app.domain.model.NewsModel
+import kotlinx.datetime.LocalDateTime
 
 class Globals {
     companion object {
@@ -13,7 +14,8 @@ class Globals {
                 sourceName = "TechNews",
                 pubDate = "2025-08-01",
                 category = listOf("Technology", "Education"),
-                link = "https://example.com/article1"
+                link = "https://example.com/article1",
+                creator = listOf("강민주 기자")
             ),
             NewsModel(
                 id = "2",
@@ -23,7 +25,8 @@ class Globals {
                 sourceName = "EcoDaily",
                 pubDate = "2025-08-02",
                 category = listOf("Environment", "Economy"),
-                link = "https://example.com/article2"
+                link = "https://example.com/article2",
+                creator = listOf("강민주 기자")
             ),
             NewsModel(
                 id = "3",
@@ -33,7 +36,8 @@ class Globals {
                 sourceName = "HealthLine",
                 pubDate = "2025-08-03",
                 category = listOf("Health", "Society"),
-                link = "https://example.com/article3"
+                link = "https://example.com/article3",
+                creator = listOf("강민주 기자")
             ),
             NewsModel(
                 id = "4",
@@ -43,7 +47,8 @@ class Globals {
                 sourceName = "SpaceNow",
                 pubDate = "2025-08-04",
                 category = listOf("Science", "Technology"),
-                link = "https://example.com/article4"
+                link = "https://example.com/article4",
+                creator = listOf("강민주 기자")
             ),
             NewsModel(
                 id = "5",
@@ -53,7 +58,9 @@ class Globals {
                 sourceName = "BizReport",
                 pubDate = "2025-08-05",
                 category = listOf("Business", "Startup"),
-                link = "https://example.com/article5"
+                link = "https://example.com/article5",
+                creator = listOf("강민주 기자")
+
             ),
             NewsModel(
                 id = "6",
@@ -63,7 +70,9 @@ class Globals {
                 sourceName = "AutoWorld",
                 pubDate = "2025-08-06",
                 category = listOf("Automobile", "Technology"),
-                link = "https://example.com/article6"
+                link = "https://example.com/article6",
+                creator = listOf("강민주 기자")
+
             ),
             NewsModel(
                 id = "7",
@@ -73,7 +82,9 @@ class Globals {
                 sourceName = "FutureScope",
                 pubDate = "2025-08-07",
                 category = listOf("Tech", "Society"),
-                link = "https://example.com/article7"
+                link = "https://example.com/article7",
+                creator = listOf("강민주 기자")
+
             ),
             NewsModel(
                 id = "8",
@@ -83,7 +94,8 @@ class Globals {
                 sourceName = "CultureToday",
                 pubDate = "2025-08-08",
                 category = listOf("Culture", "Entertainment"),
-                link = "https://example.com/article8"
+                link = "https://example.com/article8",
+                creator = listOf("강민주 기자")
             )
         )
     }
