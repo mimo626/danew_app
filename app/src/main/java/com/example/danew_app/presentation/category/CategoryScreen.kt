@@ -1,5 +1,7 @@
 package com.example.danew.presentation.category
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.CircularProgressIndicator
@@ -70,10 +73,13 @@ fun CategoryScreen(viewModel: NewsViewModel = hiltViewModel()) {
                 selectedTabIndex = selectedTabIndex,
                 edgePadding = 0.dp,
                 indicator = { tabPositions ->
-                    TabRowDefaults.Indicator(
-                        Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex])
+                    val currentTabPosition = tabPositions[selectedTabIndex]
+                    Box(
+                        Modifier.tabIndicatorOffset(currentTabPosition)
+                            .padding(horizontal = 16.dp)
+                            .height(2.dp)
+                            .background(ColorsLight.darkGrayColor, RoundedCornerShape(1.dp))
                     )
-
                 }
             ) {
                 newsCategoryKr.forEachIndexed { index, category ->
