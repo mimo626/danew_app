@@ -66,7 +66,7 @@ fun CategoryScreen(viewModel: NewsViewModel = hiltViewModel()) {
         }
     ){
         padding ->
-        Column(modifier = Modifier.fillMaxSize().padding(padding).padding(20.dp)) {
+        Column(modifier = Modifier.fillMaxSize().padding(padding)) {
             // 탭 UI
             ScrollableTabRow(
                 containerColor = ColorsLight.whiteColor,
@@ -99,22 +99,32 @@ fun CategoryScreen(viewModel: NewsViewModel = hiltViewModel()) {
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // 로딩
-            if (isLoading) {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-            }
+            when {
+                // 로딩
+                isLoading ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.align(Alignment.Center),
+                            color = ColorsLight.grayColor
+                        )
+                    }
+                errorMessage != null ->
+                    // 에러 메시지
+                    errorMessage?.let {
+                        Text("오류: $it", color = Color.Red)
+                    }
+                else ->
+                    // 뉴스 리스트
+                    LazyColumn (modifier = Modifier.padding(horizontal = 20.dp)){
+                        items(newsList) { news ->
+                            val category = newsCategoryKr[selectedTabIndex]
+                            NewsItem(newsModel = news)
+                        }
+                    }
 
-            // 에러 메시지
-            errorMessage?.let {
-                Text("오류: $it", color = Color.Red)
-            }
-
-            // 뉴스 리스트
-            LazyColumn {
-                items(newsList) { news ->
-                    val category = newsCategoryKr[selectedTabIndex]
-                    NewsItem(newsModel = news)
-                }
             }
         }
     }
