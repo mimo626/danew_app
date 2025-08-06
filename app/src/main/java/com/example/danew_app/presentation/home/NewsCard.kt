@@ -33,7 +33,7 @@ fun NewsCard(newsModel: NewsModel) {
     ) {
         Column (modifier = Modifier.padding(horizontal = 16.dp)){
             Text(newsModel.title, maxLines = 1, fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
+                fontSize = 14.sp,
                 overflow = TextOverflow.Ellipsis
             )
             Spacer(modifier = Modifier.height(4.dp))

@@ -29,7 +29,7 @@ fun MainImageCard(newsModel: NewsModel) {
             contentScale = ContentScale.Crop
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Text(newsModel.title, fontWeight = FontWeight.Bold, fontSize = 16.sp,
+        Text(newsModel.title, fontWeight = FontWeight.Bold, fontSize = 14.sp,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
     }

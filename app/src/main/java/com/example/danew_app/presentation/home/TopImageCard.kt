@@ -52,6 +52,6 @@ fun TopImageCard(newsModel: NewsModel) {
         }
 
         Spacer(modifier = Modifier.height(8.dp))
-        Text(newsModel.title, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+        Text(newsModel.title, fontWeight = FontWeight.Bold,)
     }
 }

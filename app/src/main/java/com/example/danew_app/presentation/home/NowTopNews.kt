@@ -26,7 +26,7 @@ fun NowTopNews(sectionTitle:String, newsList: List<NewsModel>){
                 .padding(vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(sectionTitle, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Text(sectionTitle, fontWeight = FontWeight.Bold, fontSize = 16.sp)
             Text("전체보기", color = Color.Blue, fontSize = 12.sp)
         }
         newsList.get(0).imageUrl?.let {
