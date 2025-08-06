@@ -7,6 +7,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -29,14 +34,16 @@ fun NowTopNews(sectionTitle:String, newsList: List<NewsModel>){
             Text(sectionTitle, fontWeight = FontWeight.Bold, fontSize = 16.sp)
             Text("전체보기", color = Color.Blue, fontSize = 12.sp)
         }
-        newsList.get(0).imageUrl?.let {
-            TopImageCard(newsList.get(0))
+        Spacer(modifier = Modifier.height(12.dp))
+
+        LazyRow {
+            items(newsList) { // 임시로 2개 뉴스 카드
+                NewsCard(newsModel = it)
+            }
         }
         Spacer(modifier = Modifier.height(12.dp))
-        Row {
-            newsList.forEach {
-                NewsCard(it)
-            }
+        newsList.get(0).imageUrl?.let {
+            TopImageCard(newsList.get(0))
         }
     }
 }
