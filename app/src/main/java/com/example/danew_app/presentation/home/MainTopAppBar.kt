@@ -1,5 +1,6 @@
 package com.example.danew_app.presentation.home
 
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -17,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -25,7 +27,7 @@ import com.example.danew_app.core.theme.ColorsLight
 
 // 앱바
 @Composable
-fun MainTopAppBar() {
+fun MainTopAppBar(title:String, icon: ImageVector, isHome:Boolean) {
     Surface(
         color = ColorsLight.whiteColor,
     ) {
@@ -41,18 +43,28 @@ fun MainTopAppBar() {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    "DANEW",
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Green,
-                    fontSize = 20.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-
+                if (isHome){
+                    Text(
+                        title,
+                        fontWeight = FontWeight.Bold,
+                        color = ColorsLight.primaryColor,
+                        fontSize = 22.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+                else {
+                    Text(
+                        title,
+                        color = ColorsLight.blackColor,
+                        fontSize = 18.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
                 IconButton(onClick = { /* do something */ }) {
                     Icon(
-                        imageVector = Icons.Default.Notifications,
+                        imageVector = icon,
                         contentDescription = "Localized description"
                     )
                 }
