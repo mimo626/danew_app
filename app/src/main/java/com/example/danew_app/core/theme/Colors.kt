@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 
 object ColorsLight {
     val primaryColor = Color(0xFF0B942D)
-    val secondaryColor = Color(0xFFD1D2B0)
+    val secondaryColor = Color(0xFFDFF0E3)
     val lightGrayColor = Color(0xFFEAEAEA)
     val darkGrayColor = Color(0xFF313131)
     val grayColor = Color(0xFF676767)
