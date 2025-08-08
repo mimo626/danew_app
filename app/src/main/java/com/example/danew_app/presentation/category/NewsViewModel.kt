@@ -32,7 +32,7 @@ class NewsViewModel @Inject constructor(
             isLoading = true
             errorMessage = null
             try {
-                newsList = getNewsByCategoryUseCase(category)
+                newsList = getNewsByCategoryUseCase.invoke(category)
             } catch (e: Exception) {
                 errorMessage = e.localizedMessage
             } finally {
