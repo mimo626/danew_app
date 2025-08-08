@@ -4,8 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.danew_app.data.remote.RetrofitInstance
-import com.example.danew_app.data.entity.NewsEntity
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.setValue
 import com.example.danew_app.domain.model.NewsModel
