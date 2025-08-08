@@ -1,5 +1,6 @@
 package com.example.danew_app.presentation.home
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,8 +24,13 @@ import com.example.danew_app.domain.model.NewsModel
 
 // 현재 Top 뉴스 위젯
 @Composable
-fun NowTopNews(sectionTitle:String, newsList: List<NewsModel>){
-    Column (modifier = Modifier.padding(horizontal = 16.dp)){
+fun NowTopNews(sectionTitle: String, newsList: List<NewsModel>) {
+    // imageUrl 있는 첫 번째 뉴스
+    val topNews = newsList.firstOrNull { !it.imageUrl.isNullOrBlank() }
+    // 나머지 뉴스들 (topNews 제외)
+    val otherNews = newsList.filter { it != topNews }
+
+    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -34,16 +40,21 @@ fun NowTopNews(sectionTitle:String, newsList: List<NewsModel>){
             Text(sectionTitle, fontWeight = FontWeight.Bold, fontSize = 16.sp)
             Text("전체보기", color = Color.Blue, fontSize = 12.sp)
         }
+
         Spacer(modifier = Modifier.height(12.dp))
 
+        // 나머지 뉴스 중 최대 3개 표시
         LazyRow {
-            items(newsList) { // 임시로 2개 뉴스 카드
-                NewsCard(newsModel = it)
+            items(otherNews.take(3)) { news ->
+                NewsCard(newsModel = news)
             }
         }
+
         Spacer(modifier = Modifier.height(12.dp))
-        newsList.get(0).imageUrl?.let {
-            TopImageCard(newsList.get(0))
+
+        // 이미지 있는 뉴스가 있으면 TopImageCard로 표시
+        topNews?.let {
+            TopImageCard(it)
         }
     }
 }
