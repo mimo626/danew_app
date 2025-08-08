@@ -10,8 +10,8 @@ data class NewsEntity(
     val creator: List<String>? = emptyList(),
     val description: String? = null,
     val content: String? = null,
-    @SerialName("pub_date") val pub_date: String,  // ISO8601 형식 문자열
-    @SerialName("pub_date_tz") val pub_date_tz: String? = null,
+    @SerialName("pub_date") val pubDate: String,  // ISO8601 형식 문자열
+    @SerialName("pub_date_tz") val pubDateTz: String? = null,
     @SerialName("image_url") val image_url: String? = null,
     @SerialName("video_url") val video_url: String? = null,
     @SerialName("source_id") val source_id: String? = null,
