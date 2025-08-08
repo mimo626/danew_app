@@ -10,6 +10,7 @@ import com.example.danew.presentation.category.CategoryScreen
 import com.example.danew.presentation.diary.DiaryScreen
 import com.example.danew.presentation.home.HomeScreen
 import com.example.danew.presentation.profile.MyPageScreen
+import com.example.danew_app.presentation.home.NewsDetailScreen
 
 @Composable
 fun BottomNavGraph(navController: NavHostController, modifier: Modifier = Modifier) {
@@ -19,5 +20,7 @@ fun BottomNavGraph(navController: NavHostController, modifier: Modifier = Modifi
         composable(BottomNavItem.Diary.route) { DiaryScreen() }
         composable(BottomNavItem.Bookmark.route) { BookmarkScreen() }
         composable(BottomNavItem.My.route) { MyPageScreen() }
+        composable("details") { NewsDetailScreen() }
+
     }
 }
