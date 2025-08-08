@@ -36,8 +36,6 @@ import com.example.danew_app.domain.model.NewsModel
 // 가로로 뉴스 카드(작은 사진)
 @Composable
 fun NewsItem(newsModel: NewsModel) {
-    //TODO 이미지 null인 거 해결
-    Log.e("ImageLoad", "Failed to load: ${newsModel.imageUrl}")
 
     Row(
         modifier = Modifier
