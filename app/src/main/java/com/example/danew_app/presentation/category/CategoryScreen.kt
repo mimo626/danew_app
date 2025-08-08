@@ -7,13 +7,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
@@ -27,17 +26,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.danew_app.presentation.category.NewsViewModel
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
-import com.example.danew_app.domain.model.NewsModel
 import com.example.danew_app.presentation.category.NewsCategory
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.presentation.home.MainTopAppBar
-import com.example.danew_app.presentation.home.NewsItem
+import com.example.danew_app.presentation.home.NewsList
+import com.example.danew_app.presentation.home.NowTopNews
 
 val newsCategoryKr = NewsCategory.categoryKrToEn.keys.toList()
 
@@ -66,7 +64,10 @@ fun CategoryScreen(viewModel: NewsViewModel = hiltViewModel()) {
         }
     ){
         padding ->
-        Column(modifier = Modifier.fillMaxSize().padding(padding)) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(padding)
+            .verticalScroll(rememberScrollState())) {
             // 탭 UI
             ScrollableTabRow(
                 containerColor = ColorsLight.whiteColor,
@@ -75,7 +76,8 @@ fun CategoryScreen(viewModel: NewsViewModel = hiltViewModel()) {
                 indicator = { tabPositions ->
                     val currentTabPosition = tabPositions[selectedTabIndex]
                     Box(
-                        Modifier.tabIndicatorOffset(currentTabPosition)
+                        Modifier
+                            .tabIndicatorOffset(currentTabPosition)
                             .padding(horizontal = 16.dp)
                             .height(2.dp)
                             .background(ColorsLight.darkGrayColor, RoundedCornerShape(1.dp))
@@ -116,15 +118,24 @@ fun CategoryScreen(viewModel: NewsViewModel = hiltViewModel()) {
                     errorMessage?.let {
                         Text("오류: $it", color = Color.Red)
                     }
-                else ->
+                newsList.isNotEmpty() ->
                     // 뉴스 리스트
-                    LazyColumn (modifier = Modifier.padding(horizontal = 20.dp)){
-                        items(newsList) { news ->
-                            val category = newsCategoryKr[selectedTabIndex]
-                            NewsItem(newsModel = news)
-                        }
+                    Column {
+                        NowTopNews(sectionTitle = "실시간 인기 뉴스", newsList = newsList.take(4))
+                        Spacer(Modifier.height(24.dp))
+                        NewsList(sectionTitle = "${newsCategoryKr[selectedTabIndex]} 이슈 뉴스",
+                            newsList = newsList.drop(4).take(4))
                     }
-
+                else -> {
+                    // 데이터가 없을 때
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        Text(
+                            "뉴스 데이터가 없습니다.",
+                            modifier = Modifier.align(Alignment.Center),
+                            color = Color.Gray
+                        )
+                    }
+                }
             }
         }
     }
