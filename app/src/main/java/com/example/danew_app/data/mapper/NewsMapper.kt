@@ -10,7 +10,7 @@ fun NewsEntity.toDomain(): NewsModel {
         description = this.description ?: "설명이 없습니다.",
         imageUrl = this.image_url,
         sourceName = this.source_name ?: "알 수 없음",
-        pubDate = this.pub_date,
+        pubDate = this.pubDate,
         category = this.category,
         link = this.link,
         creator = this.creator,
