@@ -122,7 +122,7 @@ fun CategoryScreen(viewModel: NewsViewModel = hiltViewModel()) {
                     // 뉴스 리스트
                     Column {
                         NowTopNews(sectionTitle = "실시간 인기 뉴스", newsList = newsList.take(4))
-                        Spacer(Modifier.height(24.dp))
+                        Spacer(Modifier.height(36.dp))
                         NewsList(sectionTitle = "${newsCategoryKr[selectedTabIndex]} 이슈 뉴스",
                             newsList = newsList.drop(4).take(4))
                     }
