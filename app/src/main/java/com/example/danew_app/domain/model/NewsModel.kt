@@ -1,8 +1,5 @@
 package com.example.danew_app.domain.model
 
-import kotlinx.datetime.LocalDateTime
-
-
 data class NewsModel(
     val id: String,
     val title: String,
