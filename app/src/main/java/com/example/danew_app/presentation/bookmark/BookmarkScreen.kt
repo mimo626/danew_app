@@ -11,13 +11,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.danew_app.core.gloabals.Globals
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.presentation.home.MainTopAppBar
 import com.example.danew_app.presentation.home.NewsItem
 
 @Composable
-fun BookmarkScreen() {
+fun BookmarkScreen(navController: NavHostController,) {
     Scaffold (
         containerColor = ColorsLight.whiteColor,
         topBar =  {
@@ -32,7 +33,7 @@ fun BookmarkScreen() {
             // 뉴스 리스트
             LazyColumn {
                 items(Globals.dummyNewsList) { news ->
-                    NewsItem(newsModel = news)
+                    NewsItem(newsModel = news, navController = navController)
                 }
             }
         }
