@@ -27,13 +27,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.danew_app.core.gloabals.Globals
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.presentation.home.MainTopAppBar
 import com.example.danew_app.presentation.profile.TodayNews
 
 @Composable
-fun MyPageScreen() {
+fun MyPageScreen(navController: NavHostController,) {
     Scaffold(
         containerColor = ColorsLight.whiteColor,
         topBar = {
@@ -83,7 +84,7 @@ fun MyPageScreen() {
             Spacer(modifier = Modifier.height(16.dp))
 
             // 오늘 본 뉴스
-            TodayNews(sectionTitle = "오늘 본 뉴스", newsList = Globals.dummyNewsList)
+            TodayNews(sectionTitle = "오늘 본 뉴스", newsList = Globals.dummyNewsList, navController)
 
             Spacer(modifier = Modifier.height(24.dp))
             // 설정 항목 리스트
