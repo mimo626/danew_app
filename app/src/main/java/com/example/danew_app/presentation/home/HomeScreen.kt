@@ -42,7 +42,7 @@ fun HomeScreen(navController: NavHostController,) {
             Spacer(modifier = Modifier.height(16.dp))
             SearchBar()
             Spacer(modifier = Modifier.height(24.dp))
-            MainImageCard(Globals.dummyNewsList.get(0))
+            MainImageCard(Globals.dummyNewsList.get(0), navController)
             Spacer(modifier = Modifier.height(32.dp))
             NewsList("민주님을 위한 추천 뉴스", Globals.dummyNewsList, navController)
             Spacer(modifier = Modifier.height(16.dp))
