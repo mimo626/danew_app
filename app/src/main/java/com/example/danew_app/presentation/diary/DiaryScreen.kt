@@ -43,6 +43,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.navigation.NavHostController
 import com.example.danew_app.core.gloabals.formatDateToString
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.presentation.home.MainTopAppBar
@@ -57,7 +58,7 @@ fun Int.isLeapYear(): Boolean {
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DiaryScreen() {
+fun DiaryScreen(navController: NavHostController,) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
     var showSheet by remember { mutableStateOf(false) }
