@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.danew_app.core.theme.ColorsLight
@@ -35,7 +36,7 @@ import com.example.danew_app.domain.model.NewsModel
 
 // 가로로 뉴스 카드(작은 사진)
 @Composable
-fun NewsItem(newsModel: NewsModel) {
+fun NewsItem(newsModel: NewsModel, navController: NavHostController,) {
 
     Row(
         modifier = Modifier
