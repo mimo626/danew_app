@@ -14,4 +14,8 @@ class NewsRepositoryImpl @Inject constructor(
     override suspend fun getNewsByCategory(category: String): List<NewsModel> {
         return api.fetchNewsByCategory(category = category).results.map { it.toDomain() }
     }
+
+    override suspend fun getNewsById(id: String): List<NewsModel> {
+        return api.fetchNewsById(id = id).results.map { it.toDomain() }
+    }
 }
