@@ -19,13 +19,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.domain.model.NewsModel
 
 //현재 Top뉴스의 첫번째 카드
 @Composable
-fun TopImageCard(newsModel: NewsModel) {
+fun TopImageCard(newsModel: NewsModel, navController: NavHostController,) {
     Column {
         if(newsModel.imageUrl != null){
             Image(
