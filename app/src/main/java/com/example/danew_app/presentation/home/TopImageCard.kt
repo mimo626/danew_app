@@ -2,6 +2,7 @@ package com.example.danew_app.presentation.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -27,7 +28,11 @@ import com.example.danew_app.domain.model.NewsModel
 //현재 Top뉴스의 첫번째 카드
 @Composable
 fun TopImageCard(newsModel: NewsModel, navController: NavHostController,) {
-    Column {
+    Column (
+        modifier = Modifier.clickable{
+            navController.navigate("details/${newsModel.id}")
+        }
+    ){
         if(newsModel.imageUrl != null){
             Image(
                 painter = rememberAsyncImagePainter(newsModel.imageUrl),
