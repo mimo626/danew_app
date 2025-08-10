@@ -20,11 +20,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.danew_app.domain.model.NewsModel
 
 // 현재 Top 뉴스 위젯
 @Composable
-fun NowTopNews(sectionTitle: String, newsList: List<NewsModel>) {
+fun NowTopNews(sectionTitle: String, newsList: List<NewsModel>, navController: NavHostController,) {
     // imageUrl 있는 첫 번째 뉴스
     val topNews = newsList.firstOrNull { !it.imageUrl.isNullOrBlank() }
     // 나머지 뉴스들 (topNews 제외)
@@ -46,7 +47,7 @@ fun NowTopNews(sectionTitle: String, newsList: List<NewsModel>) {
         // 나머지 뉴스 중 최대 3개 표시
         LazyRow {
             items(otherNews.take(3)) { news ->
-                NewsCard(newsModel = news)
+                NewsCard(newsModel = news, navController = navController)
             }
         }
 
@@ -54,7 +55,7 @@ fun NowTopNews(sectionTitle: String, newsList: List<NewsModel>) {
 
         // 이미지 있는 뉴스가 있으면 TopImageCard로 표시
         topNews?.let {
-            TopImageCard(it)
+            TopImageCard(it, navController = navController)
         }
     }
 }
