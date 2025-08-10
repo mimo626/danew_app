@@ -11,4 +11,11 @@ interface NewsApi {
         @Query("category") category: String,
         @Query("apikey") apiKey: String = "pub_83780fb69a56440dbbeb6c4373fcb5ebb1535"
     ): NewsResponse
+
+    @GET("latest")
+    suspend fun fetchNewsById(
+        @Query("id") id: String,
+        @Query("apikey") apiKey: String = "pub_83780fb69a56440dbbeb6c4373fcb5ebb1535"
+    ): NewsResponse
+
 }
