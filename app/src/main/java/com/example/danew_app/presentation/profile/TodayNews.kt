@@ -20,11 +20,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.danew_app.domain.model.NewsModel
 
 // 오늘 본 뉴스 위젯
 @Composable
-fun TodayNews(sectionTitle:String, newsList: List<NewsModel>){
+fun TodayNews(sectionTitle:String, newsList: List<NewsModel>, navController: NavHostController){
     Column (modifier = Modifier.padding(horizontal = 16.dp)){
         Row(
             modifier = Modifier
@@ -39,7 +40,7 @@ fun TodayNews(sectionTitle:String, newsList: List<NewsModel>){
 
         LazyRow {
             items(newsList) { // 임시로 2개 뉴스 카드
-                NewsCard(newsModel = it)
+                NewsCard(newsModel = it, navController = navController)
             }
         }
     }
