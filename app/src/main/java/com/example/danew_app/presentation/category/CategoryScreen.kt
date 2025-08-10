@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import com.example.danew_app.presentation.category.NewsCategory
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.presentation.home.MainTopAppBar
 import com.example.danew_app.presentation.home.NewsList
@@ -40,7 +41,7 @@ import com.example.danew_app.presentation.home.NowTopNews
 val newsCategoryKr = NewsCategory.categoryKrToEn.keys.toList()
 
 @Composable
-fun CategoryScreen(viewModel: NewsViewModel = hiltViewModel()) {
+fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = hiltViewModel()) {
     var selectedTabIndex by remember { mutableStateOf(0) }
 
     val newsList = viewModel.newsList
@@ -121,10 +122,10 @@ fun CategoryScreen(viewModel: NewsViewModel = hiltViewModel()) {
                 newsList.isNotEmpty() ->
                     // 뉴스 리스트
                     Column {
-                        NowTopNews(sectionTitle = "실시간 인기 뉴스", newsList = newsList.take(4))
+                        NowTopNews(sectionTitle = "실시간 인기 뉴스", newsList = newsList.take(4), navController = navController)
                         Spacer(Modifier.height(36.dp))
                         NewsList(sectionTitle = "${newsCategoryKr[selectedTabIndex]} 이슈 뉴스",
-                            newsList = newsList.drop(4).take(4))
+                            newsList = newsList.drop(4).take(4), navController = navController)
                     }
                 else -> {
                     // 데이터가 없을 때
