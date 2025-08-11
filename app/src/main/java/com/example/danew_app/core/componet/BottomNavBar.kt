@@ -29,7 +29,11 @@ fun BottomNavBar(navController: NavHostController) {
         items.forEach { item ->
             NavigationBarItem(
                 selected = navController.currentDestination?.route == item.route,
-                onClick = { navController.navigate(item.route) },
+                onClick = { navController.navigate(item.route) {
+                    popUpTo(navController.graph.startDestinationId) { saveState = true }
+                    launchSingleTop = true
+                    restoreState = true
+                } },
                 icon = { Icon(item.icon(), contentDescription = item.title, modifier = Modifier.size(26.dp)) },
                 label = { Text(item.title) }
             )
