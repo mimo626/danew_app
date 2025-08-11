@@ -39,6 +39,8 @@ class NewsViewModel @Inject constructor(
             errorMessage = null
             try {
                 newsList = getNewsByCategoryUseCase.invoke(category)
+                Log.d("NewsViewModel", "newsListByCategory: ${newsList.size}")
+
             } catch (e: Exception) {
                 errorMessage = e.localizedMessage
             } finally {
