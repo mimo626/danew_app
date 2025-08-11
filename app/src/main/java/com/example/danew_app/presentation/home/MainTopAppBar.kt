@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
@@ -19,11 +21,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.danew_app.core.theme.ColorsLight
 
 // 앱바
 @Composable
-fun MainTopAppBar(title:String, icon: ImageVector, isHome:Boolean) {
+fun MainTopAppBar(navController: NavHostController, title :String, icon: ImageVector?, isHome:Boolean, isBackIcon:Boolean = false) {
     Surface(
         color = ColorsLight.whiteColor,
     ) {
@@ -31,7 +34,7 @@ fun MainTopAppBar(title:String, icon: ImageVector, isHome:Boolean) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp) // 원하는 높이 설정
-                .padding(horizontal = 20.dp),
+                .padding(horizontal = 12.dp),
             contentAlignment = Alignment.CenterStart
         ) {
             Row(
@@ -49,21 +52,31 @@ fun MainTopAppBar(title:String, icon: ImageVector, isHome:Boolean) {
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-                else {
-                    Text(
-                        title,
-                        color = ColorsLight.blackColor,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 18.sp,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                if(isBackIcon){
+                    IconButton(
+                        onClick = { navController.popBackStack() }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "뒤로가기"
+                        )
+                    }
                 }
-                IconButton(onClick = { /* do something */ }) {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = "Localized description"
-                    )
+                Text(
+                    title,
+                    color = ColorsLight.blackColor,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 18.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                if(icon != null){
+                    IconButton(onClick = { /* do something */ }) {
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = "Localized description"
+                        )
+                    }
                 }
             }
         }
