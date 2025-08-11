@@ -76,7 +76,7 @@ fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = 
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding).padding(horizontal = 20.dp),
+                .padding(padding),
             state = listState
         ) {
             // 탭
@@ -132,8 +132,8 @@ fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = 
                 }
             }
 
-            // NowTopNews
             if (newsList.isNotEmpty()) {
+                // 패딩을 주고 싶은 영역만 감싸기
                 item {
                     NowTopNews(
                         sectionTitle = "실시간 인기 뉴스",
@@ -141,7 +141,12 @@ fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = 
                         navController = navController
                     )
                     Spacer(Modifier.height(36.dp))
-                    Text("${newsCategoryKr[selectedTabIndex]} 이슈 뉴스", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    Text(
+                        "${newsCategoryKr[selectedTabIndex]} 이슈 뉴스",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(horizontal = 20.dp)
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
