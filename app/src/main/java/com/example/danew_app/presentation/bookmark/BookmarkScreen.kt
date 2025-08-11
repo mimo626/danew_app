@@ -23,6 +23,7 @@ fun BookmarkScreen(navController: NavHostController,) {
         containerColor = ColorsLight.whiteColor,
         topBar =  {
             MainTopAppBar(
+                navController = navController,
                 title = "북마크",
                 icon = Icons.Default.Notifications,
                 isHome = false)
