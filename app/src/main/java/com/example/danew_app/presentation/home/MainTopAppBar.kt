@@ -3,10 +3,12 @@ package com.example.danew_app.presentation.home
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -26,57 +28,54 @@ import com.example.danew_app.core.theme.ColorsLight
 
 // 앱바
 @Composable
-fun MainTopAppBar(navController: NavHostController, title :String, icon: ImageVector?, isHome:Boolean, isBackIcon:Boolean = false) {
-    Surface(
-        color = ColorsLight.whiteColor,
-    ) {
+fun MainTopAppBar(
+    navController: NavHostController,
+    title: String,
+    icon: ImageVector? = null,
+    isHome: Boolean = false,
+    isBackIcon: Boolean = false
+) {
+    Surface(color = ColorsLight.whiteColor) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp) // 원하는 높이 설정
-                .padding(horizontal = 12.dp),
-            contentAlignment = Alignment.CenterStart
+                .height(56.dp)
+                .padding(horizontal = 12.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                if (isHome){
-                    Text(
-                        title,
-                        fontWeight = FontWeight.Bold,
-                        color = ColorsLight.primaryColor,
-                        fontSize = 22.sp,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+            // 왼쪽 끝 - 뒤로가기 버튼
+            if (isBackIcon) {
+                IconButton(
+                    onClick = { navController.popBackStack() },
+                    modifier = Modifier.align(Alignment.CenterStart)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "뒤로가기"
                     )
                 }
-                if(isBackIcon){
-                    IconButton(
-                        onClick = { navController.popBackStack() }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "뒤로가기"
-                        )
-                    }
-                }
-                Text(
-                    title,
-                    color = ColorsLight.blackColor,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 18.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                if(icon != null){
-                    IconButton(onClick = { /* do something */ }) {
-                        Icon(
-                            imageVector = icon,
-                            contentDescription = "Localized description"
-                        )
-                    }
+            }
+
+            // 가운데 - 타이틀
+            Text(
+                text = title,
+                fontWeight = if (isHome) FontWeight.Bold else FontWeight.SemiBold,
+                color = if (isHome) ColorsLight.primaryColor else ColorsLight.blackColor,
+                fontSize = if (isHome) 22.sp else 18.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.align(Alignment.Center)
+            )
+
+            // 오른쪽 끝 - 아이콘
+            if (icon != null) {
+                IconButton(
+                    onClick = { /* do something */ },
+                    modifier = Modifier.align(Alignment.CenterEnd)
+                ) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = "Localized description"
+                    )
                 }
             }
         }
