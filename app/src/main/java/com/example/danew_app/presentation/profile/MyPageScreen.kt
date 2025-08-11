@@ -39,6 +39,7 @@ fun MyPageScreen(navController: NavHostController,) {
         containerColor = ColorsLight.whiteColor,
         topBar = {
             MainTopAppBar(
+                navController = navController,
                 title = "마이페이지",
                 icon = Icons.Default.Settings,
                 isHome = false)
