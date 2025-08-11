@@ -125,7 +125,7 @@ fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = 
                         NowTopNews(sectionTitle = "실시간 인기 뉴스", newsList = newsList.take(4), navController = navController)
                         Spacer(Modifier.height(36.dp))
                         NewsList(sectionTitle = "${newsCategoryKr[selectedTabIndex]} 이슈 뉴스",
-                            newsList = newsList.drop(4).take(4), navController = navController)
+                            newsList = newsList.drop(4), navController = navController)
                     }
                 else -> {
                     // 데이터가 없을 때
