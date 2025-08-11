@@ -33,21 +33,27 @@ class NewsViewModel @Inject constructor(
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
-    fun fetchNewsByCategory(category: String) {
+    fun fetchNewsByCategory(category: String, loadMore: Boolean = false) {
         viewModelScope.launch {
-            isLoading = true
+            if (!loadMore) {
+                isLoading = true
+                newsList = emptyList() // 새로 탭을 눌렀을 때 기존 데이터 초기화
+            }
+
             errorMessage = null
             try {
-                newsList = getNewsByCategoryUseCase.invoke(category)
+                val newList = getNewsByCategoryUseCase.invoke(category, loadMore)
+                newsList = if (loadMore) newsList + newList else newList
+                Log.d("NewsViewModel", "newsListByCategory: ${loadMore}")
                 Log.d("NewsViewModel", "newsListByCategory: ${newsList.size}")
-
             } catch (e: Exception) {
                 errorMessage = e.localizedMessage
             } finally {
-                isLoading = false
+                if (!loadMore) isLoading = false
             }
         }
     }
+
 
     fun fetchNewsById(id: String) {
         viewModelScope.launch {
