@@ -80,7 +80,7 @@ fun DiaryScreen(navController: NavHostController,) {
     Scaffold(
         containerColor = ColorsLight.whiteColor,
         topBar = {
-            MainTopAppBar(title = "기록", icon = Icons.Default.MoreVert,
+            MainTopAppBar(navController = navController, title = "기록", icon = Icons.Default.MoreVert,
                isHome = false)
         },
     ) { padding ->
@@ -195,11 +195,19 @@ fun DiaryScreen(navController: NavHostController,) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Text(
-                "뉴스를 통해 어떤 것을 느끼셨나요?",
-                color = Color.Gray,
-                fontSize = 16.sp
-            )
+            Box (modifier = Modifier
+                    .fillMaxSize()
+                    .clickable{
+                        navController.navigate("diary/${formatDateToString(selectedDate)}")
+                    }
+            ) {
+                Text(
+                    "뉴스를 통해 어떤 것을 느끼셨나요?",
+                    color = Color.Gray,
+                    fontSize = 16.sp
+                )
+            }
+
         }
     }
 }
