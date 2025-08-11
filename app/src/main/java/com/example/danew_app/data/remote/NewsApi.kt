@@ -9,7 +9,8 @@ interface NewsApi {
     suspend fun fetchNewsByCategory(
         @Query("country") country: String = "kr",
         @Query("category") category: String,
-        @Query("apikey") apiKey: String = "pub_83780fb69a56440dbbeb6c4373fcb5ebb1535"
+        @Query("apikey") apiKey: String = "pub_83780fb69a56440dbbeb6c4373fcb5ebb1535",
+        @Query("page") page: String? = null
     ): NewsResponse
 
     @GET("latest")
