@@ -1,5 +1,6 @@
 package com.example.danew_app.data.repository
 
+import android.util.Log
 import com.example.danew_app.data.mapper.toDomain
 import com.example.danew_app.data.remote.NewsApi
 import com.example.danew_app.domain.model.NewsModel
@@ -12,10 +13,14 @@ class NewsRepositoryImpl @Inject constructor(
     private val api: NewsApi
 ) : NewsRepository {
     override suspend fun getNewsByCategory(category: String): List<NewsModel> {
-        return api.fetchNewsByCategory(category = category).results.map { it.toDomain() }
+        val result = api.fetchNewsByCategory(category = category)
+        Log.d("NewsResponse", "getNewsByCategory: ${result}")
+
+        return result.results.map { it.toDomain() }
     }
 
     override suspend fun getNewsById(id: String): List<NewsModel> {
-        return api.fetchNewsById(id = id).results.map { it.toDomain() }
+        val result = api.fetchNewsById(id = id).results
+        return result.map { it.toDomain() }
     }
 }
