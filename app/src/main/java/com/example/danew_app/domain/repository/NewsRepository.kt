@@ -8,7 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
 interface NewsRepository {
-    suspend fun getNewsByCategory(category: String): List<NewsModel>
+    suspend fun getNewsByCategory(category: String, loadMore:Boolean): List<NewsModel>
     suspend fun getNewsById(id: String): List<NewsModel>
 }
 

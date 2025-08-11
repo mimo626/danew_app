@@ -12,8 +12,15 @@ import javax.inject.Singleton
 class NewsRepositoryImpl @Inject constructor(
     private val api: NewsApi
 ) : NewsRepository {
-    override suspend fun getNewsByCategory(category: String): List<NewsModel> {
-        val result = api.fetchNewsByCategory(category = category)
+    private var nextPage: String? = null
+
+    override suspend fun getNewsByCategory(category: String, loadMore:Boolean): List<NewsModel> {
+        val result = api.fetchNewsByCategory(
+            category = category,
+            page = if (loadMore) nextPage else null
+        )
+
+        nextPage = result.nextPage // 다음 호출 때 사용할 page 값 저장
         Log.d("NewsResponse", "getNewsByCategory: ${result}")
 
         return result.results.map { it.toDomain() }
