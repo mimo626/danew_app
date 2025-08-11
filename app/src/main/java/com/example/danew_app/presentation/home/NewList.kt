@@ -17,7 +17,9 @@ import com.example.danew_app.domain.model.NewsModel
 @Composable
 fun NewsList(sectionTitle: String, newsList: List<NewsModel>, navController: NavHostController,) {
     Column {
-        Text(sectionTitle, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+        Text(sectionTitle, fontWeight = FontWeight.Bold, fontSize = 16.sp,
+            modifier = Modifier.padding(horizontal = 20.dp)
+        )
         Spacer(modifier = Modifier.height(8.dp))
         newsList.forEach {
             NewsItem(it, navController = navController)
