@@ -31,7 +31,7 @@ fun NowTopNews(sectionTitle: String, newsList: List<NewsModel>, navController: N
     // 나머지 뉴스들 (topNews 제외)
     val otherNews = newsList.filter { it != topNews }
 
-    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+    Column {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

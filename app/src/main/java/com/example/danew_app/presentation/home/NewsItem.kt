@@ -42,7 +42,7 @@ fun NewsItem(newsModel: NewsModel, navController: NavHostController,) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .padding(vertical = 16.dp)
             .clickable{
                 navController.navigate("details/${newsModel.id}")
             }
@@ -55,7 +55,7 @@ fun NewsItem(newsModel: NewsModel, navController: NavHostController,) {
                 overflow = TextOverflow.Ellipsis
             )
             Spacer(modifier = Modifier.height(4.dp))
-            Text(newsModel.title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(newsModel.description, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Spacer(modifier = Modifier.height(2.dp))
             // Todo 시간으로 계산
             Text((newsModel.pubDate), color = Color.Gray, fontSize = 12.sp)
