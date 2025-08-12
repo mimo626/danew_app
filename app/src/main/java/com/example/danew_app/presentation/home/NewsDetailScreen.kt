@@ -37,7 +37,7 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.presentation.category.NewsViewModel
-import com.example.danew_app.presentation.home.MainTopAppBar
+import com.example.danew_app.core.widget.MainTopAppBar
 
 @Composable
 fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
@@ -51,6 +51,7 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
     }
 
     Scaffold (
+        containerColor = ColorsLight.whiteColor,
         topBar = {
             MainTopAppBar(navController = navHostController, title = "", icon = null,
                 isHome = false, isBackIcon = true)
@@ -180,11 +181,13 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
                     Spacer(modifier = Modifier.height(16.dp))
                 }
                 else -> {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        Text(
-                            "뉴스 데이터가 없습니다.",
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        CircularProgressIndicator(
                             modifier = Modifier.align(Alignment.Center),
-                            color = Color.Gray
+                            color = ColorsLight.grayColor
                         )
                     }
                 }
