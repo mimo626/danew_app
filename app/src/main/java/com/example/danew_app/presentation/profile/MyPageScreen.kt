@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.gloabals.Globals
 import com.example.danew_app.core.theme.ColorsLight
-import com.example.danew_app.presentation.home.MainTopAppBar
+import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.presentation.profile.TodayNews
 
 @Composable
@@ -72,7 +72,9 @@ fun MyPageScreen(navController: NavHostController,) {
                     Text("이름", color = Color.Gray)
                 }
 
-                IconButton(onClick = { /* 프로필 수정 */ }) {
+                IconButton(onClick = {
+                    navController.navigate("profileEdit")
+                }) {
                     Icon(Icons.Default.Edit, contentDescription = "프로필 수정",
                        tint = ColorsLight.grayColor)
                 }
