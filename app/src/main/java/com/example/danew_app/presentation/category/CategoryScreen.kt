@@ -3,7 +3,6 @@ package com.example.danew.presentation.category
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,9 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.CircularProgressIndicator
@@ -41,9 +38,10 @@ import com.example.danew_app.presentation.category.NewsCategory
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.theme.ColorsLight
-import com.example.danew_app.presentation.home.MainTopAppBar
+import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.presentation.home.NewsItem
 import com.example.danew_app.presentation.home.NowTopNews
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 val newsCategoryKr = NewsCategory.categoryKrToEn.keys.toList()
 
@@ -51,7 +49,7 @@ val newsCategoryKr = NewsCategory.categoryKrToEn.keys.toList()
 fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = hiltViewModel()) {
     var selectedTabIndex by remember { mutableStateOf(0) }
     val listState = rememberLazyListState()
-    val newsList = viewModel.newsList
+    val newsList = viewModel.newsListByCategory
     val isLoading = viewModel.isLoading
     val errorMessage = viewModel.errorMessage
 
@@ -167,23 +165,23 @@ fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = 
                 }
             }
         }
-
-        LaunchedEffect(listState) {
-            snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
+        LaunchedEffect(listState, selectedTabIndex) {
+            snapshotFlow {
+                listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+            }
+                .distinctUntilChanged() // 같은 인덱스면 중복 호출 방지
                 .collect { lastVisibleIndex ->
-                    if (lastVisibleIndex != null &&
-                        lastVisibleIndex >= newsList.lastIndex - 2 &&
-                        !isLoading
-                    ) {
+                    val shouldLoadMore = lastVisibleIndex != null &&
+                            lastVisibleIndex >= newsList.lastIndex - 2 &&
+                            !isLoading
+
+                    if (shouldLoadMore) {
                         val krCategory = newsCategoryKr[selectedTabIndex]
                         val enCategory = NewsCategory.categoryKrToEn[krCategory] ?: "top"
-                        Log.d("NewsViewModel", "!!!!!! Load more")
-                        viewModel.fetchNewsByCategory(enCategory, loadMore = true)
-                    }
-                    else{
-                        Log.d("NewsViewModel", "????? ${lastVisibleIndex}")
-                        Log.d("NewsViewModel", "????? ${newsList.lastIndex}")
+                        Log.d("NewsViewModel", "lastVisibleIndex: ${lastVisibleIndex}")
+                        Log.d("NewsViewModel", "newsList.lastIndex: ${newsList.lastIndex}")
 
+                        viewModel.fetchNewsByCategory(enCategory, loadMore = true)
                     }
                 }
         }
