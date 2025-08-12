@@ -2,6 +2,9 @@ package com.example.danew.core.navigation
 
 import MainScreen
 import NewsDetailScreen
+import ProfileEditScreen
+import SearchResultScreen
+import SearchScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -38,6 +41,19 @@ fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier) {
         composable("diary/{date}") { backStackEntry ->
             val date = backStackEntry.arguments?.getString("date")
             date?.let { DiaryWriteScreen(it, navHostController) }
+        }
+
+        composable("search") {
+            SearchScreen(navHostController = navHostController)
+        }
+
+        composable("search/{query}") { backStackEntry ->
+            val query = backStackEntry.arguments?.getString("query")
+            query?.let { SearchResultScreen(it, navHostController) }
+        }
+
+        composable("profileEdit") {
+            ProfileEditScreen(navHostController = navHostController) // 내부에서 BottomNavGraph 호출
         }
     }
 }
