@@ -1,4 +1,4 @@
-package com.example.danew_app.presentation.home
+package com.example.danew_app.core.widget
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
