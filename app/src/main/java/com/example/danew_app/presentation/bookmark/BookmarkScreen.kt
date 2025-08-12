@@ -10,11 +10,10 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.gloabals.Globals
 import com.example.danew_app.core.theme.ColorsLight
-import com.example.danew_app.presentation.home.MainTopAppBar
+import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.presentation.home.NewsItem
 
 @Composable
@@ -30,7 +29,7 @@ fun BookmarkScreen(navController: NavHostController,) {
         }
     ){
             padding ->
-        Column(modifier = Modifier.fillMaxSize().padding(padding).padding(20.dp)) {
+        Column(modifier = Modifier.fillMaxSize().padding(padding)) {
             // 뉴스 리스트
             LazyColumn {
                 items(Globals.dummyNewsList) { news ->
