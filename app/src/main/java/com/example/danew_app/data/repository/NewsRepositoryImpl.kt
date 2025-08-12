@@ -30,4 +30,16 @@ class NewsRepositoryImpl @Inject constructor(
         val result = api.fetchNewsById(id = id).results
         return result.map { it.toDomain() }
     }
+
+    override suspend fun getNewsBySearchQuery(searchQuery: String, loadMore:Boolean): List<NewsModel> {
+        val result = api.fetchNewsBySearchQuery(
+            searchQuery = searchQuery,
+            page = if (loadMore) nextPage else null
+        )
+
+        nextPage = result.nextPage // 다음 호출 때 사용할 page 값 저장
+        Log.d("NewsResponse", "getNewsBySearchQuery: ${result}")
+
+        return result.results.map { it.toDomain() }
+    }
 }
