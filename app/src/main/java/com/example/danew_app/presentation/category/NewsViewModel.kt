@@ -10,6 +10,7 @@ import androidx.compose.runtime.setValue
 import com.example.danew_app.domain.model.NewsModel
 import com.example.danew_app.domain.usecase.GetNewsByCategoryUseCase
 import com.example.danew_app.domain.usecase.GetNewsByIdUseCase
+import com.example.danew_app.domain.usecase.GetNewsBySearchQueryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,14 +19,18 @@ import javax.inject.Inject
 @HiltViewModel
 class NewsViewModel @Inject constructor(
     private val getNewsByCategoryUseCase: GetNewsByCategoryUseCase,
-    private val getNewsByIdUseCase: GetNewsByIdUseCase
+    private val getNewsByIdUseCase: GetNewsByIdUseCase,
+    private val getNewsBySearchQueryUseCase: GetNewsBySearchQueryUseCase
 ) : ViewModel() {
 
-    var newsList by mutableStateOf<List<NewsModel>>(emptyList())
+    var newsListByCategory by mutableStateOf<List<NewsModel>>(emptyList())
         private set
 
     private val _newsListById = MutableStateFlow<List<NewsModel>>(emptyList())
     val newsListById: StateFlow<List<NewsModel>> = _newsListById
+
+    var newsListBySearchQuery by mutableStateOf<List<NewsModel>>(emptyList())
+        private set
 
     var isLoading by mutableStateOf(false)
         private set
@@ -37,15 +42,15 @@ class NewsViewModel @Inject constructor(
         viewModelScope.launch {
             if (!loadMore) {
                 isLoading = true
-                newsList = emptyList() // 새로 탭을 눌렀을 때 기존 데이터 초기화
+                newsListByCategory = emptyList() // 새로 탭을 눌렀을 때 기존 데이터 초기화
             }
 
             errorMessage = null
             try {
                 val newList = getNewsByCategoryUseCase.invoke(category, loadMore)
-                newsList = if (loadMore) newsList + newList else newList
-                Log.d("NewsViewModel", "newsListByCategory: ${loadMore}")
-                Log.d("NewsViewModel", "newsListByCategory: ${newsList.size}")
+                newsListByCategory = if (loadMore) newsListByCategory + newList else newList
+                Log.d("NewsViewModel", "loadMore: ${loadMore}")
+                Log.d("NewsViewModel", "newsList.size: ${newsListByCategory.size}")
             } catch (e: Exception) {
                 errorMessage = e.localizedMessage
             } finally {
@@ -72,6 +77,30 @@ class NewsViewModel @Inject constructor(
             }
         }
     }
+
+    fun fetchNewsBySearchQuery(searchQuery: String, loadMore: Boolean = false) {
+        viewModelScope.launch {
+            if (!loadMore) {
+                isLoading = true
+                newsListBySearchQuery = emptyList() // 새로 탭을 눌렀을 때 기존 데이터 초기화
+            }
+
+            errorMessage = null
+            try {
+                val newList = getNewsBySearchQueryUseCase.invoke(searchQuery, loadMore)
+                newsListBySearchQuery = if (loadMore) newsListBySearchQuery + newList else newList
+            } catch (e: Exception) {
+                errorMessage = e.localizedMessage
+            } finally {
+                if (!loadMore) isLoading = false
+            }
+        }
+    }
+
+    fun resetSearchResults() {
+        newsListBySearchQuery = emptyList()
+    }
+
 
 }
 
