@@ -14,8 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.gloabals.Globals
-import com.example.danew_app.domain.model.NewsModel
-import com.example.danew_app.presentation.home.MainTopAppBar
+import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.presentation.home.MainImageCard
 import com.example.danew_app.presentation.home.NewsList
 import com.example.danew_app.presentation.home.NowTopNews
@@ -25,6 +25,7 @@ import com.example.danew_app.presentation.home.SearchBar
 fun HomeScreen(navController: NavHostController,) {
 
     Scaffold(
+        containerColor = ColorsLight.whiteColor,
         topBar = {
             MainTopAppBar( navController = navController,
             title = "DANEW",
@@ -40,8 +41,8 @@ fun HomeScreen(navController: NavHostController,) {
         )
         {
             Spacer(modifier = Modifier.height(16.dp))
-            SearchBar()
-            Spacer(modifier = Modifier.height(32.dp))
+            SearchBar(navHostController = navController)
+            Spacer(modifier = Modifier.height(24.dp))
             MainImageCard(Globals.dummyNewsList.get(0), navController)
             Spacer(modifier = Modifier.height(28.dp))
             NewsList("민주님을 위한 추천 뉴스", Globals.dummyNewsList, navController)
