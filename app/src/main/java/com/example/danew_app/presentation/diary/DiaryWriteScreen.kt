@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.BottomButton
-import com.example.danew_app.presentation.home.MainTopAppBar
+import com.example.danew_app.core.widget.MainTopAppBar
 
 @Composable
 fun DiaryWriteScreen(date: String, navHostController: NavHostController) {
@@ -57,7 +57,6 @@ fun DiaryWriteScreen(date: String, navHostController: NavHostController) {
                 textColor = ColorsLight.whiteColor,
                 backgroundColor = ColorsLight.primaryColor
             ) {
-                // 입력 완료
                 //TODO 유저 기록 데이터에 저장
                 navHostController.navigate("diary")
             }
