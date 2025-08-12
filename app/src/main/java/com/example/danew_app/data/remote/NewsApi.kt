@@ -19,4 +19,12 @@ interface NewsApi {
         @Query("apikey") apiKey: String = "pub_83780fb69a56440dbbeb6c4373fcb5ebb1535"
     ): NewsResponse
 
+    @GET("latest")
+    suspend fun fetchNewsBySearchQuery(
+        @Query("q") searchQuery: String,
+        @Query("country") country: String = "kr",
+        @Query("apikey") apiKey: String = "pub_83780fb69a56440dbbeb6c4373fcb5ebb1535",
+        @Query("page") page: String? = null
+    ): NewsResponse
+
 }
