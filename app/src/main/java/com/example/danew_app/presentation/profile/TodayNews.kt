@@ -1,7 +1,6 @@
 package com.example.danew_app.presentation.profile
 
 import com.example.danew_app.presentation.home.NewsCard
-import com.example.danew_app.presentation.home.TopImageCard
 
 
 import androidx.compose.foundation.layout.Arrangement
