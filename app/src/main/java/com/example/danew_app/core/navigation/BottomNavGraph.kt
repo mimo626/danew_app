@@ -6,6 +6,7 @@ import ProfileEditScreen
 import SearchResultScreen
 import SearchScreen
 import SignupAddScreen
+import SignupFinishScreen
 import SignupScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -51,6 +52,10 @@ fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier) {
 
         composable("keyword") {
             KeywordScreen(navHostController = navHostController)
+        }
+
+        composable("signupFinish") {
+            SignupFinishScreen(navHostController = navHostController)
         }
         
         composable("details/{newsId}") { backStackEntry ->
