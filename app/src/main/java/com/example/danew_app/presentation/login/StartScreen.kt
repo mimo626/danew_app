@@ -22,10 +22,10 @@ fun StartScreen(navHostController: NavHostController,) {
         containerColor = ColorsLight.whiteColor,
         bottomBar = {
             Column {
-                BottomButton(text = "로그인하기") {
-                    navHostController.navigate("signin")
+                BottomButton(text = "로그인") {
+                    navHostController.navigate("login")
                 }
-                BottomButton(text = "가입하기",
+                BottomButton(text = "회원가입",
                     backgroundColor = ColorsLight.grayColor) {
                     navHostController.navigate("signup")
                 }
