@@ -15,12 +15,13 @@ import com.example.danew.presentation.category.CategoryScreen
 import com.example.danew.presentation.diary.DiaryScreen
 import com.example.danew.presentation.diary.DiaryWriteScreen
 import com.example.danew.presentation.home.HomeScreen
+import com.example.danew.presentation.home.StartScreen
 import com.example.danew.presentation.profile.MyPageScreen
 
 @Composable
 fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier) {
 
-    NavHost(navHostController, startDestination = BottomNavItem.Home.route, modifier = modifier) {
+    NavHost(navHostController, startDestination = "start", modifier = modifier) {
         composable(BottomNavItem.Home.route) { HomeScreen(navHostController) }
         composable(BottomNavItem.Category.route) { CategoryScreen(navHostController) }
         composable(BottomNavItem.Diary.route) { DiaryScreen(navHostController) }
@@ -33,6 +34,10 @@ fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier) {
         }
 
         // BottomNav 없는 화면들
+        composable("start") {
+            StartScreen(navHostController = navHostController) // 내부에서 BottomNavGraph 호출
+        }
+        
         composable("details/{newsId}") { backStackEntry ->
             val newsId = backStackEntry.arguments?.getString("newsId")
             newsId?.let { NewsDetailScreen(it, navHostController) }
