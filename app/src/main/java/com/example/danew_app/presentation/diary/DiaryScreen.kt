@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -33,6 +34,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -77,6 +79,13 @@ fun DiaryScreen(navController: NavHostController,) {
         list
     }
 
+    val listState = rememberLazyListState()
+
+    // 초기 스크롤: 오늘 날짜가 앞으로 오도록
+    LaunchedEffect(Unit) {
+        val todayIndex = selectedDate.dayOfMonth - 1
+        listState.scrollToItem(todayIndex)
+    }
     Scaffold(
         containerColor = ColorsLight.whiteColor,
         topBar = {
@@ -151,7 +160,7 @@ fun DiaryScreen(navController: NavHostController,) {
             Spacer(modifier = Modifier.height(20.dp))
 
             // Horizontal Day Selector (1~31)
-            LazyRow {
+            LazyRow(state = listState) {
                 items(days) { day ->
                     val thisDate = selectedDate.withDayOfMonth(
                         day.coerceAtMost(
