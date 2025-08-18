@@ -45,7 +45,7 @@ fun KeywordScreen(navHostController: NavHostController) {
     )
 
     // 선택된 키워드 상태
-    var selectedKeywords = remember { mutableStateListOf<String>() }
+    val selectedKeywords = remember { mutableStateListOf<String>() }
 
     Scaffold(
         topBar = {
