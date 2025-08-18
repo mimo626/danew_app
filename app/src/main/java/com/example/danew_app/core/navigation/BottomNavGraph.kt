@@ -1,5 +1,6 @@
 package com.example.danew.core.navigation
 
+import LoginScreen
 import MainScreen
 import NewsDetailScreen
 import ProfileEditScreen
@@ -40,6 +41,10 @@ fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier) {
         // BottomNav 없는 화면들
         composable("start") {
             StartScreen(navHostController = navHostController)
+        }
+
+        composable("login") {
+            LoginScreen(navHostController = navHostController)
         }
 
         composable("signup") {
