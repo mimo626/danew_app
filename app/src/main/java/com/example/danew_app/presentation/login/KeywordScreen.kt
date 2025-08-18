@@ -43,6 +43,9 @@ import com.example.danew_app.core.widget.CustomRadioButton
 import com.example.danew_app.core.widget.MainTopAppBar
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.ProgressIndicatorDefaults
+import com.example.danew_app.core.widget.CustomLinearProgressIndicator
 
 @Composable
 fun KeywordScreen(navHostController: NavHostController) {
@@ -64,31 +67,36 @@ fun KeywordScreen(navHostController: NavHostController) {
             // 완료 버튼
             BottomButton(text = "다음") {
                 Log.d("KeywordSelect", "${selectedKeywords}")
+                navHostController.navigate("signupFinish")
             }
         }
     ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
-                .fillMaxSize()
-                .padding(horizontal = 20.dp),
+                .fillMaxSize(),
             horizontalAlignment = Alignment.Start
         ) {
+            CustomLinearProgressIndicator(progress = 3/4f)
             Spacer(Modifier.height(32.dp))
 
             Text("관심 키워드 선택", fontSize = 22.sp,
-                fontWeight = FontWeight.SemiBold)
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(horizontal = 20.dp),
+            )
             Text(
                 "최대 5개까지 선택할 수 있습니다.",
                 fontSize = 14.sp,
-                color = ColorsLight.grayColor
-            )
+                color = ColorsLight.grayColor,
+                modifier = Modifier.padding(horizontal = 20.dp),
+                )
             Spacer(modifier = Modifier.weight(1f))
 
             // 키워드 그리드
             LazyVerticalGrid(
+
                 columns = GridCells.Fixed(3),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 content = {
@@ -99,7 +107,7 @@ fun KeywordScreen(navHostController: NavHostController) {
                             modifier = Modifier
                                 .clip(RoundedCornerShape(12.dp))
                                 .background(
-                                    if (isSelected) ColorsLight.primaryColor else ColorsLight.lightGrayColor
+                                    if (isSelected) ColorsLight.darkGrayColor else ColorsLight.lightGrayColor
                                 )
                                 .clickable {
                                     if (isSelected) {
