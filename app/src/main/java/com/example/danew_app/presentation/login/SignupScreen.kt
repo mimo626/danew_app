@@ -8,6 +8,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.widget.BottomButton
+import com.example.danew_app.core.widget.CustomLinearProgressIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
 
 @Composable
@@ -29,15 +30,16 @@ fun SignupScreen(navHostController: NavHostController) {
         Column(
             modifier = Modifier
                 .padding(padding)
-                .fillMaxSize()
-                .padding(horizontal = 20.dp),
+                .fillMaxSize(),
             horizontalAlignment = Alignment.Start,
         ) {
+            CustomLinearProgressIndicator(1/4f)
             Spacer(Modifier.height(32.dp))
 
             Text("회원 정보 입력", fontSize = 22.sp,
                 fontWeight = FontWeight.SemiBold,
-            )
+                modifier = Modifier.padding(horizontal = 20.dp),
+                )
 
             Spacer(modifier = Modifier.weight(1f))
 
@@ -46,7 +48,7 @@ fun SignupScreen(navHostController: NavHostController) {
                 value = id,
                 onValueChange = { id = it },
                 label = { Text("아이디") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
             )
 
             Spacer(Modifier.height(16.dp))
@@ -56,7 +58,7 @@ fun SignupScreen(navHostController: NavHostController) {
                 value = password,
                 onValueChange = { password = it },
                 label = { Text("비밀번호") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
             )
 
             Spacer(Modifier.height(16.dp))
@@ -66,7 +68,7 @@ fun SignupScreen(navHostController: NavHostController) {
                 value = password,
                 onValueChange = { password = it },
                 label = { Text("비밀번호 확인") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
             )
 
             Spacer(modifier = Modifier.weight(1f))
