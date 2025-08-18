@@ -3,7 +3,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,7 +15,6 @@ import androidx.navigation.NavHostController
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.CustomLinearProgressIndicator
-import com.example.danew_app.core.widget.MainTopAppBar
 
 @Composable
 fun SignupFinishScreen(navHostController: NavHostController) {
