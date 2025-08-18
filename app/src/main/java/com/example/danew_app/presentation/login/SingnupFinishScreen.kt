@@ -15,14 +15,18 @@ import androidx.navigation.NavHostController
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.CustomLinearProgressIndicator
+import com.example.danew_app.core.widget.MainTopAppBar
 
 @Composable
 fun SignupFinishScreen(navHostController: NavHostController) {
 
     Scaffold(
+        topBar = {
+            MainTopAppBar(navController = navHostController, title = "", isBackIcon = true)
+        },
         bottomBar = {
             // 완료 버튼
-            BottomButton(text = "로그인하기") {
+            BottomButton(text = "로그인하러가기") {
                 navHostController.navigate("login")
             }
         }
