@@ -8,6 +8,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.widget.BottomButton
+import com.example.danew_app.core.widget.CustomLinearProgressIndicator
 import com.example.danew_app.core.widget.CustomRadioButton
 import com.example.danew_app.core.widget.MainTopAppBar
 
@@ -31,14 +32,17 @@ fun SignupAddScreen(navHostController: NavHostController) {
         Column(
             modifier = Modifier
                 .padding(padding)
-                .fillMaxSize()
-                .padding(horizontal = 20.dp),
+                .fillMaxSize(),
             horizontalAlignment = Alignment.Start
         ) {
+            CustomLinearProgressIndicator(progress = 2/4f)
+
             Spacer(Modifier.height(32.dp))
 
             Text("추가 정보 입력", fontSize = 22.sp,
-                fontWeight = FontWeight.SemiBold)
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(horizontal = 20.dp),
+            )
 
             Spacer(modifier = Modifier.weight(1f))
 
@@ -47,7 +51,7 @@ fun SignupAddScreen(navHostController: NavHostController) {
                 value = name,
                 onValueChange = { name = it },
                 label = { Text("이름") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
             )
 
             Spacer(Modifier.height(16.dp))
@@ -57,14 +61,14 @@ fun SignupAddScreen(navHostController: NavHostController) {
                 value = birthDate,
                 onValueChange = { birthDate = it },
                 label = { Text("생년월일") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
             )
 
             Spacer(Modifier.height(16.dp))
 
             // 성별
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text("성별", fontSize = 16.sp, fontWeight = FontWeight.Medium)
