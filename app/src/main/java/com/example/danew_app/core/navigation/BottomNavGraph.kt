@@ -5,6 +5,8 @@ import NewsDetailScreen
 import ProfileEditScreen
 import SearchResultScreen
 import SearchScreen
+import SignupAddScreen
+import SignupScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -17,6 +19,7 @@ import com.example.danew.presentation.diary.DiaryWriteScreen
 import com.example.danew.presentation.home.HomeScreen
 import com.example.danew.presentation.home.StartScreen
 import com.example.danew.presentation.profile.MyPageScreen
+import com.example.danew_app.presentation.login.KeywordScreen
 
 @Composable
 fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier) {
@@ -35,7 +38,19 @@ fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier) {
 
         // BottomNav 없는 화면들
         composable("start") {
-            StartScreen(navHostController = navHostController) // 내부에서 BottomNavGraph 호출
+            StartScreen(navHostController = navHostController)
+        }
+
+        composable("signup") {
+            SignupScreen(navHostController = navHostController)
+        }
+
+        composable("signupAdd") {
+            SignupAddScreen(navHostController = navHostController)
+        }
+
+        composable("keyword") {
+            KeywordScreen(navHostController = navHostController)
         }
         
         composable("details/{newsId}") { backStackEntry ->
