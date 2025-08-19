@@ -30,7 +30,10 @@ fun HomeScreen(navController: NavHostController,) {
             MainTopAppBar( navController = navController,
             title = "DANEW",
             icon = Icons.Default.Notifications,
-            isHome = true) },
+            isHome = true) {
+                navController.navigate("alarm")
+            }
+                 },
     ) {
         padding ->
         Column(
