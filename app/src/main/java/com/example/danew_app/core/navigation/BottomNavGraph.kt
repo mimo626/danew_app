@@ -18,6 +18,7 @@ import com.example.danew.presentation.bookmark.BookmarkScreen
 import com.example.danew.presentation.category.CategoryScreen
 import com.example.danew.presentation.diary.DiaryScreen
 import com.example.danew.presentation.diary.DiaryWriteScreen
+import com.example.danew.presentation.home.AlarmScreen
 import com.example.danew.presentation.home.HomeScreen
 import com.example.danew.presentation.home.StartScreen
 import com.example.danew.presentation.profile.MyPageScreen
@@ -83,7 +84,11 @@ fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier) {
         }
 
         composable("profileEdit") {
-            ProfileEditScreen(navHostController = navHostController) // 내부에서 BottomNavGraph 호출
+            ProfileEditScreen(navHostController = navHostController)
+        }
+
+        composable("alarm") {
+            AlarmScreen(navHostController = navHostController)
         }
     }
 }
