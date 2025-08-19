@@ -25,7 +25,10 @@ fun BookmarkScreen(navController: NavHostController,) {
                 navController = navController,
                 title = "북마크",
                 icon = Icons.Default.Notifications,
-                isHome = false)
+                isHome = false,
+            ) {
+                navController.navigate("alarm")
+            }
         }
     ){
             padding ->
