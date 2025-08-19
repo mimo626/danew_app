@@ -68,7 +68,9 @@ fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = 
                 title = "카테고리",
                 icon = Icons.Default.Notifications,
                 isHome = false
-            )
+            ){
+                navController.navigate("alarm")
+            }
         }
     ) { padding ->
         LazyColumn(
