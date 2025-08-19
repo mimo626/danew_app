@@ -91,7 +91,10 @@ fun DiaryScreen(navController: NavHostController,) {
         containerColor = ColorsLight.whiteColor,
         topBar = {
             MainTopAppBar(navController = navController, title = "기록", icon = Icons.Default.MoreVert,
-               isHome = false)
+               isHome = false){
+                //TODO 수정 필요
+                navController.navigate("")
+            }
         },
     ) { padding ->
         Column(
