@@ -43,6 +43,9 @@ fun MyPageScreen(navController: NavHostController,) {
                 title = "마이페이지",
                 icon = Icons.Default.Settings,
                 isHome = false)
+            {
+                navController.navigate("settings")
+            }
         },
         bottomBar = {
             // 하단 네비게이션은 생략 가능 (이미 구현돼 있다면 재사용)
