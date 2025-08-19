@@ -12,6 +12,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,7 +36,7 @@ fun AlarmScreen(navHostController: NavHostController,) {
         containerColor = ColorsLight.whiteColor,
         topBar = {
             MainTopAppBar( navController = navHostController,
-                title = "",
+                title = "알림",
                 isBackIcon = true) },
     ) {
             padding ->
@@ -44,26 +45,31 @@ fun AlarmScreen(navHostController: NavHostController,) {
                 .fillMaxSize()
                 .padding(padding)
                 .verticalScroll(rememberScrollState())
+                .padding(vertical = 16.dp)
         )
         {
             Spacer(modifier = Modifier.height(16.dp))
             alarmList.forEach {
                 Column(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp, horizontal = 20.dp)
-                    .clickable{
-                    }) {
+                        .fillMaxWidth()
+                        .clickable {
+                        }
+                    )
+                {
                     Text(
                         it, maxLines = 2, fontWeight = FontWeight.Bold,
                         fontSize = 14.sp,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.padding(horizontal = 20.dp).padding(top=16.dp)
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         "3시간 전",fontWeight = FontWeight.Medium,
                         fontSize = 12.sp,
                         color = ColorsLight.grayColor,
+                        modifier = Modifier.padding(horizontal = 20.dp).padding(bottom = 16.dp)
                     )
+                    HorizontalDivider(color = ColorsLight.lightGrayColor)
                 }
             }
 
