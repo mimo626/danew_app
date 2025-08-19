@@ -28,7 +28,8 @@ fun MainTopAppBar(
     title: String,
     icon: ImageVector? = null,
     isHome: Boolean = false,
-    isBackIcon: Boolean = false
+    isBackIcon: Boolean = false,
+    onClick: () -> Unit = {  },
 ) {
     Surface(color = ColorsLight.whiteColor) {
         Box(
@@ -64,7 +65,7 @@ fun MainTopAppBar(
             // 오른쪽 끝 - 아이콘
             if (icon != null) {
                 IconButton(
-                    onClick = { /* do something */ },
+                    onClick = onClick,
                     modifier = Modifier.align(Alignment.CenterEnd)
                 ) {
                     Icon(
