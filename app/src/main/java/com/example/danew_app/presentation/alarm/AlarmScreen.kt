@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -34,32 +34,31 @@ fun AlarmScreen(navHostController: NavHostController,) {
                 title = "알림",
                 isBackIcon = true) },
     ) {
-            padding ->
-        Column(
+        padding ->
+            LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .verticalScroll(rememberScrollState())
                 .padding(vertical = 16.dp)
-        )
-        {
-            Spacer(modifier = Modifier.height(16.dp))
-            alarmList.forEach {
-                Column(modifier = Modifier
+        ) {
+            items(alarmList) { alarm ->
+                Column(
+                    modifier = Modifier
                         .fillMaxWidth()
-                        .clickable {
-                        }
-                    )
-                {
+                        .clickable { }
+                ) {
                     Text(
-                        it, maxLines = 2, fontWeight = FontWeight.Bold,
+                        alarm,
+                        maxLines = 2,
+                        fontWeight = FontWeight.Bold,
                         fontSize = 14.sp,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.padding(horizontal = 20.dp).padding(top=16.dp)
+                        modifier = Modifier.padding(horizontal = 20.dp).padding(top = 16.dp)
                     )
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        "3시간 전",fontWeight = FontWeight.Medium,
+                         Text(
+                        "3시간 전",
+                        fontWeight = FontWeight.Medium,
                         fontSize = 12.sp,
                         color = ColorsLight.grayColor,
                         modifier = Modifier.padding(horizontal = 20.dp).padding(bottom = 16.dp)
@@ -67,7 +66,6 @@ fun AlarmScreen(navHostController: NavHostController,) {
                     HorizontalDivider(color = ColorsLight.lightGrayColor)
                 }
             }
-
         }
     }
 }
