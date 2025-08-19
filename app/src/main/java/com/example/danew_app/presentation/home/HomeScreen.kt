@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -22,38 +23,44 @@ import com.example.danew_app.presentation.home.NowTopNews
 import com.example.danew_app.presentation.home.SearchBar
 
 @Composable
-fun HomeScreen(navController: NavHostController,) {
-
+fun HomeScreen(navController: NavHostController) {
     Scaffold(
         containerColor = ColorsLight.whiteColor,
         topBar = {
-            MainTopAppBar( navController = navController,
-            title = "DANEW",
-            icon = Icons.Default.Notifications,
-            isHome = true) {
+            MainTopAppBar(
+                navController = navController,
+                title = "DANEW",
+                icon = Icons.Default.Notifications,
+                isHome = true
+            ) {
                 navController.navigate("alarm")
             }
-                 },
-    ) {
-        padding ->
-        Column(
+        },
+    ) { padding ->
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .verticalScroll(rememberScrollState())
-        )
-        {
-            Spacer(modifier = Modifier.height(16.dp))
-            SearchBar(navHostController = navController)
-            Spacer(modifier = Modifier.height(24.dp))
-            MainImageCard(Globals.dummyNewsList.get(0), navController)
-            Spacer(modifier = Modifier.height(28.dp))
-            NewsList("민주님을 위한 추천 뉴스", Globals.dummyNewsList, navController)
-            Spacer(modifier = Modifier.height(28.dp))
-            NowTopNews("현재 TOP 경제 뉴스", Globals.dummyNewsList, navController)
-            Spacer(modifier = Modifier.height(16.dp))
+        ) {
+            item { Spacer(modifier = Modifier.height(16.dp)) }
 
+            item { SearchBar(navHostController = navController) }
+
+            item { Spacer(modifier = Modifier.height(24.dp)) }
+
+            item { MainImageCard(Globals.dummyNewsList[0], navController) }
+
+            item { Spacer(modifier = Modifier.height(28.dp)) }
+
+            item { NewsList("민주님을 위한 추천 뉴스", Globals.dummyNewsList, navController) }
+
+            item { Spacer(modifier = Modifier.height(28.dp)) }
+
+            item { NowTopNews("현재 TOP 경제 뉴스", Globals.dummyNewsList, navController) }
+
+            item { Spacer(modifier = Modifier.height(16.dp)) }
         }
     }
 }
+
 
