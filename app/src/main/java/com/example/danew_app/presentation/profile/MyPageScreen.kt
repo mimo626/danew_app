@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -85,7 +86,7 @@ fun MyPageScreen(navController: NavHostController,) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Divider(thickness = 6.dp, color = ColorsLight.lightGrayColor)
+            HorizontalDivider(thickness = 6.dp, color = ColorsLight.lightGrayColor)
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -116,7 +117,7 @@ fun MyPageMenuItem(
         .clickable(onClick = onClick)
         .padding(horizontal = 20.dp)
     ) {
-        Divider(color = ColorsLight.lightGrayColor)
+        HorizontalDivider(color = ColorsLight.lightGrayColor)
         Spacer(modifier = Modifier.height(16.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
