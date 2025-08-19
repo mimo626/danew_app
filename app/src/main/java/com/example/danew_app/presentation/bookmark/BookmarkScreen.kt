@@ -31,13 +31,13 @@ fun BookmarkScreen(navController: NavHostController,) {
             }
         }
     ){
-            padding ->
-        Column(modifier = Modifier.fillMaxSize().padding(padding)) {
-            // 뉴스 리스트
-            LazyColumn {
-                items(Globals.dummyNewsList) { news ->
-                    NewsItem(newsModel = news, navController = navController)
-                }
+        padding ->
+        // 뉴스 리스트
+        LazyColumn (
+            modifier = Modifier.fillMaxSize().padding(padding)
+        ){
+            items(Globals.dummyNewsList) { news ->
+                NewsItem(newsModel = news, navController = navController)
             }
         }
     }
