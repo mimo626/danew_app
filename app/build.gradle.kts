@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
-    id("kotlin-kapt")
+    alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
 }
 
@@ -80,5 +80,12 @@ dependencies {
     implementation(libs.hilt.navigation)
     implementation(libs.calendar)
     implementation(libs.datetime)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
+    implementation(libs.room.runtime)
+    implementation(libs.room.rxjava3)
+    implementation(libs.room.paging)
+    implementation(libs.room.guava)
+    implementation(libs.room.ktx)
+    testImplementation(libs.room.testing)
+    ksp(libs.room.compiler)
 }
