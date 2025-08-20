@@ -1,3 +1,4 @@
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,6 +40,7 @@ import coil.compose.AsyncImage
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.presentation.category.NewsViewModel
 import com.example.danew_app.core.widget.MainTopAppBar
+import com.example.danew_app.core.widget.ShareButton
 
 @Composable
 fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
@@ -137,13 +140,7 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
                             )
                         }
                         Spacer(modifier = Modifier.width(4.dp))
-                        IconButton(onClick = {}) {
-                            Icon(
-                                tint = ColorsLight.darkGrayColor,
-                                imageVector = Icons.Default.Share,
-                                contentDescription = "공유"
-                            )
-                        }
+                        ShareButton(newsLink = newsList.get(0).link)
                     }
                     Spacer(modifier = Modifier.height(8.dp))
 
