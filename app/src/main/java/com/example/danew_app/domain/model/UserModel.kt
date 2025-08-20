@@ -2,7 +2,7 @@ package com.example.danew.domain.model
 
 import kotlinx.datetime.LocalDateTime
 
-data class User (
+data class UserModel (
     val userId: String,
     val password: String,
     val name: String,
