@@ -1,5 +1,4 @@
 package com.example.danew_app.data.remote//
-import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,7 +26,7 @@ import javax.inject.Singleton
 // Retrofit 객체를 생성하고, 싱글톤으로 유지
 @Module
 @InstallIn(SingletonComponent::class)
-object RetrofitInstance {
+object NewsRetrofitInstance {
     @get:Provides
     @Singleton
     val newsApi: NewsApi by lazy {
@@ -36,5 +35,19 @@ object RetrofitInstance {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(NewsApi::class.java)
+    }
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object UserRetrofitInstance {
+    @get:Provides
+    @Singleton
+    val userApi: UserApi by lazy {
+        Retrofit.Builder()
+            .baseUrl("http://10.0.2.2:8080")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(UserApi::class.java)
     }
 }
