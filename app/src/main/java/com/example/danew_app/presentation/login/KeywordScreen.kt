@@ -1,5 +1,7 @@
 package com.example.danew_app.presentation.login
 
+import android.annotation.SuppressLint
+import com.example.danew_app.presentation.viewmodel.SignupViewModel
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,14 +31,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.core.widget.CustomLinearProgressIndicator
 
+@SuppressLint("UnrememberedGetBackStackEntry")
 @Composable
-fun KeywordScreen(navHostController: NavHostController) {
+fun KeywordScreen(navHostController: NavHostController, viewModel: SignupViewModel) {
     val allKeywords:List<String> = listOf(
         "정치", "엔터", "경제",
         "취업", "문화", "IT",
@@ -47,6 +51,9 @@ fun KeywordScreen(navHostController: NavHostController) {
     // 선택된 키워드 상태
     val selectedKeywords = remember { mutableStateListOf<String>() }
 
+    val parentEntry = navHostController.getBackStackEntry("signupFlow")
+    val viewModel: SignupViewModel = hiltViewModel(parentEntry)
+
     Scaffold(
         topBar = {
             MainTopAppBar(navController = navHostController, title = "", isBackIcon = true)
@@ -55,6 +62,8 @@ fun KeywordScreen(navHostController: NavHostController) {
             // 완료 버튼
             BottomButton(text = "다음") {
                 Log.d("KeywordSelect", "${selectedKeywords}")
+                viewModel.updateKeywordList(selectedKeywords)
+                viewModel.completeSignup()
                 navHostController.navigate("signupFinish")
             }
         }
