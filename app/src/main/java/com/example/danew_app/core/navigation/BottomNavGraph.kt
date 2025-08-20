@@ -9,11 +9,14 @@ import SearchScreen
 import SignupAddScreen
 import SignupFinishScreen
 import SignupScreen
+import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navigation
 import com.example.danew.presentation.bookmark.BookmarkScreen
 import com.example.danew.presentation.category.CategoryScreen
 import com.example.danew.presentation.diary.DiaryScreen
@@ -24,7 +27,9 @@ import com.example.danew.presentation.home.SettingScreen
 import com.example.danew.presentation.home.StartScreen
 import com.example.danew.presentation.profile.MyPageScreen
 import com.example.danew_app.presentation.login.KeywordScreen
+import com.example.danew_app.presentation.viewmodel.SignupViewModel
 
+@SuppressLint("UnrememberedGetBackStackEntry")
 @Composable
 fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier) {
 
@@ -49,20 +54,28 @@ fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier) {
             LoginScreen(navHostController = navHostController)
         }
 
-        composable("signup") {
-            SignupScreen(navHostController = navHostController)
-        }
-
-        composable("signupAdd") {
-            SignupAddScreen(navHostController = navHostController)
-        }
-
-        composable("keyword") {
-            KeywordScreen(navHostController = navHostController)
-        }
-
-        composable("signupFinish") {
-            SignupFinishScreen(navHostController = navHostController)
+        // 회원가입 플로우 네비게이션 그래프
+        navigation(startDestination = "signup", route = "signupFlow") {
+            composable("signup") { backStackEntry ->
+                val viewModel: SignupViewModel =
+                    hiltViewModel(navHostController.getBackStackEntry("signupFlow"))
+                SignupScreen(navHostController, viewModel)
+            }
+            composable("signupAdd") { backStackEntry ->
+                val viewModel: SignupViewModel =
+                    hiltViewModel(navHostController.getBackStackEntry("signupFlow"))
+                SignupAddScreen(navHostController, viewModel)
+            }
+            composable("keyword") { backStackEntry ->
+                val viewModel: SignupViewModel =
+                    hiltViewModel(navHostController.getBackStackEntry("signupFlow"))
+                KeywordScreen(navHostController, viewModel)
+            }
+            composable("signupFinish") { backStackEntry ->
+                val viewModel: SignupViewModel =
+                    hiltViewModel(navHostController.getBackStackEntry("signupFlow"))
+                SignupFinishScreen(navHostController, viewModel)
+            }
         }
         
         composable("details/{newsId}") { backStackEntry ->
