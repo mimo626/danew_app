@@ -20,6 +20,7 @@ import com.example.danew.presentation.diary.DiaryScreen
 import com.example.danew.presentation.diary.DiaryWriteScreen
 import com.example.danew.presentation.home.AlarmScreen
 import com.example.danew.presentation.home.HomeScreen
+import com.example.danew.presentation.home.SettingScreen
 import com.example.danew.presentation.home.StartScreen
 import com.example.danew.presentation.profile.MyPageScreen
 import com.example.danew_app.presentation.login.KeywordScreen
@@ -89,6 +90,10 @@ fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier) {
 
         composable("alarm") {
             AlarmScreen(navHostController = navHostController)
+        }
+
+        composable("settings") {
+            SettingScreen(navHostController = navHostController)
         }
     }
 }
