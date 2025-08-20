@@ -1,5 +1,6 @@
 package com.example.danew_app.data.remote
 
+import com.example.danew_app.data.dto.NewsResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

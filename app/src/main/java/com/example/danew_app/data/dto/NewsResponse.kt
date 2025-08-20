@@ -1,4 +1,4 @@
-package com.example.danew_app.data.remote
+package com.example.danew_app.data.dto
 
 import com.example.danew_app.data.entity.NewsEntity
 import com.google.gson.annotations.SerializedName
