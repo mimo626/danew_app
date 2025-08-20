@@ -16,10 +16,12 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -46,10 +48,10 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
 fun SearchResultScreen(query:String, navHostController: NavHostController) {
-    var viewModel: NewsViewModel = hiltViewModel()
+    val viewModel: NewsViewModel = hiltViewModel()
     var searchQuery by remember { mutableStateOf(query) }
     val listState = rememberLazyListState()
-    var newsList = viewModel.newsListBySearchQuery
+    val newsList = viewModel.newsListBySearchQuery
     val isLoading = viewModel.isLoading
     val errorMessage = viewModel.errorMessage
 
@@ -70,7 +72,7 @@ fun SearchResultScreen(query:String, navHostController: NavHostController) {
                     onClick = { navHostController.popBackStack() },
                 ) {
                     Icon(
-                        imageVector = Icons.Default.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "뒤로가기"
                     )
                 }
@@ -109,7 +111,7 @@ fun SearchResultScreen(query:String, navHostController: NavHostController) {
         ) {
             item {
                 Spacer(modifier = Modifier.height(32.dp))
-                Divider(thickness = 6.dp, color = ColorsLight.lightGrayColor)
+                HorizontalDivider(thickness = 6.dp, color = ColorsLight.lightGrayColor)
 
                 Spacer(modifier = Modifier.height(16.dp))
                 Row (

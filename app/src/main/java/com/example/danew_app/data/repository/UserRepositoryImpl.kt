@@ -1,6 +1,5 @@
 package com.example.danew_app.data.repository
 
-import UserModel
 import android.util.Log
 import com.example.danew.data.local.entity.UserEntity
 import com.example.danew_app.data.remote.UserApi

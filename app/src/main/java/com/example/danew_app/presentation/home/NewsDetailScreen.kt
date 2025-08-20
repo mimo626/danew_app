@@ -78,7 +78,7 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
                     }
                 errorMessage != null -> {
                     // 에러 메시지
-                    errorMessage?.let {
+                    errorMessage.let {
                         Text("오류: $it", color = Color.Red)
                     }
                 }
