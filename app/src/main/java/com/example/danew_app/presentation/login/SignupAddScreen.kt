@@ -1,3 +1,4 @@
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -6,18 +7,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.CustomLinearProgressIndicator
 import com.example.danew_app.core.widget.CustomRadioButton
 import com.example.danew_app.core.widget.MainTopAppBar
+import com.example.danew_app.presentation.viewmodel.SignupViewModel
 
+@SuppressLint("UnrememberedGetBackStackEntry")
 @Composable
-fun SignupAddScreen(navHostController: NavHostController) {
+fun SignupAddScreen(navHostController: NavHostController, viewModel: SignupViewModel) {
     var name by remember { mutableStateOf("") }
-    var birthDate by remember { mutableStateOf("") }
+    var age by remember { mutableStateOf("") }
     var gender by remember { mutableStateOf("여성") }
-
+    val parentEntry = navHostController.getBackStackEntry("signupFlow")
+    val viewModel: SignupViewModel = hiltViewModel(parentEntry)
     Scaffold(
         topBar = {
             MainTopAppBar(navController = navHostController, title = "", isBackIcon = true)
@@ -25,6 +30,10 @@ fun SignupAddScreen(navHostController: NavHostController) {
         bottomBar = {
             // 완료 버튼
             BottomButton(text = "다음") {
+                viewModel.updateName(name)
+                viewModel.updateAge(age.toInt())
+                viewModel.updateGender(gender)
+
                 navHostController.navigate("keyword")
             }
         }
@@ -58,9 +67,9 @@ fun SignupAddScreen(navHostController: NavHostController) {
 
             // 생년월일 입력
             OutlinedTextField(
-                value = birthDate,
-                onValueChange = { birthDate = it },
-                label = { Text("생년월일") },
+                value = age,
+                onValueChange = { age = it },
+                label = { Text("나이") },
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
             )
 
