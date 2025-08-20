@@ -1,3 +1,4 @@
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -6,15 +7,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.CustomLinearProgressIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
+import com.example.danew_app.presentation.viewmodel.SignupViewModel
 
+@SuppressLint("UnrememberedGetBackStackEntry")
 @Composable
-fun SignupScreen(navHostController: NavHostController) {
+fun SignupScreen(navHostController: NavHostController, viewModel: SignupViewModel) {
     var id by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    val parentEntry = navHostController.getBackStackEntry("signupFlow")
+    val viewModel: SignupViewModel = hiltViewModel(parentEntry)
 
     Scaffold(
         topBar = {
@@ -23,6 +30,8 @@ fun SignupScreen(navHostController: NavHostController) {
         bottomBar = {
             // 완료 버튼
             BottomButton(text = "다음") {
+                viewModel.updateUserId(id)
+                viewModel.updatePassword(password)
                 navHostController.navigate("signupAdd")
             }
         }
