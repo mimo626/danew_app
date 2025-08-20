@@ -16,9 +16,10 @@ import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.CustomLinearProgressIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
+import com.example.danew_app.presentation.viewmodel.SignupViewModel
 
 @Composable
-fun SignupFinishScreen(navHostController: NavHostController) {
+fun SignupFinishScreen(navHostController: NavHostController, viewModel: SignupViewModel) {
 
     Scaffold(
         topBar = {
