@@ -1,4 +1,4 @@
-package com.example.danew_app.presentation.category
+package com.example.danew_app.presentation.viewmodel
 
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -14,6 +14,7 @@ import com.example.danew_app.domain.usecase.GetNewsBySearchQueryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.util.Collections.emptyList
 import javax.inject.Inject
 
 @HiltViewModel
@@ -65,11 +66,9 @@ class NewsViewModel @Inject constructor(
             isLoading = true
             errorMessage = null
             try {
-                viewModelScope.launch {
-                    val data = getNewsByIdUseCase(id)
-                    _newsListById.value = data
-                    Log.d("NewsViewModel", "newsListById: $data")
-                }
+                val data = getNewsByIdUseCase(id)
+                _newsListById.value = data
+                Log.d("NewsViewModel", "newsListById: $data")
             } catch (e: Exception) {
                 errorMessage = e.localizedMessage
             } finally {
@@ -103,4 +102,3 @@ class NewsViewModel @Inject constructor(
 
 
 }
-
