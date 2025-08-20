@@ -50,7 +50,7 @@ fun AlarmScreen(navHostController: NavHostController,) {
                     Text(
                         alarm,
                         maxLines = 2,
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.Medium,
                         fontSize = 14.sp,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.padding(horizontal = 20.dp).padding(top = 16.dp)
