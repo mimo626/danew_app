@@ -8,5 +8,5 @@ import retrofit2.http.POST;
 
 interface UserApi {
     @POST("api/auth/signup")
-    fun insert(@Body user: UserEntity): Call<UserEntity>
+    fun save(@Body user: UserEntity): Call<UserEntity>
 }
