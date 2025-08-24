@@ -23,13 +23,21 @@ fun SignupAddScreen(navHostController: NavHostController, viewModel: SignupViewM
     var gender by remember { mutableStateOf("여성") }
     val parentEntry = navHostController.getBackStackEntry("signupFlow")
     val viewModel: SignupViewModel = hiltViewModel(parentEntry)
+
+    // 버튼 활성화 조건
+    val isNextEnabled = name.isNotBlank() &&
+            age.isNotBlank() &&
+            gender.isNotBlank()
+
     Scaffold(
         topBar = {
             MainTopAppBar(navController = navHostController, title = "", isBackIcon = true)
         },
         bottomBar = {
             // 완료 버튼
-            BottomButton(text = "다음") {
+            BottomButton(text = "다음",
+                isEnabled = isNextEnabled
+            ) {
                 viewModel.updateName(name)
                 viewModel.updateAge(age.toInt())
                 viewModel.updateGender(gender)
