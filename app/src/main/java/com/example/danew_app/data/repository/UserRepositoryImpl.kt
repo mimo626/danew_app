@@ -3,8 +3,11 @@ package com.example.danew_app.data.repository
 import android.util.Log
 import com.example.danew.data.local.entity.UserEntity
 import com.example.danew_app.data.dto.LoginRequest
+import com.example.danew_app.data.dto.LoginResponse
 import com.example.danew_app.data.remote.UserApi
 import com.example.danew_app.domain.repository.UserRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.suspendCancellableCoroutine
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,22 +31,24 @@ class UserRepositoryImpl @Inject constructor(
         })
     }
 
-    override suspend fun login(userId: String, password: String) {
-        val request = LoginRequest(userId, password)
-        api.login(request).enqueue(object : Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                if (response.isSuccessful) {
-                    Log.i("login", "로그인 성공: ${response.body()}")
-                } else {
-                    Log.w("login", "로그인 실패: ${response.errorBody()?.string()}")
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override suspend fun login(userId: String, password: String): LoginResponse =
+        suspendCancellableCoroutine { cont ->
+            api.login(LoginRequest(userId, password)).enqueue(object : Callback<LoginResponse> {
+                override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                    if (response.isSuccessful) {
+                        cont.resume(response.body()!!) {}
+                    } else {
+                        cont.resume(LoginResponse(false, "서버 오류: ${response.code()}")) {}
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                Log.e("login", "로그인 에러", t)
-            }
-        })
-    }
+                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                    cont.resume(LoginResponse(false, "네트워크 오류: ${t.localizedMessage}")) {}
+                }
+            })
+        }
+
 
     override suspend fun checkUserId(userId: String, callback: (Boolean) -> Unit) {
         api.checkUserId(userId).enqueue(object : Callback<Boolean> {
