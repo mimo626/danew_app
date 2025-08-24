@@ -63,11 +63,6 @@ class SignupViewModel @Inject constructor(
         user = user.copy(keywordList = keywordList)
     }
 
-    fun updateCreatedAt(createdAt: String) {
-        user = user.copy(createdAt = createdAt)
-    }
-
-
     // -------------------- 회원가입 --------------------
     fun completeSignup() {
         viewModelScope.launch {
