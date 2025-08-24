@@ -18,9 +18,11 @@ fun BottomButton(
     text: String,
     textColor: Color = Color.White,
     backgroundColor: Color = ColorsLight.primaryColor,
-    onClick: () -> Unit
+    isEnabled:Boolean = true,
+    onClick: () -> Unit,
 ) {
     Button(
+        enabled = isEnabled,
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
