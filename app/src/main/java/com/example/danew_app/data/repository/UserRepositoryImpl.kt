@@ -13,23 +13,38 @@ import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.resumeWithException
 
 @Singleton
 class UserRepositoryImpl @Inject constructor(
     private val api: UserApi
 ) : UserRepository {
-    override suspend fun insertUser(user: UserEntity) {
-        Log.d("User", "UserRepositoryImpl_insertUser: $user")
-        api.save(user).enqueue(object : Callback<UserEntity> {
-            override fun onResponse(call: Call<UserEntity>, response: Response<UserEntity>) {
-                Log.i("signup", "성공: ${response.body()}")
-            }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override suspend fun insertUser(user: UserEntity): UserEntity =
+        suspendCancellableCoroutine { cont ->
+            Log.d("User", "UserRepositoryImpl_insertUser: $user")
+            api.save(user).enqueue(object : Callback<UserEntity> {
+                override fun onResponse(call: Call<UserEntity>, response: Response<UserEntity>) {
+                    if (response.isSuccessful && response.body() != null) {
+                        // 성공: UserEntity 반환
+                        cont.resume(response.body()!!) {}
+                        Log.i("User 회원가입", "성공: ${response.body()}")
+                    } else {
+                        // 실패: 서버에서 온 메시지 포함해서 예외 던지기
+                        val errorMsg = response.errorBody()?.string() ?: "회원가입 실패"
+                        cont.resumeWithException(RuntimeException(errorMsg))
+                        Log.e("User 회원가입", "실패: $errorMsg")
+                    }
+                }
 
-            override fun onFailure(call: Call<UserEntity>, t: Throwable) {
-                Log.e("signup", "실패", t)
-            }
-        })
-    }
+                override fun onFailure(call: Call<UserEntity>, t: Throwable) {
+                    // 네트워크/통신 오류 처리
+                    cont.resumeWithException(t)
+                    Log.e("User 회원가입", "네트워크 실패", t)
+                }
+            })
+        }
+
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun login(userId: String, password: String): LoginResponse =
@@ -38,13 +53,16 @@ class UserRepositoryImpl @Inject constructor(
                 override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                     if (response.isSuccessful) {
                         cont.resume(response.body()!!) {}
+                        Log.i("User 로그인", "성공: ${response.body()}")
                     } else {
                         cont.resume(LoginResponse(false, "서버 오류: ${response.code()}")) {}
+                        Log.e("User 로그인", "실패: ${response.code()}")
                     }
                 }
 
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                     cont.resume(LoginResponse(false, "네트워크 오류: ${t.localizedMessage}")) {}
+                    Log.e("User 로그인", "네트워크 실패", t)
                 }
             })
         }
@@ -56,11 +74,11 @@ class UserRepositoryImpl @Inject constructor(
                 if (response.body() == true) {
                     // 사용 가능
                     callback(true)
-                    Log.i("User", "UserRepositoryImpl 아이디 사용 가능: ${response.body()}")
+                    Log.i("User 아이디 중복체크", "UserRepositoryImpl 아이디 사용 가능: ${response.body()}")
                 } else {
                     // 중복 (409)
                     callback(false)
-                    Log.e("User", "UserRepositoryImpl 아이디 중복: ${response.body()}")
+                    Log.e("User 아이디 중복체크", "UserRepositoryImpl 아이디 중복: ${response.body()}")
                 }
             }
 
