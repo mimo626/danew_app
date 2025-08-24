@@ -71,8 +71,7 @@ fun MyPageScreen(navController: NavHostController,) {
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Column(modifier = Modifier.weight(1f)) {
-                    Text("email@email.com", fontWeight = FontWeight.Bold)
-                    Text("이름", color = Color.Gray)
+                    Text("이름", fontWeight = FontWeight.Bold)
                 }
 
                 IconButton(onClick = {
