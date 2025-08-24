@@ -31,6 +31,9 @@ class SignupViewModel @Inject constructor(
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
+    var signUpResult by mutableStateOf<String?>(null)
+        private set
+
     var loginResult by mutableStateOf<String?>(null)
         private set
 
@@ -69,10 +72,12 @@ class SignupViewModel @Inject constructor(
             isLoading = true
             errorMessage = null
             try {
-                insertUserUseCase(user)
+                val user = insertUserUseCase(user)
+                signUpResult = "success"
                 Log.d("User", "SignupViewModel_completeSignup: $user")
             } catch (e: Exception) {
                 errorMessage = e.localizedMessage
+                signUpResult = "fail"
             } finally {
                 isLoading = false
             }
