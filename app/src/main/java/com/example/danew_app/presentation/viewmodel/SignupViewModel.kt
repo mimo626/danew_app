@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.danew_app.data.dto.LoginResponse
 import com.example.danew_app.domain.usecase.CheckUserIdUseCase
 import com.example.danew_app.domain.usecase.InsertUserUseCase
 import com.example.danew_app.domain.usecase.LoginUseCase
@@ -89,13 +90,16 @@ class SignupViewModel @Inject constructor(
             isLoading = true
             errorMessage = null
             try {
-                loginUseCase(userId, password)
-                loginResult = "success"
-                Log.d("User", "SignupViewModel_login: $userId 로그인 성공")
+                val response:LoginResponse = loginUseCase(userId, password)
+                if (response.success) {
+                    loginResult = "success"
+                } else {
+                    loginResult = "fail"
+                    errorMessage = response.message
+                }
             } catch (e: Exception) {
-                errorMessage = e.localizedMessage
                 loginResult = "fail"
-                Log.e("User", "SignupViewModel_login 실패", e)
+                errorMessage = e.localizedMessage
             } finally {
                 isLoading = false
             }
