@@ -4,14 +4,30 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.MainTopAppBar
+import com.example.danew_app.presentation.viewmodel.SignupViewModel
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
+import com.example.danew_app.core.theme.ColorsLight
+
 
 @Composable
-fun LoginScreen(navHostController: NavHostController) {
+fun LoginScreen(navHostController: NavHostController, viewModel: SignupViewModel= hiltViewModel()) {
     var id by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    val loginResult = viewModel.loginResult
+    val errorMessage = viewModel.errorMessage
+
+    // 로그인 성공 시 화면 이동
+    LaunchedEffect(loginResult) {
+        if (loginResult == "success") {
+            navHostController.navigate("home")
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -19,9 +35,11 @@ fun LoginScreen(navHostController: NavHostController) {
         },
         bottomBar = {
             // 완료 버튼
-            BottomButton(text = "로그인하기") {
-                navHostController.navigate("home")
-            }
+            BottomButton(
+                text = "로그인하기",
+                onClick = { viewModel.login(id, password) }
+            )
+
         }
     ) { padding ->
         Column(
@@ -51,6 +69,14 @@ fun LoginScreen(navHostController: NavHostController) {
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
             )
 
+            // 로그인 결과 메시지 표시
+            errorMessage?.let {
+                Text(
+                    text = it,
+                    color = ColorsLight.redColor,
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
+                )
+            }
             Spacer(modifier = Modifier.weight(1f))
         }
     }
