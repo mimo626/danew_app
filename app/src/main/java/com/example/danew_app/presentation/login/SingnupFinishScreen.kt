@@ -2,6 +2,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -20,6 +21,17 @@ import com.example.danew_app.presentation.viewmodel.SignupViewModel
 
 @Composable
 fun SignupFinishScreen(navHostController: NavHostController, viewModel: SignupViewModel) {
+
+    val signUpResult = viewModel.signUpResult
+    val errorMessage = viewModel.errorMessage
+    val iconColor = if(signUpResult == "success") ColorsLight.grayColor else ColorsLight.redColor
+    val icon = if(signUpResult == "success") Icons.Default.Done else Icons.Default.Close
+    var infoText by remember { mutableStateOf("") }
+
+    LaunchedEffect(signUpResult, errorMessage) {
+        infoText = if (signUpResult == "success") "회원가입 완료!"
+        else "회원가입 실패: ${errorMessage ?: ""}"
+    }
 
     Scaffold(
         topBar = {
@@ -42,7 +54,7 @@ fun SignupFinishScreen(navHostController: NavHostController, viewModel: SignupVi
 
             Spacer(Modifier.weight(1f))
 
-            Text("회원가입 완료!", fontSize = 22.sp,
+            Text(infoText, fontSize = 22.sp,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.padding(horizontal = 20.dp),
             )
@@ -56,9 +68,9 @@ fun SignupFinishScreen(navHostController: NavHostController, viewModel: SignupVi
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = Icons.Default.Done,
+                    imageVector = icon,
                     contentDescription = null,
-                    tint = ColorsLight.grayColor,
+                    tint = iconColor,
                     modifier = Modifier.size(36.dp)
                 )
             }
