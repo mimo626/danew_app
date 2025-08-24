@@ -2,6 +2,7 @@ package com.example.danew_app.domain.usecase
 
 import UserModel
 import android.util.Log
+import com.example.danew.data.local.entity.UserEntity
 import com.example.danew_app.data.mapper.toDomain
 import com.example.danew_app.data.mapper.toEntity
 import com.example.danew_app.domain.model.NewsModel
@@ -12,8 +13,7 @@ import javax.inject.Inject
 class InsertUserUseCase @Inject constructor(
     private val repository: UserRepository
 ){
-    suspend operator fun invoke(userModel: UserModel){
-        Log.d("User", "InsertUserUseCase_invoke: $userModel")
-        repository.insertUser(userModel.toEntity())
+    suspend operator fun invoke(userModel: UserModel): UserEntity {
+        return repository.insertUser(userModel.toEntity())
     }
 }
