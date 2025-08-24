@@ -9,7 +9,6 @@ class LoginUseCase @Inject constructor(
     private val repository: UserRepository
 ){
     suspend operator fun invoke(userId: String, password:String) : LoginResponse{
-        Log.d("User", "LoginUseCase_invoke: $userId")
         return repository.login(userId, password)
     }
 }
