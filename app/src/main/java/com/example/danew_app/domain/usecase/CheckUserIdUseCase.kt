@@ -1,6 +1,5 @@
 package com.example.danew_app.domain.usecase
 
-import android.util.Log
 import com.example.danew_app.domain.repository.UserRepository
 import javax.inject.Inject
 
