@@ -2,6 +2,7 @@ package com.example.danew_app.data.remote//package com.example.danew.data.reposi
 
 import com.example.danew.data.local.entity.UserEntity
 import com.example.danew_app.data.dto.LoginRequest
+import com.example.danew_app.data.dto.LoginResponse
 
 import retrofit2.Call
 import retrofit2.http.Body
@@ -14,7 +15,7 @@ interface UserApi {
     fun save(@Body user: UserEntity): Call<UserEntity>
 
     @POST("api/auth/login")
-    fun login(@Body loginRequest: LoginRequest): Call<String>
+    fun login(@Body loginRequest: LoginRequest): Call<LoginResponse>
 
     @GET("api/auth/check-username")
     fun checkUserId(@Query("userId") userId: String): Call<Boolean>
