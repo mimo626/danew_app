@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.CustomLinearProgressIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
@@ -45,7 +46,7 @@ fun SignupScreen(navHostController: NavHostController, viewModel: SignupViewMode
         bottomBar = {
             BottomButton(
                 text = "다음",
-                isEnabled = isNextEnabled // ✅ 조건 만족 시 활성화
+                isEnabled = isNextEnabled
             ) {
                 viewModel.updateUserId(id)
                 viewModel.updatePassword(password)
@@ -88,10 +89,13 @@ fun SignupScreen(navHostController: NavHostController, viewModel: SignupViewMode
                     modifier = Modifier.weight(1f),
                 )
                 Spacer(Modifier.width(8.dp))
-                Button(onClick = {
+                Button(
+                    colors = ButtonDefaults.buttonColors(containerColor = ColorsLight.darkGrayColor),
+                    onClick = {
                     viewModel.checkUserId(id)
                     isIdChecked = true
-                }
+                    },
+                    modifier = Modifier.height(56.dp) // TextField와 같은 높이
                 ) {
                     Text("중복확인")
                 }
