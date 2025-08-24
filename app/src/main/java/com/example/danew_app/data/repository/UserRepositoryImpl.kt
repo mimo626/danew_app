@@ -52,17 +52,24 @@ class UserRepositoryImpl @Inject constructor(
             api.login(LoginRequest(userId, password)).enqueue(object : Callback<LoginResponse> {
                 override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                     if (response.isSuccessful) {
-                        cont.resume(response.body()!!) {}
-                        Log.i("User 로그인", "성공: ${response.body()}")
+                        val body = response.body()
+                        if (body != null) {
+                            cont.resume(body) {}
+                            Log.i("User 로그인", "성공여부: ${body.success}, 메시지: ${body.message}")
+                        } else {
+                            cont.resume(LoginResponse(false, "응답 바디 없음", null)) {}
+                            Log.e("User 로그인", "응답 바디 없음: ${response.code()}")
+                        }
                     } else {
-                        cont.resume(LoginResponse(false, "서버 오류: ${response.code()}")) {}
-                        Log.e("User 로그인", "실패: ${response.code()}")
+                        cont.resume(LoginResponse(false, "서버 오류: ${response.code()}", null)) {}
+                        Log.e("User 로그인", "서버 오류: ${response.code()}")
                     }
                 }
 
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                    cont.resume(LoginResponse(false, "네트워크 오류: ${t.localizedMessage}")) {}
+                    cont.resume(LoginResponse(false, "네트워크 오류: ${t.localizedMessage}", null)) {}
                     Log.e("User 로그인", "네트워크 실패", t)
+
                 }
             })
         }
