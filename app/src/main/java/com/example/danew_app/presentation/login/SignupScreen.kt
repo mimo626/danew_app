@@ -105,12 +105,12 @@ fun SignupScreen(navHostController: NavHostController, viewModel: SignupViewMode
             when (viewModel.isUserIdAvailable) {
                 true -> Text(
                     "사용 가능한 아이디입니다.",
-                    color = Color.Green,
+                    color = ColorsLight.primaryColor,
                     modifier = Modifier.padding(start = 20.dp, top = 4.dp)
                 )
                 false -> Text(
                     "이미 사용 중인 아이디입니다.",
-                    color = Color.Red,
+                    color = ColorsLight.redColor,
                     modifier = Modifier.padding(start = 20.dp, top = 4.dp)
                 )
                 else -> {}
