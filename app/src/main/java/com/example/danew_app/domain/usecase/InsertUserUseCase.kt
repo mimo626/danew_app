@@ -1,8 +1,8 @@
 package com.example.danew_app.domain.usecase
 
-import UserModel
 import com.example.danew.data.local.entity.UserEntity
 import com.example.danew_app.data.mapper.toEntity
+import com.example.danew_app.domain.model.UserModel
 import com.example.danew_app.domain.repository.UserRepository
 import javax.inject.Inject
 
