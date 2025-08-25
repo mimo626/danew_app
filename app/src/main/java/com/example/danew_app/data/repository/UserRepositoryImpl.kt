@@ -17,7 +17,7 @@ import kotlin.coroutines.resumeWithException
 
 @Singleton
 class UserRepositoryImpl @Inject constructor(
-    private val api: UserApi
+    private val api: UserApi,
 ) : UserRepository {
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun insertUser(user: UserEntity): UserEntity =
@@ -53,7 +53,7 @@ class UserRepositoryImpl @Inject constructor(
                 override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                     if (response.isSuccessful) {
                         val body = response.body()
-                        if (body != null) {
+                        if (body != null && !body.token.isNullOrEmpty()) {
                             cont.resume(body) {}
                             Log.i("User 로그인", "성공여부: ${body.success}, 메시지: ${body.message}")
                         } else {
@@ -95,6 +95,4 @@ class UserRepositoryImpl @Inject constructor(
             }
         })
     }
-
-
 }
