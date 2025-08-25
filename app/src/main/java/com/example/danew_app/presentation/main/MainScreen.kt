@@ -1,3 +1,5 @@
+package com.example.danew.presentation.main
+
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -10,7 +12,7 @@ import com.example.danew.core.navigation.BottomNavGraph
 import com.example.danew.core.navigation.BottomNavItem
 
 @Composable
-fun MainScreen(navHostController: NavHostController)
+fun MainScreen(navHostController: NavHostController, isLoggedIn: Boolean)
 {
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -28,7 +30,8 @@ fun MainScreen(navHostController: NavHostController)
         } }
     ) { innerPadding ->
         BottomNavGraph(navHostController = navHostController,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
+            isLoggedIn = isLoggedIn
         )
     }
 }
