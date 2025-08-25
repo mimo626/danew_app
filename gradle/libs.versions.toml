@@ -23,6 +23,9 @@ datetime = "0.6.0"
 protoliteWellKnownTypes = "18.0.1"
 room = "2.7.2"
 ksp = "2.0.0-1.0.21"
+datastore = "1.1.7"
+runtimeLivedata = "1.9.0"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -60,6 +63,8 @@ room-testing = {group = "androidx.room", name = "room-testing", version.ref= "ro
 room-paging = {group = "androidx.room", name = "room-paging", version.ref= "room"}
 room-guava = {group = "androidx.room", name = "room-guava", version.ref= "room"}
 room-ktx = {group = "androidx.room", name = "room-ktx", version.ref= "room"}
+datastore = {group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore"}
+androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
