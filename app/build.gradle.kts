@@ -64,6 +64,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.storage)
     implementation(libs.protolite.well.known.types)
+    implementation(libs.androidx.runtime.livedata)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -88,4 +89,5 @@ dependencies {
     implementation(libs.room.ktx)
     testImplementation(libs.room.testing)
     ksp(libs.room.compiler)
+    implementation(libs.datastore)
 }
