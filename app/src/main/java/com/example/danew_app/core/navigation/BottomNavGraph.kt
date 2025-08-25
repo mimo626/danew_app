@@ -5,6 +5,7 @@ package com.example.danew.core.navigation
 import SearchResultScreen
 import SearchScreen
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
