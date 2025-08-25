@@ -1,3 +1,4 @@
+package com.example.danew_app.domain.model
 
 data class UserModel(
     val userId: String = "",
