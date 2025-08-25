@@ -1,14 +1,9 @@
 package com.example.danew.core.navigation
 
-import LoginScreen
-import MainScreen
-import NewsDetailScreen
-import ProfileEditScreen
+
+
 import SearchResultScreen
 import SearchScreen
-import SignupAddScreen
-import SignupFinishScreen
-import SignupScreen
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -23,27 +18,30 @@ import com.example.danew.presentation.diary.DiaryScreen
 import com.example.danew.presentation.diary.DiaryWriteScreen
 import com.example.danew.presentation.home.AlarmScreen
 import com.example.danew.presentation.home.HomeScreen
+import com.example.danew.presentation.home.NewsDetailScreen
 import com.example.danew.presentation.home.SettingScreen
 import com.example.danew.presentation.home.StartScreen
+import com.example.danew.presentation.login.LoginScreen
+import com.example.danew.presentation.login.SignupAddScreen
+import com.example.danew.presentation.login.SignupFinishScreen
+import com.example.danew.presentation.login.SignupScreen
+import com.example.danew.presentation.main.MainScreen
 import com.example.danew.presentation.profile.MyPageScreen
+import com.example.danew.presentation.profile.ProfileEditScreen
 import com.example.danew_app.presentation.login.KeywordScreen
 import com.example.danew_app.presentation.viewmodel.SignupViewModel
 
 @SuppressLint("UnrememberedGetBackStackEntry")
 @Composable
-fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier) {
+fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier, isLoggedIn: Boolean) {
+    val startDestination = if (isLoggedIn) BottomNavItem.Home.route else "start"
 
-    NavHost(navHostController, startDestination = "start", modifier = modifier) {
+    NavHost(navHostController, startDestination = startDestination, modifier = modifier) {
         composable(BottomNavItem.Home.route) { HomeScreen(navHostController) }
         composable(BottomNavItem.Category.route) { CategoryScreen(navHostController) }
         composable(BottomNavItem.Diary.route) { DiaryScreen(navHostController) }
         composable(BottomNavItem.Bookmark.route) { BookmarkScreen(navHostController) }
         composable(BottomNavItem.My.route) { MyPageScreen(navHostController) }
-
-        // 메인 탭 네비게이션
-        composable("main") {
-            MainScreen(navHostController = navHostController) // 내부에서 BottomNavGraph 호출
-        }
 
         // BottomNav 없는 화면들
         composable("start") {
