@@ -1,3 +1,5 @@
+package com.example.danew.presentation.login
+
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
