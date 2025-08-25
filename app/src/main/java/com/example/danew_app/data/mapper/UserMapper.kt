@@ -1,7 +1,7 @@
 package com.example.danew_app.data.mapper
 
-import UserModel
 import com.example.danew.data.local.entity.UserEntity
+import com.example.danew_app.domain.model.UserModel
 
 // Entity -> Domain
 fun UserEntity.toDomain(): UserModel {
