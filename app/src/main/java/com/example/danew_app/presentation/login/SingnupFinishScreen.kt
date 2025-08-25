@@ -1,3 +1,5 @@
+package com.example.danew.presentation.login
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
