@@ -5,7 +5,6 @@ package com.example.danew.core.navigation
 import SearchResultScreen
 import SearchScreen
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,7 +25,6 @@ import com.example.danew.presentation.login.LoginScreen
 import com.example.danew.presentation.login.SignupAddScreen
 import com.example.danew.presentation.login.SignupFinishScreen
 import com.example.danew.presentation.login.SignupScreen
-import com.example.danew.presentation.main.MainScreen
 import com.example.danew.presentation.profile.MyPageScreen
 import com.example.danew.presentation.profile.ProfileEditScreen
 import com.example.danew_app.presentation.login.KeywordScreen
