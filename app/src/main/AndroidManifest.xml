@@ -15,6 +15,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Danew_app"
         tools:targetApi="31">
+        <!-- SplashActivity를 LAUNCHER로 변경 -->
+        <activity
+            android:name=".presentation.main.SplashActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Danew_app">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".presentation.main.MainActivity"
             android:exported="true"
