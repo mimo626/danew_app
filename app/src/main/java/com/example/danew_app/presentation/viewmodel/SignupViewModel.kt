@@ -1,13 +1,15 @@
 package com.example.danew_app.presentation.viewmodel
 
-import UserModel
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.danew_app.data.dto.LoginResponse
+import com.example.danew_app.domain.model.UserModel
 import com.example.danew_app.domain.usecase.CheckUserIdUseCase
 import com.example.danew_app.domain.usecase.InsertUserUseCase
 import com.example.danew_app.domain.usecase.LoginUseCase
@@ -40,6 +42,8 @@ class SignupViewModel @Inject constructor(
     var isUserIdAvailable by mutableStateOf<Boolean?>(null)
         private set
 
+    private val _isLoggedIn = MutableLiveData<Boolean>()
+    val isLoggedIn: LiveData<Boolean> = _isLoggedIn
 
     // -------------------- 유저 정보 업데이트 --------------------
     fun updateUserId(id: String) {
@@ -72,7 +76,7 @@ class SignupViewModel @Inject constructor(
             isLoading = true
             errorMessage = null
             try {
-                val user = insertUserUseCase(user)
+                val user = insertUserUseCase.invoke(user)
                 signUpResult = "success"
                 Log.d("User", "SignupViewModel_completeSignup: $user")
             } catch (e: Exception) {
@@ -90,7 +94,7 @@ class SignupViewModel @Inject constructor(
             isLoading = true
             errorMessage = null
             try {
-                val response:LoginResponse = loginUseCase(userId, password)
+                val response:LoginResponse = loginUseCase.invoke(userId, password)
                 if (response.success) {
                     loginResult = "success"
                 } else {
@@ -112,7 +116,7 @@ class SignupViewModel @Inject constructor(
             isLoading = true
             errorMessage = null
             try {
-                checkUserIdUseCase(userId){ available ->
+                checkUserIdUseCase.invoke(userId){ available ->
                     isUserIdAvailable = available
                 }
             } catch (e: Exception) {
@@ -122,6 +126,12 @@ class SignupViewModel @Inject constructor(
             } finally {
                 isLoading = false
             }
+        }
+    }
+
+    fun checkLoginState() {
+        viewModelScope.launch {
+            _isLoggedIn.value = loginUseCase.isUserLoggedIn()
         }
     }
 }
