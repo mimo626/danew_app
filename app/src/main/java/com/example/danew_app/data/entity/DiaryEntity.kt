@@ -2,7 +2,6 @@ package com.example.danew_app.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.ColumnInfo
 
 @Entity(tableName = "diary")
 data class DiaryEntity(
