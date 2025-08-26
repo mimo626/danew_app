@@ -45,7 +45,6 @@ class UserRepositoryImpl @Inject constructor(
             })
         }
 
-
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun login(userId: String, password: String): LoginResponse =
         suspendCancellableCoroutine { cont ->
