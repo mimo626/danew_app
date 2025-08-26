@@ -2,7 +2,6 @@ package com.example.danew.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.LocalDateTime
 
 @Entity(tableName = "user")
 data class UserEntity(
