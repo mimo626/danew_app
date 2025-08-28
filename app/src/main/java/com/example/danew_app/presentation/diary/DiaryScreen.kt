@@ -29,6 +29,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -46,10 +47,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.gloabals.formatDateToString
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.MainTopAppBar
+import com.example.danew_app.presentation.viewmodel.DiaryViewModel
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -82,11 +85,19 @@ fun DiaryScreen(navController: NavHostController,) {
 
     val listState = rememberLazyListState()
 
+    val diaryViewModel: DiaryViewModel = hiltViewModel()
+
+    LaunchedEffect(selectedDate) {
+        diaryViewModel.getCreatedAt = selectedDate.toString()
+        diaryViewModel.getDiaryByDate() // 서버나 DB에서 바로 가져오기
+    }
+
     // 초기 스크롤: 오늘 날짜가 앞으로 오도록
     LaunchedEffect(Unit) {
         val todayIndex = selectedDate.dayOfMonth - 1
         listState.scrollToItem(todayIndex)
     }
+
     Scaffold(
         containerColor = ColorsLight.whiteColor,
         topBar = {
@@ -208,19 +219,30 @@ fun DiaryScreen(navController: NavHostController,) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Box (modifier = Modifier
+            if(diaryViewModel.isLoading){
+                Box (modifier = Modifier
+                    .fillMaxSize()
+                    .align(Alignment.CenterHorizontally)
+                ) {
+                    CircularProgressIndicator()
+                }
+            }else {
+                // 로딩 끝
+                val contentText = diaryViewModel.diary?.content ?: "뉴스를 통해 어떤 것을 느끼셨나요?"
+                Box (modifier = Modifier
                     .fillMaxSize()
                     .clickable{
-                        navController.navigate("diary/${formatDateToString(selectedDate)}")
+                        val dateStr = selectedDate.format(DateTimeFormatter.ISO_DATE) // "yyyy-MM-dd" 형식
+                        navController.navigate("diary/${dateStr}")
                     }
-            ) {
-                Text(
-                    "뉴스를 통해 어떤 것을 느끼셨나요?",
-                    color = Color.Gray,
-                    fontSize = 16.sp
-                )
+                ) {
+                    Text(
+                        contentText,
+                        color = ColorsLight.darkGrayColor,
+                        fontSize = 16.sp
+                    )
+                }
             }
-
         }
     }
 }
