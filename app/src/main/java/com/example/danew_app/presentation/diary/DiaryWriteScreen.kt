@@ -1,5 +1,4 @@
 package com.example.danew.presentation.diary
-import android.util.Log
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Divider
@@ -32,7 +31,6 @@ import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.presentation.viewmodel.DiaryViewModel
-import java.time.LocalDate
 
 @Composable
 fun DiaryWriteScreen(date: String, navHostController: NavHostController) {
