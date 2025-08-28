@@ -42,7 +42,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -69,7 +71,7 @@ fun DiaryScreen(navController: NavHostController,) {
     val scope = rememberCoroutineScope()
     var showSheet by remember { mutableStateOf(false) }
     val today = remember { LocalDate.now() }
-    var selectedDate by remember { mutableStateOf(today) }
+    var selectedDate by rememberSaveable { mutableStateOf(today) }
     val isLeap = selectedDate.year.isLeapYear()
     val lastDayOfMonth = (selectedDate.month).length(isLeap)
     val days = (1..lastDayOfMonth).toList()
@@ -232,10 +234,12 @@ fun DiaryScreen(navController: NavHostController,) {
                 Box (modifier = Modifier
                     .fillMaxSize()
                     .clickable{
-                        val diaryJson = diaryViewModel.diary?.let { Gson().toJson(it) } ?: ""
-                        val dateStr = selectedDate.format(DateTimeFormatter.ISO_DATE) // "yyyy-MM-dd" 형식
+                        navController.currentBackStackEntry
+                            ?.savedStateHandle
+                            ?.set("diary", diaryViewModel.diary)
 
-                        navController.navigate("diaryWrite?diaryJson=$diaryJson&selectedDate=$dateStr")
+                        val dateStr = selectedDate.format(DateTimeFormatter.ISO_DATE)
+                        navController.navigate("diaryWrite?selectedDate=$dateStr")
                     }
                 ) {
                     Text(
