@@ -70,6 +70,7 @@ class DiaryRepositoryImpl @Inject constructor(
             )
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun updateDiary(token:String, diaryId:String, diaryRequest: DiaryRequest): DiaryEntity =
         suspendCancellableCoroutine { cont ->
             api.updateDiary(token, diaryId, diaryRequest).enqueue(object : Callback<DiaryEntity>{

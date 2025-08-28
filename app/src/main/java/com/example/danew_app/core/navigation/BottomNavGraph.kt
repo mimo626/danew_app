@@ -33,7 +33,6 @@ import com.example.danew.presentation.profile.ProfileEditScreen
 import com.example.danew_app.domain.model.DiaryModel
 import com.example.danew_app.presentation.login.KeywordScreen
 import com.example.danew_app.presentation.viewmodel.SignupViewModel
-import com.google.gson.Gson
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnrememberedGetBackStackEntry")

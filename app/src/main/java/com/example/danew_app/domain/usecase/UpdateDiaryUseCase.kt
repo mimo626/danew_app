@@ -1,7 +1,6 @@
 package com.example.danew_app.domain.usecase
 
 import com.example.danew_app.data.dto.DiaryRequest
-import com.example.danew_app.data.entity.DiaryEntity
 import com.example.danew_app.data.mapper.toDomain
 import com.example.danew_app.domain.model.DiaryModel
 import com.example.danew_app.domain.repository.DiaryRepository

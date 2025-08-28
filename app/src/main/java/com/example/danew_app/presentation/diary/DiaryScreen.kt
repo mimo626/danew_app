@@ -42,7 +42,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.draw.clip
@@ -54,7 +53,6 @@ import com.example.danew_app.core.gloabals.formatDateToString
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.presentation.viewmodel.DiaryViewModel
-import com.google.gson.Gson
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
