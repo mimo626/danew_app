@@ -68,6 +68,27 @@ class DiaryRepositoryImpl @Inject constructor(
                 }
             }
             )
-
     }
+
+    override suspend fun updateDiary(token:String, diaryId:String, diaryRequest: DiaryRequest): DiaryEntity =
+        suspendCancellableCoroutine { cont ->
+            api.updateDiary(token, diaryId, diaryRequest).enqueue(object : Callback<DiaryEntity>{
+                override fun onResponse(call: Call<DiaryEntity>, response: Response<DiaryEntity>) {
+                    if (response.isSuccessful){
+                        val body = response.body()
+                        if (body != null){
+                            cont.resume(body) {}
+                            Log.i("Diary 수정", "성공: ${body}")
+                        } else{
+                            Log.e("Diary 수정", "응답 바디 없음: ${response.code()}")
+                        }
+                    }else {
+                        Log.e("Diary 수정", "서버 오류: ${response.code()}")
+                    }
+                }
+                override fun onFailure(call: Call<DiaryEntity>, t: Throwable) {
+                    Log.e("Diary 수정", "네트워크 실패", t)
+                }
+            })
+        }
 }
