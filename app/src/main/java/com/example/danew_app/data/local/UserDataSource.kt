@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.danew_app.data.local.PreferencesKeys.ACCESS_TOKEN
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -26,6 +27,9 @@ class UserDataSource @Inject constructor(
             prefs[PreferencesKeys.ACCESS_TOKEN] = token
         }
         Log.i("User 토큰 저장", "${token}")
+    }
+    suspend fun getToken(): String? {
+        return context.dataStore.data.first()[ACCESS_TOKEN]
     }
 
     suspend fun checkLoginState(): Boolean {
