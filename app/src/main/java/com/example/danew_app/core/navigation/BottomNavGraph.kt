@@ -87,17 +87,17 @@ fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier, isL
         }
 
         composable(
-            route = "diaryWrite?diaryJson={diaryJson}&selectedDate={selectedDate}",
+            route = "diaryWrite?selectedDate={selectedDate}",
             arguments = listOf(
-                navArgument("diaryJson") { defaultValue = "" },
                 navArgument("selectedDate") { defaultValue = "" }
             )
         ) { backStackEntry ->
-            val diaryJson = backStackEntry.arguments?.getString("diaryJson")
-            val diary: DiaryModel? = if (!diaryJson.isNullOrEmpty()) {
-                Gson().fromJson(diaryJson, DiaryModel::class.java)
-            } else null
+            // SavedStateHandle 에서 DiaryModel 가져오기
+            val diary = navHostController.previousBackStackEntry
+                ?.savedStateHandle
+                ?.get<DiaryModel>("diary")
 
+            // 쿼리로 넘어온 selectedDate 가져오기
             val selectedDate = backStackEntry.arguments?.getString("selectedDate") ?: ""
 
             DiaryWriteScreen(
@@ -105,9 +105,8 @@ fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier, isL
                 selectedDate = selectedDate,
                 navHostController = navHostController
             )
-
-
         }
+
 
         composable("search") {
             SearchScreen(navHostController = navHostController)
