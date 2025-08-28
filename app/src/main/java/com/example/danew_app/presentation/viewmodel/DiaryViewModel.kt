@@ -1,15 +1,12 @@
 package com.example.danew_app.presentation.viewmodel
 
 import android.util.Log
-import android.view.View
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.danew_app.data.local.UserDataSource
-import com.example.danew_app.domain.model.DiaryModel
 import com.example.danew_app.domain.usecase.DiaryGetByDateUseCase
 import com.example.danew_app.domain.usecase.SaveDiaryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
