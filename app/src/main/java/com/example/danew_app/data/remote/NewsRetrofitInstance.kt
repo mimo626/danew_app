@@ -40,14 +40,27 @@ object NewsRetrofitInstance {
 
 @Module
 @InstallIn(SingletonComponent::class)
-object UserRetrofitInstance {
-    @get:Provides
+object RetrofitModule {
+
+    @Provides
     @Singleton
-    val userApi: UserApi by lazy {
-        Retrofit.Builder()
+    fun provideRetrofit(): Retrofit {
+        return Retrofit.Builder()
             .baseUrl("http://10.0.2.2:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(UserApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserApi(retrofit: Retrofit): UserApi {
+        return retrofit.create(UserApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDiaryApi(retrofit: Retrofit): DiaryApi {
+        return retrofit.create(DiaryApi::class.java)
     }
 }
+
