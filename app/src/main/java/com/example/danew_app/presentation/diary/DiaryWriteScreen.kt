@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -93,7 +94,7 @@ fun DiaryWriteScreen(diary: DiaryModel?, selectedDate:String, navHostController:
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(date, fontSize = 16.sp)
                 Spacer(modifier = Modifier.width(8.dp))
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier
                         .weight(1f)
                         .height(1.dp),

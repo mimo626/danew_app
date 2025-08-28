@@ -5,6 +5,8 @@ package com.example.danew.core.navigation
 import SearchResultScreen
 import SearchScreen
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -33,6 +35,7 @@ import com.example.danew_app.presentation.login.KeywordScreen
 import com.example.danew_app.presentation.viewmodel.SignupViewModel
 import com.google.gson.Gson
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnrememberedGetBackStackEntry")
 @Composable
 fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier, isLoggedIn: Boolean) {
