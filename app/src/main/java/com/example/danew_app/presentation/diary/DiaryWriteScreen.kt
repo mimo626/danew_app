@@ -36,10 +36,8 @@ import com.example.danew_app.presentation.viewmodel.DiaryViewModel
 
 @Composable
 fun DiaryWriteScreen(diary: DiaryModel?, selectedDate:String, navHostController: NavHostController) {
-    val date = selectedDate
     val isEdit = diary != null
-    val contentText = diary?.content ?: ""
-    var inputText by remember { mutableStateOf(contentText) }
+    var inputText by remember { mutableStateOf(diary?.content ?: "") }
     val focusRequester = remember { FocusRequester() }
     val diaryViewModel:DiaryViewModel = hiltViewModel()
 
@@ -48,11 +46,12 @@ fun DiaryWriteScreen(diary: DiaryModel?, selectedDate:String, navHostController:
         focusRequester.requestFocus()
     }
 
-    LaunchedEffect(diaryViewModel.saveSuccess) {
-        if (diaryViewModel.saveSuccess) {
-            navHostController.navigate("diary")
+    LaunchedEffect(diaryViewModel.success) {
+        if (diaryViewModel.success) {
+            navHostController.popBackStack()
         }
     }
+
 
     Scaffold(
         containerColor = ColorsLight.whiteColor,
@@ -70,12 +69,12 @@ fun DiaryWriteScreen(diary: DiaryModel?, selectedDate:String, navHostController:
                 textColor = ColorsLight.whiteColor,
                 backgroundColor = ColorsLight.primaryColor
             ) {
-                //TODO 유저 기록 데이터에 저장
+                diaryViewModel.diary = diary
                 diaryViewModel.content = inputText
                 diaryViewModel.saveCreatedAt = selectedDate
-                if (diary != null) {
+                if (isEdit) {
                     // 수정 모드
-//                    diaryViewModel.updateDiary(diary.copy(content = inputText))
+                    diaryViewModel.updateDiary()
                 } else {
                     // 생성 모드
                     diaryViewModel.saveDiary()
@@ -92,7 +91,7 @@ fun DiaryWriteScreen(diary: DiaryModel?, selectedDate:String, navHostController:
             Spacer(Modifier.height(24.dp))
             // 날짜 표시
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(date, fontSize = 16.sp)
+                Text(selectedDate, fontSize = 16.sp)
                 Spacer(modifier = Modifier.width(8.dp))
                 HorizontalDivider(
                     modifier = Modifier
