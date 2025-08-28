@@ -16,5 +16,5 @@ interface DiaryApi {
 
     @GET("api/diary/getByDate")
     fun getByDate(@Header("Authorization") token:String,
-                  @Query("createdAt") createdAt:String): Call<DiaryEntity>
+                  @Query("createdAt") createdAt:String): Call<DiaryEntity?>
 }
