@@ -25,20 +25,30 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.MainTopAppBar
+import com.example.danew_app.domain.usecase.SaveDiaryUseCase
+import com.example.danew_app.presentation.viewmodel.DiaryViewModel
 
 @Composable
 fun DiaryWriteScreen(date: String, navHostController: NavHostController) {
     val selectedDate = date
     var inputText by remember { mutableStateOf("") }
     val focusRequester = remember { FocusRequester() }
+    val diaryViewModel:DiaryViewModel = hiltViewModel()
 
     // 화면 진입 시 포커스 요청
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
+    }
+
+    LaunchedEffect(diaryViewModel.saveSuccess) {
+        if (diaryViewModel.saveSuccess) {
+            navHostController.navigate("diary")
+        }
     }
 
     Scaffold(
@@ -58,7 +68,8 @@ fun DiaryWriteScreen(date: String, navHostController: NavHostController) {
                 backgroundColor = ColorsLight.primaryColor
             ) {
                 //TODO 유저 기록 데이터에 저장
-                navHostController.navigate("diary")
+                diaryViewModel.content = inputText
+                diaryViewModel.saveDiary()
             }
         }
     ) { padding ->
