@@ -11,6 +11,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.example.danew.presentation.bookmark.BookmarkScreen
 import com.example.danew.presentation.category.CategoryScreen
@@ -27,8 +28,10 @@ import com.example.danew.presentation.login.SignupFinishScreen
 import com.example.danew.presentation.login.SignupScreen
 import com.example.danew.presentation.profile.MyPageScreen
 import com.example.danew.presentation.profile.ProfileEditScreen
+import com.example.danew_app.domain.model.DiaryModel
 import com.example.danew_app.presentation.login.KeywordScreen
 import com.example.danew_app.presentation.viewmodel.SignupViewModel
+import com.google.gson.Gson
 
 @SuppressLint("UnrememberedGetBackStackEntry")
 @Composable
@@ -80,9 +83,27 @@ fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier, isL
             newsId?.let { NewsDetailScreen(it, navHostController) }
         }
 
-        composable("diary/{date}") { backStackEntry ->
-            val date = backStackEntry.arguments?.getString("date")
-            date?.let { DiaryWriteScreen(it, navHostController) }
+        composable(
+            route = "diaryWrite?diaryJson={diaryJson}&selectedDate={selectedDate}",
+            arguments = listOf(
+                navArgument("diaryJson") { defaultValue = "" },
+                navArgument("selectedDate") { defaultValue = "" }
+            )
+        ) { backStackEntry ->
+            val diaryJson = backStackEntry.arguments?.getString("diaryJson")
+            val diary: DiaryModel? = if (!diaryJson.isNullOrEmpty()) {
+                Gson().fromJson(diaryJson, DiaryModel::class.java)
+            } else null
+
+            val selectedDate = backStackEntry.arguments?.getString("selectedDate") ?: ""
+
+            DiaryWriteScreen(
+                diary = diary,
+                selectedDate = selectedDate,
+                navHostController = navHostController
+            )
+
+
         }
 
         composable("search") {
