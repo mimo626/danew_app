@@ -52,6 +52,7 @@ import com.example.danew_app.core.gloabals.formatDateToString
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.presentation.viewmodel.DiaryViewModel
+import com.google.gson.Gson
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -231,8 +232,10 @@ fun DiaryScreen(navController: NavHostController,) {
                 Box (modifier = Modifier
                     .fillMaxSize()
                     .clickable{
+                        val diaryJson = diaryViewModel.diary?.let { Gson().toJson(it) } ?: ""
                         val dateStr = selectedDate.format(DateTimeFormatter.ISO_DATE) // "yyyy-MM-dd" 형식
-                        navController.navigate("diary/${dateStr}")
+
+                        navController.navigate("diaryWrite?diaryJson=$diaryJson&selectedDate=$dateStr")
                     }
                 ) {
                     Text(
