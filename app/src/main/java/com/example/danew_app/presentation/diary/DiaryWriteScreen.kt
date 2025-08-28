@@ -30,12 +30,15 @@ import androidx.navigation.NavHostController
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.MainTopAppBar
+import com.example.danew_app.domain.model.DiaryModel
 import com.example.danew_app.presentation.viewmodel.DiaryViewModel
 
 @Composable
-fun DiaryWriteScreen(date: String, navHostController: NavHostController) {
-    val selectedDate = date
-    var inputText by remember { mutableStateOf("") }
+fun DiaryWriteScreen(diary: DiaryModel?, selectedDate:String, navHostController: NavHostController) {
+    val date = selectedDate
+    val isEdit = diary != null
+    val contentText = diary?.content ?: ""
+    var inputText by remember { mutableStateOf(contentText) }
     val focusRequester = remember { FocusRequester() }
     val diaryViewModel:DiaryViewModel = hiltViewModel()
 
@@ -69,7 +72,13 @@ fun DiaryWriteScreen(date: String, navHostController: NavHostController) {
                 //TODO 유저 기록 데이터에 저장
                 diaryViewModel.content = inputText
                 diaryViewModel.saveCreatedAt = selectedDate
-                diaryViewModel.saveDiary()
+                if (diary != null) {
+                    // 수정 모드
+//                    diaryViewModel.updateDiary(diary.copy(content = inputText))
+                } else {
+                    // 생성 모드
+                    diaryViewModel.saveDiary()
+                }
             }
         }
     ) { padding ->
@@ -82,7 +91,7 @@ fun DiaryWriteScreen(date: String, navHostController: NavHostController) {
             Spacer(Modifier.height(24.dp))
             // 날짜 표시
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(selectedDate, fontSize = 16.sp)
+                Text(date, fontSize = 16.sp)
                 Spacer(modifier = Modifier.width(8.dp))
                 Divider(
                     modifier = Modifier
