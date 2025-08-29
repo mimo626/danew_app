@@ -87,7 +87,6 @@ class UserViewModel @Inject constructor(
             try {
                 val user = insertUserUseCase.invoke(user)
                 signUpResult = "success"
-                Log.d("User", "SignupViewModel_completeSignup: $user")
             } catch (e: Exception) {
                 errorMessage = e.localizedMessage
                 signUpResult = "fail"
