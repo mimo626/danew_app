@@ -7,7 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.setValue
+import com.example.danew_app.data.local.UserDataSource
 import com.example.danew_app.domain.model.NewsModel
+import com.example.danew_app.domain.usecase.GetCustomNewsListUseCase
 import com.example.danew_app.domain.usecase.GetNewsByCategoryUseCase
 import com.example.danew_app.domain.usecase.GetNewsByIdUseCase
 import com.example.danew_app.domain.usecase.GetNewsBySearchQueryUseCase
@@ -21,8 +23,10 @@ import javax.inject.Inject
 class NewsViewModel @Inject constructor(
     private val getNewsByCategoryUseCase: GetNewsByCategoryUseCase,
     private val getNewsByIdUseCase: GetNewsByIdUseCase,
-    private val getNewsBySearchQueryUseCase: GetNewsBySearchQueryUseCase
-) : ViewModel() {
+    private val getNewsBySearchQueryUseCase: GetNewsBySearchQueryUseCase,
+    private val getCustomNewsListUseCase: GetCustomNewsListUseCase,
+    private val userDataSource: UserDataSource,
+    ) : ViewModel() {
 
     var newsListByCategory by mutableStateOf<List<NewsModel>>(emptyList())
         private set
@@ -31,6 +35,17 @@ class NewsViewModel @Inject constructor(
     val newsListById: StateFlow<List<NewsModel>> = _newsListById
 
     var newsListBySearchQuery by mutableStateOf<List<NewsModel>>(emptyList())
+        private set
+
+    var customNewsMap by mutableStateOf<Map<String, List<NewsModel>>>(emptyMap())
+        private set
+
+    // 이미 처리된 데이터
+    var mainImageNews by mutableStateOf<NewsModel?>(null)
+        private set
+    var recommendedNews by mutableStateOf<List<NewsModel>>(emptyList())
+        private set
+    var keywordNews by mutableStateOf<Map<String, List<NewsModel>>>(emptyMap())
         private set
 
     var isLoading by mutableStateOf(false)
@@ -100,5 +115,54 @@ class NewsViewModel @Inject constructor(
         newsListBySearchQuery = emptyList()
     }
 
+    fun fetchCustomNews() {
+        viewModelScope.launch {
+            isLoading = true
+            errorMessage = null
+            try {
+                val token = userDataSource.getToken() ?: ""
+                customNewsMap = getCustomNewsListUseCase.invoke(token)
+                processNews()
+                Log.i("News 맞춤 뉴스 조회", "$customNewsMap")
+            } catch (e: Exception) {
+                errorMessage = e.localizedMessage
+            } finally {
+                isLoading = false
+            }
+        }
+    }
 
+    private fun processNews() {
+        val used = mutableSetOf<String>() // 중복 방지 (url 이나 id 기준)
+
+        // 1) MainImageCard (이미지 있는 첫 번째 뉴스)
+        val imageNews = customNewsMap.values
+            .flatten()
+            .firstOrNull { !it.imageUrl.isNullOrEmpty() }
+        mainImageNews = imageNews
+        imageNews?.id?.let { used.add(it) }
+
+        // 2) 추천 뉴스 (총 8개, 키워드별 균등 분배)
+        val keywords = customNewsMap.keys.toList()
+        val perKeyword = if (keywords.isEmpty()) 0 else 8 / keywords.size
+
+        val pickedRecommended = mutableListOf<NewsModel>()
+        keywords.forEach { keyword ->
+            val candidates = customNewsMap[keyword].orEmpty()
+                .filter { it.id !in used }
+                .take(perKeyword)
+            pickedRecommended.addAll(candidates)
+            candidates.forEach { used.add(it.id) }
+        }
+        recommendedNews = pickedRecommended
+
+        // 3) 키워드별 뉴스 (각 4개씩)
+        val perKeywordMap = keywords.associateWith { keyword ->
+            customNewsMap[keyword].orEmpty()
+                .filter { it.id !in used }
+                .take(4)
+                .also { it.forEach { news -> used.add(news.id) } }
+        }
+        keywordNews = perKeywordMap
+    }
 }
