@@ -32,7 +32,7 @@ import com.example.danew.presentation.profile.MyPageScreen
 import com.example.danew.presentation.profile.ProfileEditScreen
 import com.example.danew_app.domain.model.DiaryModel
 import com.example.danew_app.presentation.login.KeywordScreen
-import com.example.danew_app.presentation.viewmodel.SignupViewModel
+import com.example.danew_app.presentation.viewmodel.UserViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnrememberedGetBackStackEntry")
@@ -59,22 +59,22 @@ fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier, isL
         // 회원가입 플로우 네비게이션 그래프
         navigation(startDestination = "signup", route = "signupFlow") {
             composable("signup") { backStackEntry ->
-                val viewModel: SignupViewModel =
+                val viewModel: UserViewModel =
                     hiltViewModel(navHostController.getBackStackEntry("signupFlow"))
                 SignupScreen(navHostController, viewModel)
             }
             composable("signupAdd") { backStackEntry ->
-                val viewModel: SignupViewModel =
+                val viewModel: UserViewModel =
                     hiltViewModel(navHostController.getBackStackEntry("signupFlow"))
                 SignupAddScreen(navHostController, viewModel)
             }
             composable("keyword") { backStackEntry ->
-                val viewModel: SignupViewModel =
+                val viewModel: UserViewModel =
                     hiltViewModel(navHostController.getBackStackEntry("signupFlow"))
                 KeywordScreen(navHostController, viewModel)
             }
             composable("signupFinish") { backStackEntry ->
-                val viewModel: SignupViewModel =
+                val viewModel: UserViewModel =
                     hiltViewModel(navHostController.getBackStackEntry("signupFlow"))
                 SignupFinishScreen(navHostController, viewModel)
             }

@@ -22,19 +22,35 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.gloabals.Globals
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.MainTopAppBar
+import com.example.danew_app.domain.model.UserModel
 import com.example.danew_app.presentation.profile.TodayNews
+import com.example.danew_app.presentation.viewmodel.UserViewModel
+import androidx.compose.runtime.collectAsState
 
 @Composable
 fun MyPageScreen(navController: NavHostController,) {
+    val userViewModel: UserViewModel = hiltViewModel()
+    val user by userViewModel.getUserData.collectAsState()  // StateFlow 구독
+
+    LaunchedEffect(Unit) {
+        userViewModel.getUser()   // 화면 진입 시 한 번 실행
+    }
+
     Scaffold(
         containerColor = ColorsLight.whiteColor,
         topBar = {
@@ -71,7 +87,7 @@ fun MyPageScreen(navController: NavHostController,) {
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Column(modifier = Modifier.weight(1f)) {
-                    Text("이름", fontWeight = FontWeight.Bold)
+                    Text("${user.name.ifEmpty { "로딩 중" }}님", fontWeight = FontWeight.Bold)
                 }
 
                 IconButton(onClick = {

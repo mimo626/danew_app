@@ -19,10 +19,10 @@ import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.CustomLinearProgressIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
-import com.example.danew_app.presentation.viewmodel.SignupViewModel
+import com.example.danew_app.presentation.viewmodel.UserViewModel
 
 @Composable
-fun SignupFinishScreen(navHostController: NavHostController, viewModel: SignupViewModel) {
+fun SignupFinishScreen(navHostController: NavHostController, viewModel: UserViewModel) {
 
     val signUpResult = viewModel.signUpResult
     val errorMessage = viewModel.errorMessage

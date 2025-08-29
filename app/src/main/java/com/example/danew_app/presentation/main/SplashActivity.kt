@@ -8,14 +8,14 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import com.example.danew_app.presentation.viewmodel.SignupViewModel
+import com.example.danew_app.presentation.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
 class SplashActivity : ComponentActivity() {
 
-    private val userViewModel: SignupViewModel by viewModels()
+    private val userViewModel: UserViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

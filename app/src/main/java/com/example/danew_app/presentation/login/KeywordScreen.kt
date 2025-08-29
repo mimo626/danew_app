@@ -1,7 +1,7 @@
 package com.example.danew_app.presentation.login
 
 import android.annotation.SuppressLint
-import com.example.danew_app.presentation.viewmodel.SignupViewModel
+import com.example.danew_app.presentation.viewmodel.UserViewModel
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -40,7 +40,7 @@ import com.example.danew_app.core.widget.CustomLinearProgressIndicator
 
 @SuppressLint("UnrememberedGetBackStackEntry")
 @Composable
-fun KeywordScreen(navHostController: NavHostController, viewModel: SignupViewModel) {
+fun KeywordScreen(navHostController: NavHostController, viewModel: UserViewModel) {
     val allKeywords:List<String> = listOf(
         "정치", "엔터", "경제",
         "취업", "문화", "IT",
@@ -52,7 +52,7 @@ fun KeywordScreen(navHostController: NavHostController, viewModel: SignupViewMod
     val selectedKeywords = remember { mutableStateListOf<String>() }
 
     val parentEntry = navHostController.getBackStackEntry("signupFlow")
-    val viewModel: SignupViewModel = hiltViewModel(parentEntry)
+    val viewModel: UserViewModel = hiltViewModel(parentEntry)
 
     // 버튼 활성화 조건
     val isNextEnabled = selectedKeywords.isNotEmpty()

@@ -17,18 +17,18 @@ import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.CustomLinearProgressIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
-import com.example.danew_app.presentation.viewmodel.SignupViewModel
+import com.example.danew_app.presentation.viewmodel.UserViewModel
 
 @SuppressLint("UnrememberedGetBackStackEntry")
 @Composable
-fun SignupScreen(navHostController: NavHostController, viewModel: SignupViewModel) {
+fun SignupScreen(navHostController: NavHostController, viewModel: UserViewModel) {
     var id by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var isIdChecked by remember { mutableStateOf(false) } // 중복 체크 버튼 눌렀는지 여부
 
     val parentEntry = navHostController.getBackStackEntry("signupFlow")
-    val viewModel: SignupViewModel = hiltViewModel(parentEntry)
+    val viewModel: UserViewModel = hiltViewModel(parentEntry)
 
     // ViewModel 상태 관찰
     val isUserIdAvailable = viewModel.isUserIdAvailable

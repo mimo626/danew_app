@@ -15,16 +15,16 @@ import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.CustomLinearProgressIndicator
 import com.example.danew_app.core.widget.CustomRadioButton
 import com.example.danew_app.core.widget.MainTopAppBar
-import com.example.danew_app.presentation.viewmodel.SignupViewModel
+import com.example.danew_app.presentation.viewmodel.UserViewModel
 
 @SuppressLint("UnrememberedGetBackStackEntry")
 @Composable
-fun SignupAddScreen(navHostController: NavHostController, viewModel: SignupViewModel) {
+fun SignupAddScreen(navHostController: NavHostController, viewModel: UserViewModel) {
     var name by remember { mutableStateOf("") }
     var age by remember { mutableStateOf("") }
     var gender by remember { mutableStateOf("여성") }
     val parentEntry = navHostController.getBackStackEntry("signupFlow")
-    val viewModel: SignupViewModel = hiltViewModel(parentEntry)
+    val viewModel: UserViewModel = hiltViewModel(parentEntry)
 
     // 버튼 활성화 조건
     val isNextEnabled = name.isNotBlank() &&

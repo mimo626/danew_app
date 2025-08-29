@@ -10,14 +10,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.MainTopAppBar
-import com.example.danew_app.presentation.viewmodel.SignupViewModel
+import com.example.danew_app.presentation.viewmodel.UserViewModel
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import com.example.danew_app.core.theme.ColorsLight
 
 
 @Composable
-fun LoginScreen(navHostController: NavHostController, viewModel: SignupViewModel= hiltViewModel()) {
+fun LoginScreen(navHostController: NavHostController, viewModel: UserViewModel= hiltViewModel()) {
     var id by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 

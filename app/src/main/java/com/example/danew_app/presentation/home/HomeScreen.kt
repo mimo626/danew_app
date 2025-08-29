@@ -8,19 +8,35 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.gloabals.Globals
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.MainTopAppBar
+import com.example.danew_app.domain.model.UserModel
 import com.example.danew_app.presentation.home.MainImageCard
 import com.example.danew_app.presentation.home.NewsList
 import com.example.danew_app.presentation.home.NowTopNews
 import com.example.danew_app.presentation.home.SearchBar
+import com.example.danew_app.presentation.viewmodel.UserViewModel
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
+    val userViewModel:UserViewModel = hiltViewModel()
+    var user by remember { mutableStateOf(UserModel()) }
+
+    LaunchedEffect(Unit) {
+        userViewModel.getUser()
+        user = userViewModel.user
+    }
     Scaffold(
         containerColor = ColorsLight.whiteColor,
         topBar = {
@@ -59,5 +75,4 @@ fun HomeScreen(navController: NavHostController) {
         }
     }
 }
-
 
