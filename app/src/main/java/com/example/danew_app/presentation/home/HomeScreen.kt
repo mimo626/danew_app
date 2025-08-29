@@ -86,7 +86,7 @@ fun HomeScreen(navController: NavHostController) {
                     item { MainImageCard(it, navController) }
                 }
 
-                item { Spacer(modifier = Modifier.height(40.dp)) }
+                item { Spacer(modifier = Modifier.height(28.dp)) }
 
                 // 추천 뉴스
                 if (recommendedNews.isNotEmpty()) {
