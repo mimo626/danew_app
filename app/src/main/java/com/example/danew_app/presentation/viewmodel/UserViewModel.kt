@@ -9,23 +9,32 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.danew_app.data.dto.LoginResponse
+import com.example.danew_app.data.local.UserDataSource
 import com.example.danew_app.domain.model.UserModel
 import com.example.danew_app.domain.usecase.CheckUserIdUseCase
+import com.example.danew_app.domain.usecase.GetUserUseCase
 import com.example.danew_app.domain.usecase.InsertUserUseCase
 import com.example.danew_app.domain.usecase.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignupViewModel @Inject constructor(
+class UserViewModel @Inject constructor(
     private val insertUserUseCase: InsertUserUseCase,
     private val loginUseCase: LoginUseCase,
-    private val checkUserIdUseCase: CheckUserIdUseCase
-) : ViewModel() {
+    private val checkUserIdUseCase: CheckUserIdUseCase,
+    private val getUserUseCase: GetUserUseCase,
+    private val userDataSource: UserDataSource,
+    ) : ViewModel() {
 
     var user by mutableStateOf(UserModel())
         private set
+
+    private val _user = MutableStateFlow(UserModel())
+    var getUserData: StateFlow<UserModel> = _user
 
     var isLoading by mutableStateOf(false)
         private set
@@ -110,6 +119,24 @@ class SignupViewModel @Inject constructor(
         }
     }
 
+    // -------------------- 유저 조회 --------------------
+    fun getUser(){
+        viewModelScope.launch {
+            isLoading = true
+            errorMessage = null
+            try {
+                val token = userDataSource.getToken() ?: ""
+                val userData = getUserUseCase.invoke(token)
+                _user.value = userData
+            }catch (e: Exception) {
+                errorMessage = e.localizedMessage
+                Log.e("User 조회", "getUser 오류", e)
+            } finally {
+                isLoading = false
+            }
+        }
+    }
+
     // -------------------- 아이디 중복체크 --------------------
     fun checkUserId(userId: String) {
         viewModelScope.launch {
@@ -122,7 +149,7 @@ class SignupViewModel @Inject constructor(
             } catch (e: Exception) {
                 isUserIdAvailable = false
                 errorMessage = e.localizedMessage
-                Log.e("User", "SignupViewModel_checkUserId 중복", e)
+                Log.e("User 로그인 여부 확인", "checkUserId 오류", e)
             } finally {
                 isLoading = false
             }
