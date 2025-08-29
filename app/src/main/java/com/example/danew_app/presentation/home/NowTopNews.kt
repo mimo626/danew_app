@@ -44,7 +44,7 @@ fun NowTopNews(sectionTitle: String, newsList: List<NewsModel>, navController: N
             Text("전체보기", color = Color.Blue, fontSize = 12.sp)
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         // 나머지 뉴스 중 최대 3개 표시
         LazyRow {
@@ -59,5 +59,6 @@ fun NowTopNews(sectionTitle: String, newsList: List<NewsModel>, navController: N
         topNews?.let {
             TopImageCard(it, navController = navController)
         }
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
