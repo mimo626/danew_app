@@ -3,6 +3,7 @@ package com.example.danew_app.data.remote
 import com.example.danew.data.local.entity.UserEntity
 import com.example.danew_app.data.dto.LoginRequest
 import com.example.danew_app.data.dto.LoginResponse
+import com.example.danew_app.data.entity.BookmarkEntity
 
 import retrofit2.Call
 import retrofit2.http.Body
@@ -23,4 +24,7 @@ interface UserApi {
 
     @GET("/api/auth/getUser")
     fun getUser(@Header("Authorization") token: String) : Call<UserEntity>
+
+    @POST("api/auth/bookmark")
+    fun addNewsBookmark(@Header("Authorization") token: String, diaryId:String):Call<BookmarkEntity>
 }
