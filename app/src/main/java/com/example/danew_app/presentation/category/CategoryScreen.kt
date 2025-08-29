@@ -117,7 +117,9 @@ fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = 
             if (isLoading && newsList.isEmpty()) {
                 item {
                     Box(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(padding),
                         contentAlignment = Alignment.Center
                     ) {
                         CircularProgressIndicator(color = ColorsLight.grayColor)
