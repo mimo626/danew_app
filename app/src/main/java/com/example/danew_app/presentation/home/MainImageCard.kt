@@ -1,7 +1,9 @@
 package com.example.danew_app.presentation.home
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.domain.model.NewsModel
 
 //홈의 첫번째 이미지 카드
@@ -32,9 +35,16 @@ fun MainImageCard(newsModel: NewsModel, navController:NavHostController) {
                 .height(180.dp),
             contentScale = ContentScale.Crop
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(newsModel.title, fontWeight = FontWeight.Bold, fontSize = 14.sp,
-            modifier = Modifier.padding(horizontal = 16.dp)
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+                .background(color = ColorsLight.darkGrayColor)
+        ){
+            Text(newsModel.title, fontWeight = FontWeight.Bold, fontSize = 14.sp,
+                color = ColorsLight.whiteColor,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+        }
     }
 }
