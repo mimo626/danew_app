@@ -38,12 +38,11 @@ fun MainImageCard(newsModel: NewsModel, navController:NavHostController) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp)
                 .background(color = ColorsLight.darkGrayColor)
         ){
             Text(newsModel.title, fontWeight = FontWeight.Bold, fontSize = 14.sp,
                 color = ColorsLight.whiteColor,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             )
         }
     }
