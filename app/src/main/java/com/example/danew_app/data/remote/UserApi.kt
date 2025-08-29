@@ -7,6 +7,7 @@ import com.example.danew_app.data.dto.LoginResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -20,4 +21,6 @@ interface UserApi {
     @GET("api/auth/check-username")
     fun checkUserId(@Query("userId") userId: String): Call<Boolean>
 
+    @GET("/api/auth/getUser")
+    fun getUser(@Header("Authorization") token: String) : Call<UserEntity>
 }
