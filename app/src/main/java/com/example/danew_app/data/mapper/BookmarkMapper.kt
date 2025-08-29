@@ -7,5 +7,6 @@ fun BookmarkEntity.toDomain(): BookmarkModel {
     return BookmarkModel(
         userId = this.userId,
         articleId = this.articleId,
+        bookmarkedAt = this.bookmarkedAt,
     )
 }
