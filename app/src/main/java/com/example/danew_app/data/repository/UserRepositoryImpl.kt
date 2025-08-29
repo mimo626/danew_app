@@ -73,6 +73,31 @@ class UserRepositoryImpl @Inject constructor(
             })
         }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override suspend fun getUser(token: String,): UserEntity =
+        suspendCancellableCoroutine { cont ->
+            api.getUser(token).enqueue(object : Callback<UserEntity> {
+                override fun onResponse(call: Call<UserEntity>, response: Response<UserEntity>) {
+                    if (response.isSuccessful) {
+                        val body = response.body()
+                        if (body != null) {
+                            cont.resume(body) {}
+                            Log.i("User 조회", "${body}")
+                        } else {
+                            Log.e("User 조회", "응답 바디 없음: ${response.code()}")
+                        }
+                    } else {
+                        Log.e("User 조회", "서버 오류: ${response.code()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<UserEntity>, t: Throwable) {
+                    Log.e("User 조회", "네트워크 실패", t)
+
+                }
+            })
+        }
+
 
     override suspend fun checkUserId(userId: String, callback: (Boolean) -> Unit) {
         api.checkUserId(userId).enqueue(object : Callback<Boolean> {
