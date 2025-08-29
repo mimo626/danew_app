@@ -8,4 +8,5 @@ interface UserRepository {
     suspend fun insertUser(user:UserEntity):UserEntity
     suspend fun login(userId: String, password: String) : LoginResponse
     suspend fun checkUserId(userId: String, callback: (Boolean) -> Unit)
+    suspend fun getUser(token: String,): UserEntity
 }
