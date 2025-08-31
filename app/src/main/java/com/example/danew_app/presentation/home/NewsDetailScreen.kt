@@ -15,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -25,6 +26,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -46,6 +50,8 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
     val newsList by viewModel.newsListById.collectAsState()
     val isLoading = viewModel.isLoading
     val errorMessage = viewModel.errorMessage
+    var isBookmarked by remember { mutableStateOf(false) }
+
 
     LaunchedEffect(newsId) {
         viewModel.fetchNewsById(id = newsId)
@@ -130,13 +136,16 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
                     Row (
                         modifier = Modifier.align(Alignment.End)
                     ){
-                        IconButton(onClick = {}) {
+                        IconButton(
+                            onClick = { isBookmarked = !isBookmarked }
+                        ) {
                             Icon(
-                                tint = ColorsLight.darkGrayColor,
-                                imageVector = Icons.Default.FavoriteBorder,
-                                contentDescription = "북마크"
+                                imageVector = if (isBookmarked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                contentDescription = if (isBookmarked) "북마크 취소" else "북마크",
+                                tint = if (isBookmarked) Color.Red else ColorsLight.darkGrayColor
                             )
                         }
+
                         Spacer(modifier = Modifier.width(4.dp))
                         ShareButton(newsLink = newsList.get(0).link)
                     }
