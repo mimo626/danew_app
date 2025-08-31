@@ -53,7 +53,6 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
     val errorMessage = newsViewModel.errorMessage
 
     val bookmarkViewModel:BookmarkViewModel = hiltViewModel()
-    val bookmark = bookmarkViewModel.bookmark
     var isBookmarked by remember { mutableStateOf(false) }
 
 
@@ -142,7 +141,13 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
                     ){
                         IconButton(
                             onClick = {
-                                bookmarkViewModel.saveBookmark(newsList.get(0))
+                                if (isBookmarked) {
+                                    // 북마크 삭제
+                                    bookmarkViewModel.deleteBookmark(newsList[0].id)
+                                } else {
+                                    // 북마크 저장
+                                    bookmarkViewModel.saveBookmark(newsList[0])
+                                }
                                 isBookmarked = !isBookmarked
                             }
                         ) {
