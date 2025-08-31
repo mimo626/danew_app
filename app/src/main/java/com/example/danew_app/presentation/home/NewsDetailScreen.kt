@@ -43,18 +43,22 @@ import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.presentation.viewmodel.NewsViewModel
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.core.widget.ShareButton
+import com.example.danew_app.presentation.viewmodel.BookmarkViewModel
 
 @Composable
 fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
-    val viewModel: NewsViewModel = hiltViewModel()
-    val newsList by viewModel.newsListById.collectAsState()
-    val isLoading = viewModel.isLoading
-    val errorMessage = viewModel.errorMessage
+    val newsViewModel: NewsViewModel = hiltViewModel()
+    val newsList by newsViewModel.newsListById.collectAsState()
+    val isLoading = newsViewModel.isLoading
+    val errorMessage = newsViewModel.errorMessage
+
+    val bookmarkViewModel:BookmarkViewModel = hiltViewModel()
+    val bookmark = bookmarkViewModel.bookmark
     var isBookmarked by remember { mutableStateOf(false) }
 
 
     LaunchedEffect(newsId) {
-        viewModel.fetchNewsById(id = newsId)
+        newsViewModel.fetchNewsById(id = newsId)
     }
 
     Scaffold (
@@ -137,7 +141,10 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
                         modifier = Modifier.align(Alignment.End)
                     ){
                         IconButton(
-                            onClick = { isBookmarked = !isBookmarked }
+                            onClick = {
+                                bookmarkViewModel.saveBookmark(newsList.get(0))
+                                isBookmarked = !isBookmarked
+                            }
                         ) {
                             Icon(
                                 imageVector = if (isBookmarked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
