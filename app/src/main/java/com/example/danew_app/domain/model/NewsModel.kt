@@ -9,5 +9,6 @@ data class NewsModel(
     val pubDate: String,
     val category: List<String>?,
     val creator: List<String>?,
-    val link: String?
-)
+    val keywords: List<String>?,
+    val link: String?,
+    val language: String?,)
