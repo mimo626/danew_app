@@ -18,10 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.gloabals.Globals
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.MainTopAppBar
-import com.example.danew_app.domain.model.NewsModel
 import com.example.danew_app.presentation.home.NewsItem
 import com.example.danew_app.presentation.viewmodel.BookmarkViewModel
 
