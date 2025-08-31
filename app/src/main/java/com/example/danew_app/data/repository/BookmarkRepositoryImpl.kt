@@ -72,4 +72,26 @@ class BookmarkRepositoryImpl @Inject constructor(
                 }
             })
         }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override suspend fun deleteBookmark(token: String, newsId: String): Boolean =
+        suspendCancellableCoroutine { cont ->
+            api.deleteBookmark(token, newsId).enqueue(object : Callback<Boolean> {
+                override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                    if (response.body() == true) {
+                        cont.resume(true) {}
+                        Log.i("Bookmark 삭제", "성공: $newsId")
+                    } else {
+                        cont.resume(false) {}
+                        Log.e("Bookmark 삭제", "서버 오류: ${response.code()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                    cont.resume(false) {}
+                    Log.e("Bookmark 삭제", "네트워크 실패", t)
+                }
+            })
+        }
+
 }
