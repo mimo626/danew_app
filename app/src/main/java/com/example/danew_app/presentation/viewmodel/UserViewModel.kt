@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.danew_app.data.dto.LoginResponse
+import com.example.danew_app.data.dto.UserResponse
 import com.example.danew_app.data.local.UserDataSource
 import com.example.danew_app.domain.model.UserModel
 import com.example.danew_app.domain.usecase.CheckUserIdUseCase
@@ -102,12 +102,12 @@ class UserViewModel @Inject constructor(
             isLoading = true
             errorMessage = null
             try {
-                val response:LoginResponse = loginUseCase.invoke(userId, password)
-                if (response.success) {
+                val response:UserResponse = loginUseCase.invoke(userId, password)
+                if (response.token.isNotEmpty()) {
                     loginResult = "success"
                 } else {
                     loginResult = "fail"
-                    errorMessage = response.message
+                    errorMessage = "토큰 없음 로그인 실패"
                 }
             } catch (e: Exception) {
                 loginResult = "fail"
@@ -142,9 +142,7 @@ class UserViewModel @Inject constructor(
             isLoading = true
             errorMessage = null
             try {
-                checkUserIdUseCase.invoke(userId){ available ->
-                    isUserIdAvailable = available
-                }
+                isUserIdAvailable = checkUserIdUseCase.invoke(userId)
             } catch (e: Exception) {
                 isUserIdAvailable = false
                 errorMessage = e.localizedMessage
