@@ -1,5 +1,7 @@
 package com.example.danew.presentation.main
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -11,6 +13,7 @@ import com.example.danew.core.componet.BottomNavBar
 import com.example.danew.core.navigation.BottomNavGraph
 import com.example.danew.core.navigation.BottomNavItem
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen(navHostController: NavHostController, isLoggedIn: Boolean)
 {
