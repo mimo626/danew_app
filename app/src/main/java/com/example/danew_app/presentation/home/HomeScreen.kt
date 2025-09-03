@@ -1,5 +1,4 @@
 package com.example.danew.presentation.home
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -7,16 +6,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.widget.CustomLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.presentation.home.MainImageCard
 import com.example.danew_app.presentation.home.NewsList
@@ -50,23 +48,19 @@ fun HomeScreen(navController: NavHostController) {
             }
         }
     ) { padding ->
-        if (isLoading) {
-            // 로딩 화면
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator(color = ColorsLight.grayColor)
+        // 실제 화면
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
+            if (isLoading) {
+                // 로딩 화면
+                item{
+                    CustomLoadingIndicator(padding)
+                }
             }
-        } else {
-            // 실제 화면
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding)
-            ) {
+            else {
                 item { Spacer(modifier = Modifier.height(16.dp)) }
 
                 item { SearchBar(navHostController = navController) }
@@ -95,6 +89,7 @@ fun HomeScreen(navController: NavHostController) {
                 }
             }
         }
+
     }
 }
 
