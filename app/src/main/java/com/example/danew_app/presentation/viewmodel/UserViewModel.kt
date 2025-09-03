@@ -86,7 +86,12 @@ class UserViewModel @Inject constructor(
             errorMessage = null
             try {
                 val user = insertUserUseCase.invoke(user)
-                signUpResult = "success"
+                if(user.userId.isNotEmpty()){
+                    signUpResult = "success"
+                }else {
+                    signUpResult = "fail"
+                    errorMessage = "회원가입 실패"
+                }
             } catch (e: Exception) {
                 errorMessage = e.localizedMessage
                 signUpResult = "fail"
