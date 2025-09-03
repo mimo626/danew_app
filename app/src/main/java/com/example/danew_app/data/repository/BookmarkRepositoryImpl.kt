@@ -1,7 +1,9 @@
 package com.example.danew_app.data.repository
 
 import android.util.Log
+import com.example.danew_app.data.dto.ApiResponse
 import com.example.danew_app.data.entity.BookmarkEntity
+import com.example.danew_app.data.entity.DiaryEntity
 import com.example.danew_app.data.entity.MetaNewsEntity
 import com.example.danew_app.data.remote.BookmarkApi
 import com.example.danew_app.domain.repository.BookmarkRepository
@@ -12,6 +14,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.resumeWithException
 
 @Singleton
 class BookmarkRepositoryImpl @Inject constructor(
@@ -21,26 +24,32 @@ class BookmarkRepositoryImpl @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun saveBookmark(token:String, metaNewsEntity: MetaNewsEntity): BookmarkEntity =
         suspendCancellableCoroutine { cont ->
-            api.saveBookmark(token, metaNewsEntity).enqueue(object : Callback<BookmarkEntity>{
+            api.saveBookmark(token, metaNewsEntity).enqueue(object : Callback<ApiResponse<BookmarkEntity>>{
                 override fun onResponse(
-                    call: Call<BookmarkEntity>,
-                    response: Response<BookmarkEntity>
+                    call: Call<ApiResponse<BookmarkEntity>>,
+                    response: Response<ApiResponse<BookmarkEntity>>
                 ) {
-                    if (response.isSuccessful) {
-                        val body = response.body()
-                        if (body != null) {
-                            cont.resume(body) {}
-                            Log.i("Bookmark 저장", "${response.body()}")
+                    val body = response.body()
+                    if (response.isSuccessful && body != null){
+                        if (body.status == "success" && body.data != null) {
+                            val bookmark = body.data
+                            cont.resume(bookmark){}
+                            Log.i("Bookmark 저장", "${bookmark}")
 
-                        } else {
-                            Log.e("Bookmark 저장", "응답 바디 없음: ${response.code()}")
+                        }
+                        else {
+                            val msg = body.message ?: "북마크 저장 실패"
+                            cont.resumeWithException(RuntimeException(msg))
+                            Log.e("Bookmark 저장", "실패: $msg")
                         }
                     } else {
-                        Log.e("Bookmark 저장", "서버 오류: ${response.code()}")
-                    }
+                        val errorMsg = response.errorBody()?.string() ?: "다이어리 저장 실패"
+                        cont.resumeWithException(RuntimeException(errorMsg))
+                        Log.e("Bookmark 저장", "실패: $errorMsg")                    }
                 }
 
-                override fun onFailure(call: Call<BookmarkEntity>, t: Throwable) {
+                override fun onFailure(call: Call<ApiResponse<BookmarkEntity>>, t: Throwable) {
+                    cont.resumeWithException(t)
                     Log.e("Bookmark 저장", "네트워크 실패", t)
                 }
             })
@@ -48,27 +57,33 @@ class BookmarkRepositoryImpl @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun getBookmarks(token: String): List<MetaNewsEntity> =
         suspendCancellableCoroutine { cont ->
-            api.getBookmarks(token).enqueue(object : Callback<List<MetaNewsEntity>>{
+            api.getBookmarks(token).enqueue(object : Callback<ApiResponse<List<MetaNewsEntity>>>{
                 override fun onResponse(
-                    call: Call<List<MetaNewsEntity>>,
-                    response: Response<List<MetaNewsEntity>>
+                    call: Call<ApiResponse<List<MetaNewsEntity>>>,
+                    response: Response<ApiResponse<List<MetaNewsEntity>>>
                 ) {
-                    if (response.isSuccessful){
-                        val body = response.body()
-                        if(body != null){
-                            cont.resume(body){}
-                            Log.i("Bookmark 가져오기", "${response.body()}")
+                    val body = response.body()
+                    if (response.isSuccessful && body != null){
+                        if (body.status == "success" && body.data != null) {
+                            val newsList = body.data
+                            cont.resume(newsList){}
+                            Log.i("Bookmark 뉴스 조회", "성공: ${newsList.size}")
 
                         }
                         else {
-                            Log.e("Bookmark 가져오기", "응답 바디 없음: ${response.code()}")
+                            val msg = body.message ?: "북마크 뉴스 조회 실패"
+                            cont.resumeWithException(RuntimeException(msg))
+                            Log.e("Bookmark 뉴스 조회", "실패: $msg")
                         }
                     } else {
-                        Log.e("Bookmark 가져오기", "서버 오류: ${response.code()}")
-                    }                }
+                        val errorMsg = response.errorBody()?.string() ?: "북마크 뉴스 조회 실패"
+                        cont.resumeWithException(RuntimeException(errorMsg))
+                        Log.e("Bookmark 뉴스 조회", "실패: $errorMsg")                    }
+                }
 
-                override fun onFailure(call: Call<List<MetaNewsEntity>>, t: Throwable) {
-                    Log.e("Bookmark 가져오기", "네트워크 실패", t)
+                override fun onFailure(call: Call<ApiResponse<List<MetaNewsEntity>>>, t: Throwable) {
+                    cont.resumeWithException(t)
+                    Log.e("Bookmark 뉴스 조회", "네트워크 실패", t)
                 }
             })
         }
@@ -76,19 +91,29 @@ class BookmarkRepositoryImpl @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun deleteBookmark(token: String, newsId: String): Boolean =
         suspendCancellableCoroutine { cont ->
-            api.deleteBookmark(token, newsId).enqueue(object : Callback<Boolean> {
-                override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
-                    if (response.body() == true) {
-                        cont.resume(true) {}
-                        Log.i("Bookmark 삭제", "성공: $newsId")
+            api.deleteBookmark(token, newsId).enqueue(object : Callback<ApiResponse<Boolean>> {
+                override fun onResponse(call: Call<ApiResponse<Boolean>>, response: Response<ApiResponse<Boolean>>) {
+                    val body = response.body()
+                    if (response.isSuccessful && body != null){
+                        if (body.status == "success" && body.data != null) {
+                            val isDelete = body.data
+                            cont.resume(isDelete){}
+                            Log.i("Bookmark 삭제", "${isDelete}")
+
+                        }
+                        else {
+                            val msg = body.message ?: "북마크 삭제 실패"
+                            cont.resumeWithException(RuntimeException(msg))
+                            Log.e("Bookmark 삭제", "실패: $msg")
+                        }
                     } else {
-                        cont.resume(false) {}
-                        Log.e("Bookmark 삭제", "서버 오류: ${response.code()}")
-                    }
+                        val errorMsg = response.errorBody()?.string() ?: "북마크 삭제 실패"
+                        cont.resumeWithException(RuntimeException(errorMsg))
+                        Log.e("Bookmark 삭제", "실패: $errorMsg")                    }
                 }
 
-                override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                    cont.resume(false) {}
+                override fun onFailure(call: Call<ApiResponse<Boolean>>, t: Throwable) {
+                    cont.resumeWithException(t)
                     Log.e("Bookmark 삭제", "네트워크 실패", t)
                 }
             })
