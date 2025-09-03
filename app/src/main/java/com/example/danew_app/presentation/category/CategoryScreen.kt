@@ -38,6 +38,7 @@ import com.example.danew_app.presentation.category.NewsCategory
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.widget.CustomLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.presentation.home.NewsItem
 import com.example.danew_app.presentation.home.NowTopNews
@@ -102,7 +103,7 @@ fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = 
                             onClick = { selectedTabIndex = index },
                             text = {
                                 Text(
-                                    category,
+                                    text = category,
                                     color = if (selectedTabIndex == index) Color.Black else Color.Gray,
                                     fontWeight = if (selectedTabIndex == index) FontWeight.Bold else FontWeight.Normal
                                 )
@@ -116,14 +117,7 @@ fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = 
             // 로딩
             if (isLoading && newsList.isEmpty()) {
                 item {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(padding),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator(color = ColorsLight.grayColor)
-                    }
+                    CustomLoadingIndicator(padding)
                 }
             }
 
