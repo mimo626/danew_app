@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.widget.CustomLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.presentation.home.NewsItem
 import com.example.danew_app.presentation.viewmodel.BookmarkViewModel
@@ -48,34 +49,29 @@ fun BookmarkScreen(navController: NavHostController) {
             }
         }
     ) { padding ->
-        if (isLoading) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator(color = ColorsLight.grayColor)
+        LazyColumn(
+            modifier = Modifier.fillMaxSize().padding(padding)
+        ) {
+            if (bookmarkedNewsList.isEmpty()) {
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillParentMaxSize()
+                            .padding(padding),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text("북마크가 없습니다")
+                    }
+                }
             }
-        } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize().padding(padding)
-            ) {
-                if (bookmarkedNewsList.isEmpty()) {
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(padding),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text("북마크가 없습니다")
-                        }
-                    }
-                } else {
-                    items(bookmarkedNewsList) { news ->
-                        NewsItem(newsModel = news, navController = navController)
-                    }
+            if (isLoading) {
+                item {
+                    CustomLoadingIndicator(padding)
+                }
+            }
+            else {
+                items(bookmarkedNewsList) { news ->
+                    NewsItem(newsModel = news, navController = navController)
                 }
             }
         }
