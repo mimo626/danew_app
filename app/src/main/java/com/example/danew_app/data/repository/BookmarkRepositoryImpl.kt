@@ -3,7 +3,6 @@ package com.example.danew_app.data.repository
 import android.util.Log
 import com.example.danew_app.data.dto.ApiResponse
 import com.example.danew_app.data.entity.BookmarkEntity
-import com.example.danew_app.data.entity.DiaryEntity
 import com.example.danew_app.data.entity.MetaNewsEntity
 import com.example.danew_app.data.remote.BookmarkApi
 import com.example.danew_app.domain.repository.BookmarkRepository
