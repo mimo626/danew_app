@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.widget.CustomLoadingIndicator
 import com.example.danew_app.presentation.viewmodel.NewsViewModel
 import com.example.danew_app.presentation.home.NewsItem
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -134,7 +135,8 @@ fun SearchResultScreen(query:String, navHostController: NavHostController) {
             if (isLoading) {
                 item {
                     Box(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillParentMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
                         CircularProgressIndicator(color = ColorsLight.grayColor)
@@ -151,14 +153,7 @@ fun SearchResultScreen(query:String, navHostController: NavHostController) {
 
             if(!isLoading && newsList.isEmpty()){
                 item {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text("\"${searchQuery}\"에 대한 검색 결과가 없습니다.",
-                            color = ColorsLight.darkGrayColor
-                        )
-                    }
+                    CustomLoadingIndicator(padding)
                 }
             }
             // 일반 뉴스 리스트
