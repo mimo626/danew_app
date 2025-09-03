@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -40,6 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.widget.CustomLoadingIndicator
 import com.example.danew_app.presentation.viewmodel.NewsViewModel
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.core.widget.ShareButton
@@ -52,101 +54,137 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
     val isLoading = newsViewModel.isLoading
     val errorMessage = newsViewModel.errorMessage
 
-    val bookmarkViewModel:BookmarkViewModel = hiltViewModel()
+    val bookmarkViewModel: BookmarkViewModel = hiltViewModel()
     var isBookmarked by remember { mutableStateOf(false) }
-
 
     LaunchedEffect(newsId) {
         newsViewModel.fetchNewsById(id = newsId)
     }
 
-    Scaffold (
+    Scaffold(
         containerColor = ColorsLight.whiteColor,
         topBar = {
-            MainTopAppBar(navController = navHostController, title = "", icon = null,
-                isHome = false, isBackIcon = true)
+            MainTopAppBar(
+                navController = navHostController,
+                title = "",
+                icon = null,
+                isHome = false,
+                isBackIcon = true
+            )
         }
-    ){
-        padding ->
-        Column(
-            modifier = Modifier.padding(padding).padding(horizontal = 20.dp)
-                .verticalScroll(rememberScrollState())
+    ) { paddingValues ->
 
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            horizontalAlignment = Alignment.Start
         ) {
-            Spacer(modifier = Modifier.height(8.dp))
 
-            when {
-                isLoading ->
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                    ) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.align(Alignment.Center),
-                            color = ColorsLight.grayColor
-                        )
-                    }
-                errorMessage != null -> {
-                    // 에러 메시지
-                    errorMessage.let {
-                        Text("오류: $it", color = Color.Red)
-                    }
+            // 로딩
+            if (isLoading) {
+                item {
+                    CustomLoadingIndicator(paddingValues)
                 }
-                newsList.isNotEmpty() -> {
-                    // 카테고리 태그
-                    newsList.get(0).category?.firstOrNull()?.let { category ->
+            }
+
+            // 에러
+            if (errorMessage != null) {
+                item {
+                    Text(
+                        text = "오류: $errorMessage",
+                        color = Color.Red,
+                        modifier = Modifier.padding(20.dp)
+                    )
+                }
+            }
+
+            // 뉴스 내용
+            if (newsList.isNotEmpty()) {
+                val news = newsList[0]
+
+                // 카테고리 태그
+                news.category?.firstOrNull()?.let { category ->
+                    item {
                         Box(
                             modifier = Modifier
-                                .background(ColorsLight.secondaryColor, shape = RoundedCornerShape(8.dp))
+                                .padding(horizontal = 20.dp, vertical = 8.dp)
+                                .background(
+                                    color = ColorsLight.secondaryColor,
+                                    shape = RoundedCornerShape(8.dp)
+                                )
                                 .padding(horizontal = 12.dp, vertical = 8.dp)
                         ) {
-                            Text(category, color = ColorsLight.primaryColor, fontWeight = FontWeight.SemiBold)
+                            Text(
+                                text = category,
+                                color = ColorsLight.primaryColor,
+                                fontWeight = FontWeight.SemiBold
+                            )
                         }
                     }
+                }
 
+                // 뉴스 제목
+                item {
                     Spacer(modifier = Modifier.height(16.dp))
-
-                    // 뉴스 제목
                     Text(
-                        text = newsList.get(0).title,
+                        text = news.title,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(horizontal = 20.dp)
                     )
+                }
 
+                // 날짜
+                item {
                     Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = news.pubDate,
+                        fontSize = 12.sp,
+                        color = ColorsLight.grayColor,
+                        modifier = Modifier.padding(horizontal = 20.dp)
+                    )
+                }
 
-                    // 날짜
-                    Text(newsList.get(0).pubDate, fontSize = 12.sp, color = ColorsLight.grayColor)
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    // 작성자
-                    newsList.get(0).creator?.firstOrNull()?.let { creator ->
-                        Row(verticalAlignment = Alignment.CenterVertically) {
+                // 작성자
+                news.creator?.firstOrNull()?.let { creator ->
+                    item {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(horizontal = 20.dp)
+                        ) {
                             Box(
                                 modifier = Modifier
-                                    .background(ColorsLight.lightGrayColor, shape = RoundedCornerShape(4.dp))
+                                    .background(
+                                        ColorsLight.lightGrayColor,
+                                        shape = RoundedCornerShape(4.dp)
+                                    )
                                     .padding(horizontal = 6.dp, vertical = 2.dp)
                             ) {
                                 Text("작성자", fontSize = 12.sp, color = ColorsLight.grayColor)
                             }
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text(creator, fontSize = 14.sp,  color = ColorsLight.grayColor)
+                            Text(creator, fontSize = 14.sp, color = ColorsLight.grayColor)
                         }
                     }
+                }
 
+                // 북마크 + 공유 버튼
+                item {
                     Spacer(modifier = Modifier.height(8.dp))
-                    Row (
-                        modifier = Modifier.align(Alignment.End)
-                    ){
+                    Row(
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp)
+                    ) {
                         IconButton(
                             onClick = {
                                 if (isBookmarked) {
-                                    // 북마크 삭제
-                                    bookmarkViewModel.deleteBookmark(newsList[0].id)
+                                    bookmarkViewModel.deleteBookmark(news.id)
                                 } else {
-                                    // 북마크 저장
-                                    bookmarkViewModel.saveBookmark(newsList[0])
+                                    bookmarkViewModel.saveBookmark(news)
                                 }
                                 isBookmarked = !isBookmarked
                             }
@@ -157,57 +195,56 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
                                 tint = if (isBookmarked) Color.Red else ColorsLight.darkGrayColor
                             )
                         }
-
                         Spacer(modifier = Modifier.width(4.dp))
-                        ShareButton(newsLink = newsList.get(0).link)
+                        ShareButton(newsLink = news.link)
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
+                }
 
-                    Text("AI 뉴스 요약본", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = Color.Gray)
+                // AI 요약
+                item {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "AI 뉴스 요약본",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.Gray,
+                        modifier = Modifier.padding(horizontal = 20.dp)
+                    )
                     Spacer(modifier = Modifier.height(16.dp))
-                    Row (
-                        modifier = Modifier.fillMaxWidth(),
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
-                    ){
-                        Text(newsList.get(0).description, fontSize = 14.sp)
-                        // 뉴스 원문 보기
+                    ) {
+                        Text(news.description, fontSize = 14.sp)
                         Text(
                             text = "뉴스 원문 보기",
                             color = ColorsLight.grayColor,
                             fontSize = 14.sp,
-                            modifier = Modifier.clickable {
-                                // TODO: 뉴스 원문 링크 열기
-                            }
+                            modifier = Modifier.clickable { /* 링크 열기 */ }
                         )
                     }
+                }
 
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    // 이미지
-                    newsList.get(0).imageUrl?.let { imageUrl ->
+                // 이미지
+                news.imageUrl?.let { imageUrl ->
+                    item {
+                        Spacer(modifier = Modifier.height(24.dp))
                         AsyncImage(
                             model = imageUrl,
                             contentDescription = "뉴스 이미지",
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(200.dp),
+                                .height(200.dp)
+                                .padding(horizontal = 20.dp),
                             contentScale = ContentScale.Crop
                         )
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-                else -> {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                    ) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.align(Alignment.Center),
-                            color = ColorsLight.grayColor
-                        )
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
             }
         }
     }
 }
+
