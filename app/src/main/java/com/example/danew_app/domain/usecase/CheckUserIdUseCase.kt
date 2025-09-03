@@ -6,8 +6,8 @@ import javax.inject.Inject
 class CheckUserIdUseCase @Inject constructor(
     private val repository: UserRepository
 ){
-    suspend operator fun invoke(userId: String, callback: (Boolean) -> Unit){
-        repository.checkUserId(userId, callback)
+    suspend operator fun invoke(userId: String) : Boolean{
+        return repository.checkUserId(userId)
     }
 }
 
