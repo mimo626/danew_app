@@ -38,7 +38,6 @@ class BookmarkRepositoryImpl @Inject constructor(
                         }
                         else {
                             val msg = body.message ?: "북마크 저장 실패"
-                            cont.resumeWithException(RuntimeException(msg))
                             Log.e("Bookmark 저장", "실패: $msg")
                         }
                     } else {
@@ -71,7 +70,6 @@ class BookmarkRepositoryImpl @Inject constructor(
                         }
                         else {
                             val msg = body.message ?: "북마크 뉴스 조회 실패"
-                            cont.resumeWithException(RuntimeException(msg))
                             Log.e("Bookmark 뉴스 조회", "실패: $msg")
                         }
                     } else {
@@ -88,6 +86,35 @@ class BookmarkRepositoryImpl @Inject constructor(
         }
 
     @OptIn(ExperimentalCoroutinesApi::class)
+    override suspend fun checkBookmark(token: String, newsId: String): Boolean =
+        suspendCancellableCoroutine { cont ->
+            api.checkBookmark(token, newsId).enqueue(object : Callback<ApiResponse<Boolean>> {
+                override fun onResponse(call: Call<ApiResponse<Boolean>>, response: Response<ApiResponse<Boolean>>) {
+                    val body = response.body()
+                    if (response.isSuccessful && body != null){
+                        if (body.status == "success" && body.data != null) {
+                            val isBookmark = body.data
+                            cont.resume(isBookmark){}
+                            Log.i("Bookmark 여부 조회", "성공: ${isBookmark}")
+                        }
+                        else {
+                            val msg = body.message ?: "북마크 여부 조회 실패"
+                            Log.e("Bookmark 여부 조회 ", "실패: $msg")
+                        }
+                    } else {
+                        val errorMsg = response.errorBody()?.string() ?: "북마크 삭제 실패"
+                        cont.resumeWithException(RuntimeException(errorMsg))
+                        Log.e("Bookmark 여부 조회", "실패: $errorMsg")                    }
+                }
+
+                override fun onFailure(call: Call<ApiResponse<Boolean>>, t: Throwable) {
+                    cont.resumeWithException(t)
+                    Log.e("Bookmark 여부 조회", "네트워크 실패", t)
+                }
+            })
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun deleteBookmark(token: String, newsId: String): Boolean =
         suspendCancellableCoroutine { cont ->
             api.deleteBookmark(token, newsId).enqueue(object : Callback<ApiResponse<Boolean>> {
@@ -97,12 +124,11 @@ class BookmarkRepositoryImpl @Inject constructor(
                         if (body.status == "success" && body.data != null) {
                             val isDelete = body.data
                             cont.resume(isDelete){}
-                            Log.i("Bookmark 삭제", "${isDelete}")
+                            Log.i("Bookmark 삭제", "성공: ${isDelete}")
 
                         }
                         else {
                             val msg = body.message ?: "북마크 삭제 실패"
-                            cont.resumeWithException(RuntimeException(msg))
                             Log.e("Bookmark 삭제", "실패: $msg")
                         }
                     } else {
