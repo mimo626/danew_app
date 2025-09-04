@@ -25,6 +25,7 @@ import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.CustomRadioButton
 import com.example.danew_app.core.widget.MainTopAppBar
+import com.example.danew_app.data.dto.UpdateUserRequest
 import com.example.danew_app.presentation.viewmodel.UserViewModel
 
 @Composable
@@ -54,8 +55,13 @@ fun ProfileEditScreen(navHostController: NavHostController) {
         },
         bottomBar = {
             BottomButton(text = "입력 완료") {
-                // TODO: 입력 완료 시 유저 정보 수정
-                // 예: userViewModel.updateUser(name, age.toIntOrNull() ?: 0, gender)
+                val request = UpdateUserRequest(
+                    name = if (name.isNotBlank()) name else null,
+                    age = age.toIntOrNull(),
+                    gender = if (gender.isNotBlank()) gender else null
+                )
+                userViewModel.updateUser(request)
+                navHostController.popBackStack()
             }
         }
     ) { padding ->
