@@ -3,12 +3,14 @@ package com.example.danew_app.data.remote
 import com.example.danew.data.local.entity.UserEntity
 import com.example.danew_app.data.dto.ApiResponse
 import com.example.danew_app.data.dto.LoginRequest
+import com.example.danew_app.data.dto.UpdateUserRequest
 import com.example.danew_app.data.dto.UserResponse
 
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -24,4 +26,10 @@ interface UserApi {
 
     @GET("/api/auth/getUser")
     fun getUser(@Header("Authorization") token: String) : Call<ApiResponse<UserEntity>>
+
+    @PATCH("/api/auth/updateUser")
+    fun updateUser(
+        @Header("Authorization") token: String,
+        @Body request: UpdateUserRequest
+    ): Call<ApiResponse<UserEntity>>
 }
