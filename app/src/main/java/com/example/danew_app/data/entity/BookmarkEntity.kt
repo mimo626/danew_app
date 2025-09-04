@@ -1,13 +1,16 @@
 package com.example.danew_app.data.entity
 
+import androidx.room.Embedded
 import androidx.room.Entity
 
-@Entity(
-    tableName = "bookmark",
-    primaryKeys = ["userId", "articleId"]  // 복합키 설정
-)
+@Entity(tableName = "bookmark", primaryKeys = ["userId", "articleId"])
 data class BookmarkEntity(
-    val userId: String,
-    val articleId: String,
+    @Embedded val id: BookmarkId,
     val bookmarkedAt: String
 )
+
+data class BookmarkId(
+    val userId: String,
+    val articleId: String
+)
+
