@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.danew_app.data.dto.UpdateUserRequest
 import com.example.danew_app.data.dto.UserResponse
 import com.example.danew_app.data.local.UserDataSource
 import com.example.danew_app.domain.model.UserModel
@@ -15,6 +16,7 @@ import com.example.danew_app.domain.usecase.CheckUserIdUseCase
 import com.example.danew_app.domain.usecase.GetUserUseCase
 import com.example.danew_app.domain.usecase.InsertUserUseCase
 import com.example.danew_app.domain.usecase.LoginUseCase
+import com.example.danew_app.domain.usecase.UpdateUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,6 +29,7 @@ class UserViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val checkUserIdUseCase: CheckUserIdUseCase,
     private val getUserUseCase: GetUserUseCase,
+    private val updateUserUseCase: UpdateUserUseCase,
     private val userDataSource: UserDataSource,
     ) : ViewModel() {
 
@@ -135,6 +138,24 @@ class UserViewModel @Inject constructor(
             }catch (e: Exception) {
                 errorMessage = e.localizedMessage
                 Log.e("User 조회", "getUser 오류", e)
+            } finally {
+                isLoading = false
+            }
+        }
+    }
+
+    // -------------------- 유저 수정 --------------------
+    fun updateUser(updateUserRequest: UpdateUserRequest){
+        viewModelScope.launch {
+            isLoading = true
+            errorMessage = null
+            try {
+                val token = userDataSource.getToken() ?: ""
+                val userData = updateUserUseCase.invoke(token, updateUserRequest)
+                _user.value = userData
+            }catch (e: Exception) {
+                errorMessage = e.localizedMessage
+                Log.e("User 수정", "updateUser 오류", e)
             } finally {
                 isLoading = false
             }
