@@ -51,10 +51,11 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
     val errorMessage = newsViewModel.errorMessage
 
     val bookmarkViewModel: BookmarkViewModel = hiltViewModel()
-    var isBookmarked by remember { mutableStateOf(false) }
+    val isBookmarked by bookmarkViewModel.isBookmark.collectAsState()
 
-    LaunchedEffect(newsId) {
+    LaunchedEffect(Unit) {
         newsViewModel.fetchNewsById(id = newsId)
+        bookmarkViewModel.checkBookmark(newsId)
     }
 
     Scaffold(
@@ -182,7 +183,6 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
                                 } else {
                                     bookmarkViewModel.saveBookmark(news)
                                 }
-                                isBookmarked = !isBookmarked
                             }
                         ) {
                             Icon(
