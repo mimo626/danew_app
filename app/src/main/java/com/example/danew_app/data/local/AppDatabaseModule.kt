@@ -2,8 +2,6 @@ package com.example.danew_app.data.local
 
 import android.content.Context
 import androidx.room.Room
-import com.example.danew_app.data.local.AppDatabase
-import com.example.danew_app.data.local.SearchHistoryDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
