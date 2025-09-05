@@ -21,6 +21,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,17 +33,17 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.presentation.viewmodel.SearchViewModel
 
 @Composable
 fun SearchScreen(navHostController: NavHostController) {
     var searchQuery by remember { mutableStateOf("") }
-    var recentSearches by remember {
-        mutableStateOf(
-            listOf("검색어1", "검색어2", "검색어3", "검색어4", "검색어5", "검색어6", "검색어7", "검색어8")
-        )
-    }
+    val viewModel: SearchViewModel = hiltViewModel()
+    val recentSearches by viewModel.recentSearches.collectAsState()
+
     val focusRequester = remember { FocusRequester() }
 
     // 화면 진입 시 포커스 요청
@@ -92,6 +93,7 @@ fun SearchScreen(navHostController: NavHostController) {
                 )
                 Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.Gray,
                     modifier = Modifier.clickable{
+                        viewModel.saveSearch(searchQuery)
                         navHostController.navigate("search/${searchQuery}")
                     }
                 )
@@ -111,7 +113,7 @@ fun SearchScreen(navHostController: NavHostController) {
                 "전체 삭제",
                 color = Color.Gray,
                 modifier = Modifier.clickable {
-                    recentSearches = emptyList()
+                    viewModel.clearAll()
                 }
             )
         }
@@ -120,7 +122,7 @@ fun SearchScreen(navHostController: NavHostController) {
 
         // 최근 검색어 목록
         LazyColumn {
-            items(recentSearches) { keyword ->
+            items(recentSearches) { history ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -128,13 +130,13 @@ fun SearchScreen(navHostController: NavHostController) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(keyword)
+                    Text(history.keyword)
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = "삭제",
                         tint = Color.Gray,
                         modifier = Modifier.clickable {
-                            recentSearches = recentSearches - keyword
+                            viewModel.deleteSearch(history.keyword)
                         }
                     )
                 }
