@@ -28,6 +28,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -101,10 +102,10 @@ fun DiaryScreen(navController: NavHostController,) {
     Scaffold(
         containerColor = ColorsLight.whiteColor,
         topBar = {
-            MainTopAppBar(navController = navController, title = "기록", icon = Icons.Default.MoreVert,
+            MainTopAppBar(navController = navController, title = "기록",
+                icon = Icons.Default.Notifications,
                isHome = false){
-                //TODO 수정 필요
-                navController.navigate("")
+                navController.navigate("alarm")
             }
         },
     ) { padding ->
