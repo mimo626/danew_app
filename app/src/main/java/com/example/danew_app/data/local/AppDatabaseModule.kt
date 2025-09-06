@@ -22,11 +22,18 @@ object AppDatabaseModule {
             context,
             AppDatabase::class.java,
             "app_database"
-        ).build()
+        )
+            .fallbackToDestructiveMigration(false)
+            .build()
     }
 
     @Provides
     fun provideSearchHistoryDao(db: AppDatabase): SearchHistoryDao {
         return db.searchHistoryDao()
+    }
+
+    @Provides
+    fun provideTodayNewsDao(db: AppDatabase): TodayNewsDao {
+        return db.todayNewsDao()
     }
 }
