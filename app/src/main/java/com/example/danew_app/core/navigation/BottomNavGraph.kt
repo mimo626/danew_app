@@ -32,6 +32,7 @@ import com.example.danew.presentation.profile.MyPageScreen
 import com.example.danew.presentation.profile.ProfileEditScreen
 import com.example.danew_app.domain.model.DiaryModel
 import com.example.danew_app.presentation.login.KeywordScreen
+import com.example.danew_app.presentation.profile.TodayNewsScreen
 import com.example.danew_app.presentation.viewmodel.UserViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -126,6 +127,10 @@ fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier, isL
 
         composable("settings") {
             SettingScreen(navHostController = navHostController)
+        }
+
+        composable("todayNews") {
+            TodayNewsScreen(navHostController = navHostController)
         }
     }
 }
