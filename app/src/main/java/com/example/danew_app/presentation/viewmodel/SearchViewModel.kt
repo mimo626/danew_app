@@ -1,4 +1,7 @@
 package com.example.danew_app.presentation.viewmodel
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.danew_app.data.entity.SearchHistoryEntity
@@ -17,34 +20,75 @@ class SearchViewModel @Inject constructor(
     private val _recentSearches = MutableStateFlow<List<SearchHistoryEntity>>(emptyList())
     val recentSearches = _recentSearches.asStateFlow()
 
+    var isLoading by mutableStateOf(false)
+        private set
+
+    var errorMessage by mutableStateOf<String?>(null)
+        private set
+
+
     init {
         loadRecentSearches()
     }
 
     fun loadRecentSearches() {
         viewModelScope.launch {
-            _recentSearches.value = repository.getRecentSearches()
+            isLoading = true
+            errorMessage = null
+            try {
+                _recentSearches.value = repository.getRecentSearches()
+            } catch (e:Exception){
+                errorMessage = e.localizedMessage
+            } finally {
+                isLoading = false
+            }
         }
     }
 
     fun saveSearch(keyword: String) {
         viewModelScope.launch {
-            repository.insertSearch(keyword)
-            loadRecentSearches()
+            isLoading = true
+            errorMessage = null
+            try {
+                repository.insertSearch(keyword)
+                loadRecentSearches()
+            } catch (e:Exception){
+                errorMessage = e.localizedMessage
+            } finally {
+                isLoading = false
+            }
+
         }
     }
 
     fun deleteSearch(keyword: String) {
         viewModelScope.launch {
-            repository.deleteSearch(keyword)
-            loadRecentSearches()
+            isLoading = true
+            errorMessage = null
+            try {
+                repository.deleteSearch(keyword)
+                loadRecentSearches()
+            } catch (e:Exception){
+                errorMessage = e.localizedMessage
+            } finally {
+                isLoading = false
+            }
+
         }
     }
 
     fun clearAll() {
         viewModelScope.launch {
-            repository.clearAll()
-            loadRecentSearches()
+            isLoading = true
+            errorMessage = null
+            try {
+                repository.clearAll()
+                loadRecentSearches()
+            } catch (e:Exception){
+                errorMessage = e.localizedMessage
+            } finally {
+                isLoading = false
+            }
         }
     }
 }
