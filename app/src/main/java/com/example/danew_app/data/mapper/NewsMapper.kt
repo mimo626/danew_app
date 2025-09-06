@@ -1,12 +1,16 @@
 package com.example.danew_app.data.mapper
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.example.danew_app.data.entity.MetaNewsEntity
 import com.example.danew_app.data.entity.NewsEntity
+import com.example.danew_app.data.entity.TodayNewsEntity
 import com.example.danew_app.domain.model.NewsModel
+import java.time.LocalDate
 
 fun NewsEntity.toDomain(): NewsModel {
     return NewsModel(
-        id = this.article_id ?: "",
+        newsId = this.article_id ?: "",
         title = this.title ?: "제목 없음",
         description = this.description ?: "설명이 없습니다.",
         imageUrl = this.image_url,
@@ -22,7 +26,7 @@ fun NewsEntity.toDomain(): NewsModel {
 
 fun MetaNewsEntity.toDomain(): NewsModel {
     return NewsModel(
-        id = this.id,
+        newsId = this.newsId,
         title = this.title,
         description = this.description,
         imageUrl = this.imageUrl,
@@ -38,7 +42,7 @@ fun MetaNewsEntity.toDomain(): NewsModel {
 
 fun NewsEntity.toMeta():MetaNewsEntity{
     return MetaNewsEntity(
-        id = this.article_id ?: "",
+        newsId = this.article_id ?: "",
         title = this.title ?: "제목 없음",
         description = this.description ?: "설명이 없습니다.",
         imageUrl = this.image_url,
@@ -55,7 +59,7 @@ fun NewsEntity.toMeta():MetaNewsEntity{
 
 fun NewsModel.toMeta():MetaNewsEntity{
     return MetaNewsEntity(
-        id = this.id,
+        newsId = this.newsId,
         title = this.title,
         description = this.description,
         imageUrl = this.imageUrl,
@@ -67,5 +71,40 @@ fun NewsModel.toMeta():MetaNewsEntity{
         language = this.language,
         keywords = this.keywords,
         savedAt = ""
+    )
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun NewsModel.toTodayNews():TodayNewsEntity{
+    return TodayNewsEntity(
+        newsId = this.newsId,
+        title = this.title,
+        description = this.description,
+        imageUrl = this.imageUrl,
+        sourceName = this.sourceName,
+        pubDate = this.pubDate,
+        category = this.category,
+        link = this.link,
+        creator = this.creator,
+        language = this.language,
+        keywords = this.keywords,
+        savedAt = LocalDate.now().toString()
+    )
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun TodayNewsEntity.toDomain():NewsModel{
+    return NewsModel(
+        newsId = this.newsId,
+        title = this.title,
+        description = this.description,
+        imageUrl = this.imageUrl,
+        sourceName = this.sourceName,
+        pubDate = this.pubDate,
+        category = this.category,
+        link = this.link,
+        creator = this.creator,
+        language = this.language,
+        keywords = this.keywords,
     )
 }
