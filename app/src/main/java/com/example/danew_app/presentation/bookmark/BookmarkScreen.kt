@@ -51,26 +51,28 @@ fun BookmarkScreen(navController: NavHostController) {
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(padding)
         ) {
-            if (isLoading) {
-                item {
-                    CustomLoadingIndicator(padding)
-                }
-            }
-            if (bookmarkedNewsList.isEmpty()) {
-                item {
-                    Box(
-                        modifier = Modifier
-                            .fillParentMaxSize()
-                            .padding(padding),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Text("북마크가 없습니다")
+            when {
+                isLoading -> {
+                    item {
+                        CustomLoadingIndicator(padding)
                     }
                 }
-            }
-            else {
-                items(bookmarkedNewsList) { news ->
-                    NewsItem(newsModel = news, navController = navController)
+                bookmarkedNewsList.isNotEmpty() -> {
+                    items(bookmarkedNewsList) { news ->
+                        NewsItem(newsModel = news, navController = navController)
+                    }
+                }
+                else -> {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillParentMaxSize()
+                                .padding(padding),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Text("북마크가 없습니다")
+                        }
+                    }
                 }
             }
         }
