@@ -105,10 +105,10 @@ fun MyPageScreen(navController: NavHostController,) {
             Spacer(modifier = Modifier.height(16.dp))
 
             // 오늘 본 뉴스
-            TodayNews(sectionTitle = "오늘 본 뉴스", newsList = Globals.dummyNewsList, navController)
+            TodayNews(sectionTitle = "오늘 본 뉴스", navController)
 
             Spacer(modifier = Modifier.height(24.dp))
-            // 설정 항목 리스트
+            // 설정 항목ㅌ 리스트
             MyPageMenuItem("공지사항") { }
             MyPageMenuItem("문의하기") { }
             MyPageMenuItem("자주 묻는 질문") { }
