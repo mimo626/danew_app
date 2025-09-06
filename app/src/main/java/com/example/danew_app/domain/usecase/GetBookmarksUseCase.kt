@@ -1,5 +1,6 @@
 package com.example.danew_app.domain.usecase
 
+import android.util.Log
 import com.example.danew_app.data.entity.MetaNewsEntity
 import com.example.danew_app.data.mapper.toDomain
 import com.example.danew_app.domain.model.NewsModel
@@ -11,6 +12,7 @@ class GetBookmarksUseCase @Inject constructor(
 ){
     suspend operator fun invoke(token:String):List<NewsModel>{
         val metaNewsList = bookmarkRepository.getBookmarks(token)
-        return metaNewsList.map { metaNewsEntity -> metaNewsEntity.toDomain() }
+        val newsModelList = metaNewsList.map { metaNewsEntity -> metaNewsEntity.toDomain()}
+        return newsModelList
     }
 }
