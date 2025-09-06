@@ -26,7 +26,7 @@ fun NewsEntity.toDomain(): NewsModel {
 
 fun MetaNewsEntity.toDomain(): NewsModel {
     return NewsModel(
-        newsId = this.newsId,
+        newsId = this.id,
         title = this.title,
         description = this.description,
         imageUrl = this.imageUrl,
@@ -42,7 +42,7 @@ fun MetaNewsEntity.toDomain(): NewsModel {
 
 fun NewsEntity.toMeta():MetaNewsEntity{
     return MetaNewsEntity(
-        newsId = this.article_id ?: "",
+        id = this.article_id ?: "",
         title = this.title ?: "제목 없음",
         description = this.description ?: "설명이 없습니다.",
         imageUrl = this.image_url,
@@ -59,7 +59,7 @@ fun NewsEntity.toMeta():MetaNewsEntity{
 
 fun NewsModel.toMeta():MetaNewsEntity{
     return MetaNewsEntity(
-        newsId = this.newsId,
+        id = this.newsId,
         title = this.title,
         description = this.description,
         imageUrl = this.imageUrl,
