@@ -2,6 +2,9 @@ package com.example.danew_app.presentation.viewmodel
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.danew_app.data.entity.TodayNewsEntity
@@ -22,33 +25,70 @@ class TodayNewsViewModel @Inject constructor(
     private val _todayNews = MutableStateFlow<List<TodayNewsEntity>>(emptyList())
     val todayNews = _todayNews.asStateFlow()
 
+    var isLoading by mutableStateOf(false)
+        private set
+
+    var errorMessage by mutableStateOf<String?>(null)
+        private set
+
     init {
         refreshTodayNews()
     }
 
     private fun refreshTodayNews() {
         viewModelScope.launch {
-            repository.clearOldNews() // ✅ 날짜 바뀌면 이전 데이터 삭제
-            _todayNews.value = repository.getTodayNews()
+            isLoading = true
+            errorMessage = null
+            try {
+                repository.clearOldNews() // ✅ 날짜 바뀌면 이전 데이터 삭제
+                _todayNews.value = repository.getTodayNews()
+            }catch (e:Exception){
+                errorMessage = e.localizedMessage
+            } finally {
+                isLoading = false
+            }
         }
     }
 
     fun addNews(newsModel: NewsModel) {
         viewModelScope.launch {
-            repository.addNews(newsModel)
+            isLoading = true
+            errorMessage = null
+            try {
+                repository.addNews(newsModel)
+            }catch (e:Exception){
+                errorMessage = e.localizedMessage
+            } finally {
+                isLoading = false
+            }
         }
     }
 
     fun getNews() {
         viewModelScope.launch {
-            _todayNews.value = repository.getTodayNews()
+            isLoading = true
+            errorMessage = null
+            try {
+                _todayNews.value = repository.getTodayNews()
+            }catch (e:Exception){
+                errorMessage = e.localizedMessage
+            } finally {
+                isLoading = false
+            }
         }
     }
 
     fun clearAll() {
         viewModelScope.launch {
-            repository.clearAll()
-            _todayNews.value = emptyList()
+            isLoading = true
+            errorMessage = null
+            try {
+                repository.clearAll()
+                _todayNews.value = emptyList()            }catch (e:Exception){
+                errorMessage = e.localizedMessage
+            } finally {
+                isLoading = false
+            }
         }
     }
 }
