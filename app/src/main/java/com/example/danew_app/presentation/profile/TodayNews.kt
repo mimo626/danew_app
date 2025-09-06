@@ -2,6 +2,7 @@ package com.example.danew_app.presentation.profile
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.clickable
 import com.example.danew_app.presentation.home.NewsCard
 
 
@@ -49,7 +50,10 @@ fun TodayNews(sectionTitle:String, navController: NavHostController){
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(sectionTitle, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            Text("전체보기", color = Color.Blue, fontSize = 12.sp)
+            Text("전체보기", color = Color.Blue, fontSize = 12.sp,
+                modifier = Modifier.clickable{
+                    navController.navigate("todayNews")
+                })
         }
         Spacer(modifier = Modifier.height(12.dp))
 
