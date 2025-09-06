@@ -1,7 +1,7 @@
 package com.example.danew_app.domain.model
 
 data class NewsModel(
-    val id: String,
+    val newsId: String,
     val title: String,
     val description: String,
     val imageUrl: String?,
