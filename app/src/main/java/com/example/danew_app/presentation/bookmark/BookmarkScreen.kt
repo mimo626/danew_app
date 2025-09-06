@@ -51,6 +51,11 @@ fun BookmarkScreen(navController: NavHostController) {
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(padding)
         ) {
+            if (isLoading) {
+                item {
+                    CustomLoadingIndicator(padding)
+                }
+            }
             if (bookmarkedNewsList.isEmpty()) {
                 item {
                     Box(
@@ -61,11 +66,6 @@ fun BookmarkScreen(navController: NavHostController) {
                     ) {
                         Text("북마크가 없습니다")
                     }
-                }
-            }
-            if (isLoading) {
-                item {
-                    CustomLoadingIndicator(padding)
                 }
             }
             else {
