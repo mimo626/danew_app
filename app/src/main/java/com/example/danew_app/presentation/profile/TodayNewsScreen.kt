@@ -33,7 +33,7 @@ import com.example.danew_app.presentation.viewmodel.TodayNewsViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ㅌㄹ(navHostController: NavHostController) {
+fun TodayNewsScreen(navHostController: NavHostController) {
     val todayNewsViewModel: TodayNewsViewModel = hiltViewModel()
     val todayNews by todayNewsViewModel.todayNews.collectAsState()
     val isLoading = todayNewsViewModel.isLoading
