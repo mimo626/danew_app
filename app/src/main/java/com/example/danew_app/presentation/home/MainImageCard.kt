@@ -24,7 +24,7 @@ import com.example.danew_app.domain.model.NewsModel
 @Composable
 fun MainImageCard(newsModel: NewsModel, navController:NavHostController) {
     Column (modifier = Modifier.clickable{
-        navController.navigate("details/${newsModel.id}")
+        navController.navigate("details/${newsModel.newsId}")
     }){
         Image(
             painter = rememberAsyncImagePainter(newsModel.imageUrl),

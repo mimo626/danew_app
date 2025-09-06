@@ -30,7 +30,7 @@ import com.example.danew_app.domain.model.NewsModel
 fun TopImageCard(newsModel: NewsModel, navController: NavHostController,) {
     Column (
         modifier = Modifier.clickable{
-            navController.navigate("details/${newsModel.id}")
+            navController.navigate("details/${newsModel.newsId}")
         }
     ){
         if(newsModel.imageUrl != null){

@@ -32,7 +32,7 @@ fun NewsCard(newsModel: NewsModel, navController: NavHostController,) {
             .padding(end = 16.dp)
             .background(ColorsLight.lightGrayColor, shape = RoundedCornerShape(4.dp))
             .clickable {
-                navController.navigate("details/${newsModel.id}")
+                navController.navigate("details/${newsModel.newsId}")
             },
         contentAlignment = Alignment.CenterStart
     ) {

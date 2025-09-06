@@ -140,7 +140,7 @@ class NewsViewModel @Inject constructor(
             .flatten()
             .firstOrNull { !it.imageUrl.isNullOrEmpty() }
         mainImageNews = imageNews
-        imageNews?.id?.let { used.add(it) }
+        imageNews?.newsId?.let { used.add(it) }
 
         // 2) 추천 뉴스 (총 8개, 키워드별 균등 분배)
         val keywords = customNewsMap.keys.toList()
@@ -149,19 +149,19 @@ class NewsViewModel @Inject constructor(
         val pickedRecommended = mutableListOf<NewsModel>()
         keywords.forEach { keyword ->
             val candidates = customNewsMap[keyword].orEmpty()
-                .filter { it.id !in used }
+                .filter { it.newsId !in used }
                 .take(perKeyword)
             pickedRecommended.addAll(candidates)
-            candidates.forEach { used.add(it.id) }
+            candidates.forEach { used.add(it.newsId) }
         }
         recommendedNews = pickedRecommended
 
         // 3) 키워드별 뉴스 (각 4개씩)
         val perKeywordMap = keywords.associateWith { keyword ->
             customNewsMap[keyword].orEmpty()
-                .filter { it.id !in used }
+                .filter { it.newsId !in used }
                 .take(4)
-                .also { it.forEach { news -> used.add(news.id) } }
+                .also { it.forEach { news -> used.add(news.newsId) } }
         }
         keywordNews = perKeywordMap
     }

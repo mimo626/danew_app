@@ -44,7 +44,7 @@ fun NewsItem(newsModel: NewsModel, navController: NavHostController) {
             .fillMaxWidth()
             .padding(vertical = 16.dp, horizontal = 20.dp)
             .clickable{
-                navController.navigate("details/${newsModel.id}")
+                navController.navigate("details/${newsModel.newsId}")
             }
         ,
         horizontalArrangement = Arrangement.SpaceBetween
