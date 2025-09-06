@@ -1,4 +1,6 @@
 package com.example.danew.presentation.home
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -38,22 +40,36 @@ import com.example.danew_app.core.widget.CustomLoadingIndicator
 import com.example.danew_app.presentation.viewmodel.NewsViewModel
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.core.widget.ShareButton
+import com.example.danew_app.domain.model.NewsModel
 import com.example.danew_app.presentation.viewmodel.BookmarkViewModel
+import com.example.danew_app.presentation.viewmodel.TodayNewsViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
     val newsViewModel: NewsViewModel = hiltViewModel()
     val newsList by newsViewModel.newsListById.collectAsState()
+    var news:NewsModel
     val isLoading = newsViewModel.isLoading
     val errorMessage = newsViewModel.errorMessage
 
     val bookmarkViewModel: BookmarkViewModel = hiltViewModel()
     val isBookmarked by bookmarkViewModel.isBookmark.collectAsState()
 
+    val todayNewsViewModel: TodayNewsViewModel = hiltViewModel()
+
     LaunchedEffect(Unit) {
         newsViewModel.fetchNewsById(id = newsId)
         bookmarkViewModel.checkBookmark(newsId)
     }
+
+    LaunchedEffect(newsList) {
+        if (newsList.isNotEmpty()) {
+            news = newsList[0]
+            todayNewsViewModel.addNews(news)
+        }
+    }
+
 
     Scaffold(
         containerColor = ColorsLight.whiteColor,
@@ -95,8 +111,7 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
 
             // 뉴스 내용
             if (newsList.isNotEmpty()) {
-                val news = newsList[0]
-
+                news = newsList[0]
                 // 카테고리 태그
                 news.category?.firstOrNull()?.let { category ->
                     item {
@@ -176,7 +191,7 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
                         IconButton(
                             onClick = {
                                 if (isBookmarked) {
-                                    bookmarkViewModel.deleteBookmark(news.id)
+                                    bookmarkViewModel.deleteBookmark(news.newsId)
                                 } else {
                                     bookmarkViewModel.saveBookmark(news)
                                 }
