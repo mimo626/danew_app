@@ -1,7 +1,7 @@
 package com.example.danew_app.data.entity
 
 data class MetaNewsEntity (
-    val newsId: String,
+    val id: String,
     val title: String,
     val description: String,
     val imageUrl: String?,
