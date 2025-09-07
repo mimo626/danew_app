@@ -32,6 +32,7 @@ fun LoginScreen(navHostController: NavHostController, viewModel: UserViewModel= 
     }
 
     Scaffold(
+        containerColor = ColorsLight.whiteColor,
         topBar = {
             MainTopAppBar(navController = navHostController, title = "로그인", isBackIcon = true)
         },
