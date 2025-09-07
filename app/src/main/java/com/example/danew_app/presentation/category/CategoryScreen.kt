@@ -162,26 +162,26 @@ fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = 
                 }
             }
         }
-        LaunchedEffect(listState, selectedTabIndex) {
-            snapshotFlow {
-                listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
-            }
-                .distinctUntilChanged() // 같은 인덱스면 중복 호출 방지
-                .collect { lastVisibleIndex ->
-                    val shouldLoadMore = lastVisibleIndex != null &&
-                            lastVisibleIndex >= newsList.lastIndex - 2 &&
-                            !isLoading
-
-                    if (shouldLoadMore) {
-                        val krCategory = newsCategoryKr[selectedTabIndex]
-                        val enCategory = NewsCategory.categoryKrToEn[krCategory] ?: "top"
-                        Log.d("NewsViewModel", "lastVisibleIndex: ${lastVisibleIndex}")
-                        Log.d("NewsViewModel", "newsList.lastIndex: ${newsList.lastIndex}")
-
-                        viewModel.fetchNewsByCategory(enCategory, loadMore = true)
-                    }
-                }
-        }
+//        LaunchedEffect(listState, selectedTabIndex) {
+//            snapshotFlow {
+//                listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+//            }
+//                .distinctUntilChanged() // 같은 인덱스면 중복 호출 방지
+//                .collect { lastVisibleIndex ->
+//                    val shouldLoadMore = lastVisibleIndex != null &&
+//                            lastVisibleIndex >= newsList.lastIndex - 2 &&
+//                            !isLoading
+//
+//                    if (shouldLoadMore) {
+//                        val krCategory = newsCategoryKr[selectedTabIndex]
+//                        val enCategory = NewsCategory.categoryKrToEn[krCategory] ?: "top"
+//                        Log.d("NewsViewModel", "lastVisibleIndex: ${lastVisibleIndex}")
+//                        Log.d("NewsViewModel", "newsList.lastIndex: ${newsList.lastIndex}")
+//
+//                        viewModel.fetchNewsByCategory(enCategory, loadMore = true)
+//                    }
+//                }
+//        }
 
     }
 }
