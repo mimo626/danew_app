@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -51,94 +52,100 @@ fun SearchScreen(navHostController: NavHostController) {
         focusRequester.requestFocus()
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp)
-    ) {
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // 검색창
-        Row (
-            modifier = Modifier
-                .fillMaxWidth()
-        ){
-            IconButton(
-                onClick = { navHostController.popBackStack() },
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "뒤로가기"
-                )
-            }
-            Row(
+    Scaffold (
+        containerColor = ColorsLight.whiteColor,
+        topBar = {
+            // 검색창
+            Row (
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(ColorsLight.lightGrayColor, RoundedCornerShape(16.dp))
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                BasicTextField(
-                    value = searchQuery,
-                    onValueChange = { searchQuery = it },
-                    singleLine = true,
-                    decorationBox = { innerTextField ->
-                        if (searchQuery.isEmpty()) {
-                            Text("검색어를 입력해 주세요.", color = ColorsLight.grayColor)
-                        }
-                        innerTextField()
-                    },
-                    modifier = Modifier.weight(1f).focusRequester(focusRequester)
-                )
-                Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.Gray,
-                    modifier = Modifier.clickable{
-                        viewModel.saveSearch(searchQuery)
-                        navHostController.navigate("search/${searchQuery}")
-                    }
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // 최근 검색어 타이틀
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text("최근 검색어", fontWeight = FontWeight.Bold)
-            Text(
-                "전체 삭제",
-                color = Color.Gray,
-                modifier = Modifier.clickable {
-                    viewModel.clearAll()
+            ){
+                IconButton(
+                    onClick = { navHostController.popBackStack() },
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "뒤로가기"
+                    )
                 }
-            )
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // 최근 검색어 목록
-        LazyColumn {
-            items(recentSearches) { history ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 8.dp),
+                        .background(ColorsLight.lightGrayColor, RoundedCornerShape(16.dp))
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(history.keyword)
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "삭제",
-                        tint = Color.Gray,
-                        modifier = Modifier.clickable {
-                            viewModel.deleteSearch(history.keyword)
+                    BasicTextField(
+                        value = searchQuery,
+                        onValueChange = { searchQuery = it },
+                        singleLine = true,
+                        decorationBox = { innerTextField ->
+                            if (searchQuery.isEmpty()) {
+                                Text("검색어를 입력해 주세요.", color = ColorsLight.grayColor)
+                            }
+                            innerTextField()
+                        },
+                        modifier = Modifier.weight(1f).focusRequester(focusRequester)
+                    )
+                    Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.Gray,
+                        modifier = Modifier.clickable{
+                            viewModel.saveSearch(searchQuery)
+                            navHostController.navigate("search/${searchQuery}")
                         }
                     )
+                }
+            }
+        }
+        ){
+        padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(horizontal = 20.dp)
+        ) {
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // 최근 검색어 타이틀
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("최근 검색어", fontWeight = FontWeight.Bold)
+                Text(
+                    "전체 삭제",
+                    color = Color.Gray,
+                    modifier = Modifier.clickable {
+                        viewModel.clearAll()
+                    }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // 최근 검색어 목록
+            LazyColumn {
+                items(recentSearches) { history ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(history.keyword)
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "삭제",
+                            tint = Color.Gray,
+                            modifier = Modifier.clickable {
+                                viewModel.deleteSearch(history.keyword)
+                            }
+                        )
+                    }
                 }
             }
         }
