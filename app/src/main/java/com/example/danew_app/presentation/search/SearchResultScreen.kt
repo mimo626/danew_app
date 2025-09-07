@@ -160,23 +160,23 @@ fun SearchResultScreen(query:String, navHostController: NavHostController) {
             }
         }
 
-        LaunchedEffect(listState) {
-            snapshotFlow {
-                listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
-            }
-                .distinctUntilChanged() // 같은 인덱스면 중복 호출 방지
-                .collect { lastVisibleIndex ->
-                    val shouldLoadMore = lastVisibleIndex != null &&
-                            lastVisibleIndex >= newsList.lastIndex - 2 &&
-                            !isLoading
-
-                    if (shouldLoadMore) {
-                        Log.d("NewsViewModel", "lastVisibleIndex: ${lastVisibleIndex}")
-                        Log.d("NewsViewModel", "newsList.lastIndex: ${newsList.lastIndex}")
-
-                        viewModel.fetchNewsByCategory(searchQuery, loadMore = true)
-                    }
-                }
-        }
+//        LaunchedEffect(listState) {
+//            snapshotFlow {
+//                listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+//            }
+//                .distinctUntilChanged() // 같은 인덱스면 중복 호출 방지
+//                .collect { lastVisibleIndex ->
+//                    val shouldLoadMore = lastVisibleIndex != null &&
+//                            lastVisibleIndex >= newsList.lastIndex - 2 &&
+//                            !isLoading
+//
+//                    if (shouldLoadMore) {
+//                        Log.d("NewsViewModel", "lastVisibleIndex: ${lastVisibleIndex}")
+//                        Log.d("NewsViewModel", "newsList.lastIndex: ${newsList.lastIndex}")
+//
+//                        viewModel.fetchNewsByCategory(searchQuery, loadMore = true)
+//                    }
+//                }
+//        }
     }
 }
