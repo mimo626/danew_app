@@ -58,6 +58,7 @@ fun KeywordScreen(navHostController: NavHostController, viewModel: UserViewModel
     val isNextEnabled = selectedKeywords.isNotEmpty()
 
     Scaffold(
+        containerColor = ColorsLight.whiteColor,
         topBar = {
             MainTopAppBar(navController = navHostController, title = "", isBackIcon = true)
         },
