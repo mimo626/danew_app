@@ -42,6 +42,7 @@ fun SignupScreen(navHostController: NavHostController, viewModel: UserViewModel)
             isUserIdAvailable == true
 
     Scaffold(
+        containerColor = ColorsLight.whiteColor,
         topBar = {
             MainTopAppBar(navController = navHostController, title = "", isBackIcon = true)
         },
