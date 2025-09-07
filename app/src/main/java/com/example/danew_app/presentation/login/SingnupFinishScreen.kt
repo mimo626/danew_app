@@ -36,6 +36,7 @@ fun SignupFinishScreen(navHostController: NavHostController, viewModel: UserView
     }
 
     Scaffold(
+        containerColor = ColorsLight.whiteColor,
         topBar = {
             MainTopAppBar(navController = navHostController, title = "", isBackIcon = true)
         },
