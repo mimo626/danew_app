@@ -50,6 +50,7 @@ fun ProfileEditScreen(navHostController: NavHostController) {
     }
 
     Scaffold(
+        containerColor = ColorsLight.whiteColor,
         topBar = {
             MainTopAppBar(navController = navHostController, title = "프로필 수정", isBackIcon = true)
         },
