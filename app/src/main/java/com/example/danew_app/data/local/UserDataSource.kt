@@ -32,6 +32,14 @@ class UserDataSource @Inject constructor(
         return context.dataStore.data.first()[ACCESS_TOKEN]
     }
 
+    suspend fun logout() {
+        context.dataStore.edit { prefs ->
+            prefs[PreferencesKeys.IS_LOGGED_IN] = false
+            prefs.remove(PreferencesKeys.ACCESS_TOKEN)
+        }
+        Log.i("User 로그아웃", "로그아웃 완료, 토큰 삭제")
+    }
+
     suspend fun checkLoginState(): Boolean {
         val prefs = context.dataStore.data.first()
         val isLoggedIn = prefs[PreferencesKeys.IS_LOGGED_IN] ?: false
