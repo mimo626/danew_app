@@ -126,6 +126,21 @@ class UserViewModel @Inject constructor(
         }
     }
 
+
+    fun logout() {
+        viewModelScope.launch {
+            isLoading = true
+            errorMessage = null
+            try {
+                userDataSource.logout()
+            } catch (e: Exception) {
+                errorMessage = e.localizedMessage
+            } finally {
+                isLoading = false
+            }
+        }
+    }
+
     // -------------------- 유저 조회 --------------------
     fun getUser(){
         viewModelScope.launch {
