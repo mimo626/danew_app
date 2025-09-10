@@ -51,6 +51,9 @@ class UserViewModel @Inject constructor(
     var loginResult by mutableStateOf<String?>(null)
         private set
 
+    var logoutResult by mutableStateOf<String?>(null)
+        private set
+
     var isUserIdAvailable by mutableStateOf<Boolean?>(null)
         private set
 
@@ -133,13 +136,16 @@ class UserViewModel @Inject constructor(
             errorMessage = null
             try {
                 userDataSource.logout()
+                logoutResult = "success"
             } catch (e: Exception) {
                 errorMessage = e.localizedMessage
+                logoutResult = "fail"
             } finally {
                 isLoading = false
             }
         }
     }
+
 
     // -------------------- 유저 조회 --------------------
     fun getUser(){

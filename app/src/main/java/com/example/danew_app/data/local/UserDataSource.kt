@@ -33,11 +33,12 @@ class UserDataSource @Inject constructor(
     }
 
     suspend fun logout() {
+
         context.dataStore.edit { prefs ->
             prefs[PreferencesKeys.IS_LOGGED_IN] = false
             prefs.remove(PreferencesKeys.ACCESS_TOKEN)
         }
-        Log.i("User 로그아웃", "로그아웃 완료, 토큰 삭제")
+        Log.i("User 로그아웃", "성공")
     }
 
     suspend fun checkLoginState(): Boolean {
