@@ -38,16 +38,25 @@ import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.presentation.profile.TodayNews
 import com.example.danew_app.presentation.viewmodel.UserViewModel
 import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MyPageScreen(navController: NavHostController,) {
     val userViewModel: UserViewModel = hiltViewModel()
     val user by userViewModel.getUserData.collectAsState()  // StateFlow 구독
+    val logoutResult = userViewModel.logoutResult
 
     LaunchedEffect(Unit) {
         userViewModel.getUser()   // 화면 진입 시 한 번 실행
     }
+
+    LaunchedEffect(logoutResult) {
+        if (logoutResult == "success"){
+            navController.navigate("start")
+        }
+    }
+
 
     Scaffold(
         containerColor = ColorsLight.whiteColor,
@@ -114,7 +123,6 @@ fun MyPageScreen(navController: NavHostController,) {
             MyPageMenuItem("버전 정보", trailing = { Text("1.0", color = ColorsLight.grayColor) }) { }
             MyPageMenuItem("로그아웃", textColor = ColorsLight.grayColor) {
                 userViewModel.logout()
-                navController.navigate("/start")
             }
         }
     }
