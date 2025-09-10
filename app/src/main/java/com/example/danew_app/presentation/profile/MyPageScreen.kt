@@ -1,5 +1,7 @@
 package com.example.danew.presentation.profile
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,6 +39,7 @@ import com.example.danew_app.presentation.profile.TodayNews
 import com.example.danew_app.presentation.viewmodel.UserViewModel
 import androidx.compose.runtime.collectAsState
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MyPageScreen(navController: NavHostController,) {
     val userViewModel: UserViewModel = hiltViewModel()
