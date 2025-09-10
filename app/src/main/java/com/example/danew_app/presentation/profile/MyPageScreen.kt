@@ -109,7 +109,10 @@ fun MyPageScreen(navController: NavHostController,) {
             MyPageMenuItem("자주 묻는 질문") { }
             MyPageMenuItem("오픈소스 라이센스") { }
             MyPageMenuItem("버전 정보", trailing = { Text("1.0", color = ColorsLight.grayColor) }) { }
-            MyPageMenuItem("로그아웃", textColor = ColorsLight.grayColor) { /* 로그아웃 로직 */ }
+            MyPageMenuItem("로그아웃", textColor = ColorsLight.grayColor) {
+                userViewModel.logout()
+                navController.navigate("/start")
+            }
         }
     }
 }
