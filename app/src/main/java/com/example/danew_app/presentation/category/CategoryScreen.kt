@@ -4,13 +4,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
@@ -27,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.example.danew_app.presentation.viewmodel.NewsViewModel
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.sp
 import com.example.danew_app.presentation.category.NewsCategory
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -46,7 +50,7 @@ fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = 
     var selectedTabIndex by remember { mutableStateOf(0) }
     val listState = rememberLazyListState()
     val topNewsCount = 4
-    val newsPagingItems = viewModel.newsPagingData.collectAsLazyPagingItems()
+    val newsPagingItems = viewModel.newsByCategory.collectAsLazyPagingItems()
     val totalItemsCount = newsPagingItems.itemCount
 
 
@@ -109,6 +113,12 @@ fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = 
                 }
                 Spacer(modifier = Modifier.height(12.dp))
             }
+            // 초기 로딩 상태 체크
+            if (newsPagingItems.loadState.refresh is LoadState.Loading) {
+                item {
+                    CustomLoadingIndicator() // 상단 로딩 표시
+                }
+            }
             // 상위 4개 뉴스
             item {
                 val topNews = newsPagingItems.itemSnapshotList.items.take(topNewsCount)
@@ -137,16 +147,15 @@ fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = 
                 }
             }
 
-            // 로딩 표시
+            // 추가 로딩/에러 (스크롤 끝에 더 로드 중/오류 표시)
             newsPagingItems.apply {
                 when (loadState.append) {
-                    is LoadState.Loading -> item { CustomLoadingIndicator() }  // 더 로드 중
-                    is LoadState.Error -> item { Text("오류") }
-                    else -> {}
-                }
-
-                when (loadState.refresh) {
-                    is LoadState.Loading -> item { CustomLoadingIndicator() } // 초기 로딩
+                    is LoadState.Loading -> item { CircularProgressIndicator(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                            .wrapContentSize(Alignment.Center)
+                    ) }  // 더 로드 중
                     is LoadState.Error -> item { Text("오류") }
                     else -> {}
                 }
