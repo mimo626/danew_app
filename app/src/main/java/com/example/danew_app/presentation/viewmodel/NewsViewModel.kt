@@ -34,7 +34,6 @@ class NewsViewModel @Inject constructor(
     private val getNewsByIdUseCase: GetNewsByIdUseCase,
     private val userDataSource: UserDataSource,
     private val newsRepository: NewsRepository,
-    private val api: NewsApi
 ) : ViewModel() {
 
     private val _newsListById = MutableStateFlow<List<NewsModel>>(emptyList())
