@@ -25,6 +25,8 @@ room = "2.7.2"
 ksp = "2.0.0-1.0.21"
 datastore = "1.1.7"
 runtimeLivedata = "1.9.0"
+paging = "3.3.2"
+paging-compose = "1.0.0-alpha18"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -64,6 +66,8 @@ room-guava = {group = "androidx.room", name = "room-guava", version.ref= "room"}
 room-ktx = {group = "androidx.room", name = "room-ktx", version.ref= "room"}
 datastore = {group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore"}
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
+paging = {group = "androidx.paging", name = "paging-runtime", version.ref = "paging"}
+paging-compose = {group = "androidx.paging", name = "paging-compose", version.ref = "paging-compose"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
