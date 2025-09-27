@@ -10,7 +10,6 @@ import androidx.compose.runtime.setValue
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
-import com.example.danew_app.data.entity.NewsEntity
 import com.example.danew_app.data.local.UserDataSource
 import com.example.danew_app.data.mapper.toDomain
 import com.example.danew_app.domain.model.NewsModel
@@ -20,13 +19,10 @@ import com.example.danew_app.domain.usecase.GetNewsByCategoryUseCase
 import com.example.danew_app.domain.usecase.GetNewsByIdUseCase
 import com.example.danew_app.domain.usecase.GetNewsBySearchQueryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import java.util.Collections.emptyList
 import javax.inject.Inject
 
@@ -69,13 +65,13 @@ class NewsViewModel @Inject constructor(
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
-    fun loadNews(category: String) {
+    fun fetchNewsByCategory(category: String) {
         viewModelScope.launch {
             try {
                 errorMessage = null
                 Log.d("NewsViewModel", "뉴스 조회 스크롤1")
 
-                newsRepository.getNews(category) // Flow<PagingData<NewsEntity>>
+                newsRepository.getNewsByCategory(category) // Flow<PagingData<NewsEntity>>
                     .map { pagingData ->
                         pagingData.map { it.toDomain() } // PagingData.map
                     }
@@ -83,36 +79,12 @@ class NewsViewModel @Inject constructor(
                     .collectLatest { pagingData ->
                         _newsPagingData.value = pagingData  // PagingData 직접 저장
                     }
-                Log.d("NewsViewModel", "뉴스 조회 스크롤2")
-
-
             } catch (e: Exception) {
                 errorMessage = e.localizedMessage
             } finally {
             }
         }
     }
-    fun fetchNewsByCategory(category: String, loadMore: Boolean = false) {
-        viewModelScope.launch {
-            if (!loadMore) {
-                isLoading = true
-                newsListByCategory = emptyList() // 새로 탭을 눌렀을 때 기존 데이터 초기화
-            }
-
-            errorMessage = null
-            try {
-                val newList = getNewsByCategoryUseCase.invoke(category, loadMore)
-                newsListByCategory = if (loadMore) newsListByCategory + newList else newList
-                Log.d("NewsViewModel", "loadMore: ${loadMore}")
-                Log.d("NewsViewModel", "newsList.size: ${newsListByCategory.size}")
-            } catch (e: Exception) {
-                errorMessage = e.localizedMessage
-            } finally {
-                if (!loadMore) isLoading = false
-            }
-        }
-    }
-
 
     fun fetchNewsById(id: String) {
         viewModelScope.launch {
