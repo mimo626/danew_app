@@ -19,22 +19,10 @@ class NewsRepositoryImpl @Inject constructor(
 ) : NewsRepository {
     private var nextPage: String? = null
 
-    override suspend fun getNews(category: String): Flow<PagingData<NewsEntity>> {
+    override suspend fun getNewsByCategory(category: String): Flow<PagingData<NewsEntity>> {
         return Pager(PagingConfig(pageSize = 20)) {
             NewsPagingSource(api, category)
         }.flow
-    }
-
-    override suspend fun getNewsByCategory(category: String, loadMore:Boolean): List<NewsEntity> {
-        val result = api.fetchNewsByCategory(
-            category = category,
-            page = if (loadMore) nextPage else null
-        )
-
-        nextPage = result.nextPage // 다음 호출 때 사용할 page 값 저장
-        Log.d("News 카테고리별 조회", "getNewsByCategory: ${result}")
-
-        return result.results.map { it }
     }
 
     override suspend fun getNewsById(id: String): List<NewsEntity> {
