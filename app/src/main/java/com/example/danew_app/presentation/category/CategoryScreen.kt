@@ -147,13 +147,13 @@ fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = 
             // 로딩 표시
             newsPagingItems.apply {
                 when (loadState.append) {
-                    is LoadState.Loading -> item { CircularProgressIndicator() }  // 더 로드 중
+                    is LoadState.Loading -> item { CustomLoadingIndicator() }  // 더 로드 중
                     is LoadState.Error -> item { Text("오류") }
                     else -> {}
                 }
 
                 when (loadState.refresh) {
-                    is LoadState.Loading -> item { CircularProgressIndicator() } // 초기 로딩
+                    is LoadState.Loading -> item { CustomLoadingIndicator() } // 초기 로딩
                     is LoadState.Error -> item { Text("오류") }
                     else -> {}
                 }
