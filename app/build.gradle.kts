@@ -91,4 +91,6 @@ dependencies {
     testImplementation(libs.room.testing)
     ksp(libs.room.compiler)
     implementation(libs.datastore)
+    implementation(libs.paging)
+    implementation(libs.paging.compose)
 }
