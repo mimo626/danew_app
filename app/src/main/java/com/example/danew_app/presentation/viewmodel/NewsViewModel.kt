@@ -17,6 +17,7 @@ import com.example.danew_app.domain.repository.NewsRepository
 import com.example.danew_app.domain.usecase.GetCustomNewsListUseCase
 import com.example.danew_app.domain.usecase.GetNewsByIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -41,19 +42,8 @@ class NewsViewModel @Inject constructor(
     private val _newsListById = MutableStateFlow<List<NewsModel>>(emptyList())
     val newsListById: StateFlow<List<NewsModel>> = _newsListById
 
-    var customNewsMap by mutableStateOf<Map<String, List<NewsModel>>>(emptyMap())
-        private set
-
     private val _newsByCategory = MutableStateFlow<PagingData<NewsModel>>(PagingData.empty())
     val newsByCategory: StateFlow<PagingData<NewsModel>> = _newsByCategory
-
-    // 이미 처리된 데이터
-    var mainImageNews by mutableStateOf<NewsModel?>(null)
-        private set
-    var recommendedNews by mutableStateOf<List<NewsModel>>(emptyList())
-        private set
-    var keywordNews by mutableStateOf<Map<String, List<NewsModel>>>(emptyMap())
-        private set
 
     var isLoading by mutableStateOf(false)
         private set
@@ -83,6 +73,7 @@ class NewsViewModel @Inject constructor(
     }
 
     private val searchQueryState = MutableStateFlow("")
+    @OptIn(ExperimentalCoroutinesApi::class)
     val newsBySearchQuery = searchQueryState
         // 검색어가 변경될 때마다 새로운 Pager Flow를 생성
         .flatMapLatest { query ->
@@ -126,6 +117,7 @@ class NewsViewModel @Inject constructor(
 
     // 2. 토큰 변경에 반응하는 Paging Flow (로직 변경 없음)
     // token.isNullOrBlank()를 사용하여 null과 "" 모두 처리합니다.
+    @OptIn(ExperimentalCoroutinesApi::class)
     val recommendedNewsFlow: Flow<PagingData<NewsModel>> = userTokenState
         .filterNotNull() // null 값은 필터링하여 UseCase 호출 방지
         .flatMapLatest { token ->

@@ -2,7 +2,6 @@ package com.example.danew_app.domain.usecase
 
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.example.danew_app.data.entity.NewsEntity
 import com.example.danew_app.data.mapper.toDomain
 import com.example.danew_app.domain.model.NewsModel
 import com.example.danew_app.domain.repository.NewsRepository

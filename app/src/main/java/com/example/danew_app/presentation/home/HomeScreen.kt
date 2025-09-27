@@ -1,5 +1,4 @@
 package com.example.danew.presentation.home
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +12,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -26,10 +24,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.CustomLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
-import com.example.danew_app.presentation.home.MainImageCard
 import com.example.danew_app.presentation.home.NewsItem
-import com.example.danew_app.presentation.home.NewsList
-import com.example.danew_app.presentation.home.NowTopNews
 import com.example.danew_app.presentation.home.SearchBar
 import com.example.danew_app.presentation.viewmodel.NewsViewModel
 
