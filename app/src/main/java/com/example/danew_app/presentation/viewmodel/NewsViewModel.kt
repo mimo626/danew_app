@@ -18,12 +18,17 @@ import com.example.danew_app.data.remote.NewsApi
 import com.example.danew_app.data.repository.SearchNewsPagingSource
 import com.example.danew_app.domain.model.NewsModel
 import com.example.danew_app.domain.repository.NewsRepository
+import com.example.danew_app.domain.usecase.GetCustomNewsListUseCase
 import com.example.danew_app.domain.usecase.GetNewsByIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flattenConcat
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import java.util.Collections.emptyList
@@ -32,6 +37,7 @@ import javax.inject.Inject
 @HiltViewModel
 class NewsViewModel @Inject constructor(
     private val getNewsByIdUseCase: GetNewsByIdUseCase,
+    private val getCustomNewsListUseCase: GetCustomNewsListUseCase,
     private val userDataSource: UserDataSource,
     private val newsRepository: NewsRepository,
 ) : ViewModel() {
@@ -44,20 +50,6 @@ class NewsViewModel @Inject constructor(
 
     private val _newsByCategory = MutableStateFlow<PagingData<NewsModel>>(PagingData.empty())
     val newsByCategory: StateFlow<PagingData<NewsModel>> = _newsByCategory
-
-    private val searchQueryState = MutableStateFlow("")
-    val newsBySearchQuery = searchQueryState
-        // 검색어가 변경될 때마다 새로운 Pager Flow를 생성
-        .flatMapLatest { query ->
-            if (query.isBlank()) {
-                // 빈 검색어일 경우 빈 PagingData 반환
-                flowOf(PagingData.empty())
-            } else {
-                // 검색어가 있을 경우 Pager 구성 및 Flow 방출
-                newsRepository.getNewsBySearchQuery(searchQuery = query)
-            }
-        }
-        .cachedIn(viewModelScope) // Flow를 캐시하여 화면 회전 등에 대응
 
     // 이미 처리된 데이터
     var mainImageNews by mutableStateOf<NewsModel?>(null)
@@ -93,7 +85,21 @@ class NewsViewModel @Inject constructor(
             }
         }
     }
-    // NewsViewModel.kt (예시)
+
+    private val searchQueryState = MutableStateFlow("")
+    val newsBySearchQuery = searchQueryState
+        // 검색어가 변경될 때마다 새로운 Pager Flow를 생성
+        .flatMapLatest { query ->
+            if (query.isBlank()) {
+                // 빈 검색어일 경우 빈 PagingData 반환
+                flowOf(PagingData.empty())
+            } else {
+                // 검색어가 있을 경우 Pager 구성 및 Flow 방출
+                newsRepository.getNewsBySearchQuery(searchQuery = query)
+            }
+        }
+        .cachedIn(viewModelScope) // Flow를 캐시하여 화면 회전 등에 대응
+
 
     fun fetchNewsBySearchQuery(query: String) {
         // 1. Compose에서 이 함수를 호출하여 검색어 상태를 업데이트
@@ -119,54 +125,43 @@ class NewsViewModel @Inject constructor(
         }
     }
 
-    fun fetchCustomNews() {
-        viewModelScope.launch {
-            isLoading = true
-            errorMessage = null
-            try {
-                val token = userDataSource.getToken() ?: ""
-//                customNewsMap = getCustomNewsListUseCase.invoke(token)
-                processNews()
-                Log.i("News 맞춤 뉴스 조회", "$customNewsMap")
-            } catch (e: Exception) {
-                errorMessage = e.localizedMessage
-            } finally {
-                isLoading = false
+    // 1. userTokenState를 String? 타입으로 복구하고, 초기값을 null로 설정합니다.
+    private val userTokenState = MutableStateFlow<String?>(null)
+
+    // 2. 토큰 변경에 반응하는 Paging Flow (로직 변경 없음)
+    // token.isNullOrBlank()를 사용하여 null과 "" 모두 처리합니다.
+    val recommendedNewsFlow: Flow<PagingData<NewsModel>> = userTokenState
+        .filterNotNull() // null 값은 필터링하여 UseCase 호출 방지
+        .flatMapLatest { token ->
+            if (token.isBlank()) {
+                flowOf(PagingData.empty())
+            } else {
+                flow {
+                    // UseCase 호출
+                    emit(getCustomNewsListUseCase(token))
+                }.flattenConcat()
             }
+        }
+        .cachedIn(viewModelScope)
+
+
+    // 3. 'init' 블록에서 코루틴을 사용하여 토큰을 비동기적으로 로드합니다.
+    init {
+        loadUserTokenAndStartNewsLoad()
+    }
+
+    private fun loadUserTokenAndStartNewsLoad() {
+        viewModelScope.launch {
+            // suspend 함수인 getToken()을 안전하게 호출합니다.
+            val token = userDataSource.getToken() ?: ""
+
+            // 가져온 토큰 값을 userTokenState에 설정하여 Paging Flow를 트리거합니다.
+            userTokenState.value = token
         }
     }
 
-    private fun processNews() {
-        val used = mutableSetOf<String>() // 중복 방지 (url 이나 id 기준)
-
-        // 1) MainImageCard (이미지 있는 첫 번째 뉴스)
-        val imageNews = customNewsMap.values
-            .flatten()
-            .firstOrNull { !it.imageUrl.isNullOrEmpty() }
-        mainImageNews = imageNews
-        imageNews?.newsId?.let { used.add(it) }
-
-        // 2) 추천 뉴스 (총 8개, 키워드별 균등 분배)
-        val keywords = customNewsMap.keys.toList()
-        val perKeyword = if (keywords.isEmpty()) 0 else 8 / keywords.size
-
-        val pickedRecommended = mutableListOf<NewsModel>()
-        keywords.forEach { keyword ->
-            val candidates = customNewsMap[keyword].orEmpty()
-                .filter { it.newsId !in used }
-                .take(perKeyword)
-            pickedRecommended.addAll(candidates)
-            candidates.forEach { used.add(it.newsId) }
-        }
-        recommendedNews = pickedRecommended
-
-        // 3) 키워드별 뉴스 (각 4개씩)
-        val perKeywordMap = keywords.associateWith { keyword ->
-            customNewsMap[keyword].orEmpty()
-                .filter { it.newsId !in used }
-                .take(4)
-                .also { it.forEach { news -> used.add(news.newsId) } }
-        }
-        keywordNews = perKeywordMap
+    // 외부(예: 로그인/로그아웃)에서 토큰이 변경될 때 수동으로 호출하는 함수.
+    fun fetchRecommendedNews(token: String) {
+        userTokenState.value = token
     }
 }
