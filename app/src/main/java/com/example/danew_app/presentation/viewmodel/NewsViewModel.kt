@@ -7,15 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.setValue
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.example.danew_app.data.local.UserDataSource
 import com.example.danew_app.data.mapper.toDomain
-import com.example.danew_app.data.remote.NewsApi
-import com.example.danew_app.data.repository.SearchNewsPagingSource
 import com.example.danew_app.domain.model.NewsModel
 import com.example.danew_app.domain.repository.NewsRepository
 import com.example.danew_app.domain.usecase.GetCustomNewsListUseCase
