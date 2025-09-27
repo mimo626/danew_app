@@ -7,15 +7,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.setValue
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.map
+import com.example.danew_app.data.entity.NewsEntity
 import com.example.danew_app.data.local.UserDataSource
+import com.example.danew_app.data.mapper.toDomain
 import com.example.danew_app.domain.model.NewsModel
+import com.example.danew_app.domain.repository.NewsRepository
 import com.example.danew_app.domain.usecase.GetCustomNewsListUseCase
 import com.example.danew_app.domain.usecase.GetNewsByCategoryUseCase
 import com.example.danew_app.domain.usecase.GetNewsByIdUseCase
 import com.example.danew_app.domain.usecase.GetNewsBySearchQueryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import java.util.Collections.emptyList
 import javax.inject.Inject
 
@@ -26,6 +37,7 @@ class NewsViewModel @Inject constructor(
     private val getNewsBySearchQueryUseCase: GetNewsBySearchQueryUseCase,
     private val getCustomNewsListUseCase: GetCustomNewsListUseCase,
     private val userDataSource: UserDataSource,
+    private val newsRepository: NewsRepository,
     ) : ViewModel() {
 
     var newsListByCategory by mutableStateOf<List<NewsModel>>(emptyList())
@@ -39,6 +51,9 @@ class NewsViewModel @Inject constructor(
 
     var customNewsMap by mutableStateOf<Map<String, List<NewsModel>>>(emptyMap())
         private set
+
+    private val _newsPagingData = MutableStateFlow<PagingData<NewsModel>>(PagingData.empty())
+    val newsPagingData: StateFlow<PagingData<NewsModel>> = _newsPagingData
 
     // 이미 처리된 데이터
     var mainImageNews by mutableStateOf<NewsModel?>(null)
@@ -54,6 +69,29 @@ class NewsViewModel @Inject constructor(
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
+    fun loadNews(category: String) {
+        viewModelScope.launch {
+            try {
+                errorMessage = null
+                Log.d("NewsViewModel", "뉴스 조회 스크롤1")
+
+                newsRepository.getNews(category) // Flow<PagingData<NewsEntity>>
+                    .map { pagingData ->
+                        pagingData.map { it.toDomain() } // PagingData.map
+                    }
+                    .cachedIn(viewModelScope)
+                    .collectLatest { pagingData ->
+                        _newsPagingData.value = pagingData  // PagingData 직접 저장
+                    }
+                Log.d("NewsViewModel", "뉴스 조회 스크롤2")
+
+
+            } catch (e: Exception) {
+                errorMessage = e.localizedMessage
+            } finally {
+            }
+        }
+    }
     fun fetchNewsByCategory(category: String, loadMore: Boolean = false) {
         viewModelScope.launch {
             if (!loadMore) {
