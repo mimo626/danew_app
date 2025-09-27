@@ -31,11 +31,14 @@ import androidx.compose.ui.unit.dp
 import com.example.danew_app.presentation.viewmodel.NewsViewModel
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.unit.sp
 import com.example.danew_app.presentation.category.NewsCategory
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.CustomLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
@@ -49,15 +52,16 @@ val newsCategoryKr = NewsCategory.categoryKrToEn.keys.toList()
 fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = hiltViewModel()) {
     var selectedTabIndex by remember { mutableStateOf(0) }
     val listState = rememberLazyListState()
-    val newsList = viewModel.newsListByCategory
-    val isLoading = viewModel.isLoading
-    val errorMessage = viewModel.errorMessage
+    val topNewsCount = 4
+    val newsPagingItems = viewModel.newsPagingData.collectAsLazyPagingItems()
+    val totalItemsCount = newsPagingItems.itemCount
+
 
     // 탭 인덱스 변경 시 API 호출
     LaunchedEffect(selectedTabIndex) {
         val krCategory = newsCategoryKr[selectedTabIndex]
         val enCategory = NewsCategory.categoryKrToEn[krCategory] ?: "top"
-        viewModel.fetchNewsByCategory(enCategory)
+        viewModel.loadNews(enCategory)
     }
 
     Scaffold(
@@ -112,76 +116,48 @@ fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = 
                 }
                 Spacer(modifier = Modifier.height(12.dp))
             }
+            // 상위 4개 뉴스
+            item {
+                val topNews = newsPagingItems.itemSnapshotList.items.take(topNewsCount)
+                NowTopNews(
+                    sectionTitle = "실시간 인기 뉴스",
+                    newsList = topNews,
+                    navController = navController
+                )
+                Spacer(Modifier.height(36.dp))
+                Text(
+                    "${newsCategoryKr[selectedTabIndex]} 이슈 뉴스",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
 
-            // 로딩
-            if (isLoading && newsList.isEmpty()) {
-                item {
-                    CustomLoadingIndicator(padding)
+            // 나머지 뉴스 (총 아이템 수 > topNewsCount일 때만)
+            if (totalItemsCount > topNewsCount) {
+                items(totalItemsCount - topNewsCount) { index ->
+                    val item = newsPagingItems[index + topNewsCount]
+                    if (item != null) {
+                        NewsItem(item, navController)
+                    }
                 }
             }
 
-            // 에러 메시지
-            if (errorMessage != null) {
-                item {
-                    Text("오류: $errorMessage", color = Color.Red)
+            // 로딩 표시
+            newsPagingItems.apply {
+                when (loadState.append) {
+                    is LoadState.Loading -> item { CircularProgressIndicator() }  // 더 로드 중
+                    is LoadState.Error -> item { Text("오류") }
+                    else -> {}
                 }
-            }
 
-            if (newsList.isNotEmpty()) {
-                // 패딩을 주고 싶은 영역만 감싸기
-                item {
-                    NowTopNews(
-                        sectionTitle = "실시간 인기 뉴스",
-                        newsList = newsList.take(4),
-                        navController = navController
-                    )
-                    Spacer(Modifier.height(36.dp))
-                    Text(
-                        "${newsCategoryKr[selectedTabIndex]} 이슈 뉴스",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
-                        modifier = Modifier.padding(horizontal = 20.dp)
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
-            }
-
-            // 일반 뉴스 리스트
-            items(items = newsList.drop(4)) { news ->
-                NewsItem(news, navController)
-            }
-
-            // 로딩 인디케이터 (페이지네이션)
-            if (isLoading && newsList.isNotEmpty()) {
-                item {
-                    CircularProgressIndicator(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                    )
+                when (loadState.refresh) {
+                    is LoadState.Loading -> item { CircularProgressIndicator() } // 초기 로딩
+                    is LoadState.Error -> item { Text("오류") }
+                    else -> {}
                 }
             }
         }
-//        LaunchedEffect(listState, selectedTabIndex) {
-//            snapshotFlow {
-//                listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
-//            }
-//                .distinctUntilChanged() // 같은 인덱스면 중복 호출 방지
-//                .collect { lastVisibleIndex ->
-//                    val shouldLoadMore = lastVisibleIndex != null &&
-//                            lastVisibleIndex >= newsList.lastIndex - 2 &&
-//                            !isLoading
-//
-//                    if (shouldLoadMore) {
-//                        val krCategory = newsCategoryKr[selectedTabIndex]
-//                        val enCategory = NewsCategory.categoryKrToEn[krCategory] ?: "top"
-//                        Log.d("NewsViewModel", "lastVisibleIndex: ${lastVisibleIndex}")
-//                        Log.d("NewsViewModel", "newsList.lastIndex: ${newsList.lastIndex}")
-//
-//                        viewModel.fetchNewsByCategory(enCategory, loadMore = true)
-//                    }
-//                }
-//        }
-
     }
 }
