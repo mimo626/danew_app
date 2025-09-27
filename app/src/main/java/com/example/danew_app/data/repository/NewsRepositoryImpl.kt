@@ -25,20 +25,15 @@ class NewsRepositoryImpl @Inject constructor(
         }.flow
     }
 
+    override suspend fun getNewsBySearchQuery(searchQuery: String): Flow<PagingData<NewsEntity>> {
+        return Pager(PagingConfig(pageSize = 20)) {
+            NewsPagingSource(api, searchQuery = searchQuery)
+        }.flow
+    }
+
     override suspend fun getNewsById(id: String): List<NewsEntity> {
         val result = api.fetchNewsById(id = id).results
         return result.map { it}
     }
 
-    override suspend fun getNewsBySearchQuery(searchQuery: String, loadMore:Boolean): List<NewsEntity> {
-        val result = api.fetchNewsBySearchQuery(
-            searchQuery = searchQuery,
-            //page = if (loadMore) nextPage else null
-        )
-
-        nextPage = result.nextPage // 다음 호출 때 사용할 page 값 저장
-        Log.d("News 검색어 조회", "getNewsBySearchQuery: ${result}")
-
-        return result.results.map { it }
-    }
 }
