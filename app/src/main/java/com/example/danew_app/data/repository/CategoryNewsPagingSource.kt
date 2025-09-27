@@ -6,32 +6,25 @@ import androidx.paging.PagingState
 import com.example.danew_app.data.entity.NewsEntity
 import com.example.danew_app.data.remote.NewsApi
 
-class NewsPagingSource(
+class CategoryNewsPagingSource(
     private val api: NewsApi,
-    private val category: String? = null,
-    private val searchQuery: String? = null
-
+    private val category: String
 ) : PagingSource<String, NewsEntity>() { // 키 타입을 String 으로 변경
 
     override suspend fun load(params: LoadParams<String>): LoadResult<String, NewsEntity> {
         return try {
 
             val page: String? = params.key // 첫 호출은 null
-            val response = when {
-                !searchQuery.isNullOrEmpty() -> api.fetchNewsBySearchQuery(
-                    searchQuery = searchQuery,
-                    page = page)
-                !category.isNullOrEmpty() -> api.fetchNewsByCategory(
-                    category = category,
-                    page = page)
-                else -> throw IllegalArgumentException("category or searchQuery must be provided")
-            }
-
+            val response = api.fetchNewsByCategory(
+                category = category,
+                page = page,
+            )
             Log.d("NewsPagingSource", "뉴스 페이지 ${page}")
 
 
             val newsList = response.results
             Log.d("NewsPagingSource", "뉴스 리스트 ${newsList}")
+
 
             LoadResult.Page(
                 data = newsList,
