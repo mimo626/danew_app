@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -39,8 +40,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.CustomLoadingIndicator
+import com.example.danew_app.data.mapper.toDomain
 import com.example.danew_app.presentation.viewmodel.NewsViewModel
 import com.example.danew_app.presentation.home.NewsItem
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -50,15 +54,15 @@ fun SearchResultScreen(query:String, navHostController: NavHostController) {
     val viewModel: NewsViewModel = hiltViewModel()
     var searchQuery by remember { mutableStateOf(query) }
     val listState = rememberLazyListState()
-    val newsList = viewModel.newsListBySearchQuery
-    val isLoading = viewModel.isLoading
-    val errorMessage = viewModel.errorMessage
+    val newsPagingItems = viewModel.newsBySearchQuery.collectAsLazyPagingItems()
 
-    // LaunchedEffect 안에서 실행 해야 query 값이 바뀌지 않는 이상 처음에 재실행 X
+    // 초기 검색 및 검색어 변경 시 로드 유도
     LaunchedEffect(query) {
-        viewModel.fetchNewsBySearchQuery(searchQuery)
+        // 1. ViewModel에 초기 검색어 설정
+        viewModel.fetchNewsBySearchQuery(query)
+        // 2. ViewModel이 반응형 구조가 아니라면, 강제로 새로고침하여 load() 호출
+        newsPagingItems.refresh()
     }
-
     Scaffold (
         containerColor = ColorsLight.whiteColor,
         topBar = {
@@ -94,8 +98,8 @@ fun SearchResultScreen(query:String, navHostController: NavHostController) {
                     )
                     Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.Gray,
                         modifier = Modifier.clickable{
-                            viewModel.resetSearchResults()
                             viewModel.fetchNewsBySearchQuery(searchQuery)
+                            newsPagingItems.refresh()
                         }
                     )
                 }
@@ -129,54 +133,29 @@ fun SearchResultScreen(query:String, navHostController: NavHostController) {
                 }
                 Spacer(modifier = Modifier.height(16.dp))
             }
-            // 로딩
-            if (isLoading) {
-                item {
-                    Box(
-                        modifier = Modifier
-                            .fillParentMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator(color = ColorsLight.grayColor)
+            // PagingData items 렌더링
+            items(newsPagingItems.itemCount) { index ->
+                val item = newsPagingItems[index]
+                if (item != null) {
+                    NewsItem(item.toDomain(), navHostController)
+                }
+            }
+
+            // 추가 로딩/에러 처리
+            newsPagingItems.apply {
+                when (loadState.append) {
+                    is LoadState.Loading -> item {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .wrapContentSize(Alignment.Center)
+                        )
                     }
+                    is LoadState.Error -> item { Text("오류") }
+                    else -> {}
                 }
-            }
-
-            // 에러 메시지
-            if (errorMessage != null) {
-                item {
-                    Text("오류: $errorMessage", color = Color.Red)
-                }
-            }
-
-            if(!isLoading && newsList.isEmpty()){
-                item {
-                    CustomLoadingIndicator(padding)
-                }
-            }
-            // 일반 뉴스 리스트
-            items(items = newsList) { news ->
-                NewsItem(news, navHostController)
             }
         }
-
-//        LaunchedEffect(listState) {
-//            snapshotFlow {
-//                listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
-//            }
-//                .distinctUntilChanged() // 같은 인덱스면 중복 호출 방지
-//                .collect { lastVisibleIndex ->
-//                    val shouldLoadMore = lastVisibleIndex != null &&
-//                            lastVisibleIndex >= newsList.lastIndex - 2 &&
-//                            !isLoading
-//
-//                    if (shouldLoadMore) {
-//                        Log.d("NewsViewModel", "lastVisibleIndex: ${lastVisibleIndex}")
-//                        Log.d("NewsViewModel", "newsList.lastIndex: ${newsList.lastIndex}")
-//
-//                        viewModel.fetchNewsByCategory(searchQuery, loadMore = true)
-//                    }
-//                }
-//        }
     }
 }
