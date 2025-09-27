@@ -1,20 +1,16 @@
 package com.example.danew.presentation.category
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
@@ -31,8 +27,6 @@ import androidx.compose.ui.unit.dp
 import com.example.danew_app.presentation.viewmodel.NewsViewModel
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.unit.sp
 import com.example.danew_app.presentation.category.NewsCategory
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -44,7 +38,6 @@ import com.example.danew_app.core.widget.CustomLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.presentation.home.NewsItem
 import com.example.danew_app.presentation.home.NowTopNews
-import kotlinx.coroutines.flow.distinctUntilChanged
 
 val newsCategoryKr = NewsCategory.categoryKrToEn.keys.toList()
 
@@ -61,7 +54,7 @@ fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = 
     LaunchedEffect(selectedTabIndex) {
         val krCategory = newsCategoryKr[selectedTabIndex]
         val enCategory = NewsCategory.categoryKrToEn[krCategory] ?: "top"
-        viewModel.loadNews(enCategory)
+        viewModel.fetchNewsByCategory(enCategory)
     }
 
     Scaffold(
