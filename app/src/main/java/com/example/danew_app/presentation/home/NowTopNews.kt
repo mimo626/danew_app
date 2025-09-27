@@ -34,15 +34,10 @@ fun NowTopNews(sectionTitle: String, newsList: List<NewsModel>, navController: N
     Column (
         modifier = Modifier.padding(horizontal = 20.dp)
     ){
-        Row(
+        Text(sectionTitle, fontWeight = FontWeight.Bold, fontSize = 16.sp,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(sectionTitle, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            Text("전체보기", color = Color.Blue, fontSize = 12.sp)
-        }
+                .padding(vertical = 8.dp),)
 
         Spacer(modifier = Modifier.height(16.dp))
 
