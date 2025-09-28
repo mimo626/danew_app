@@ -136,7 +136,12 @@ fun SearchScreen(navHostController: NavHostController) {
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(history.keyword)
+                        Text(history.keyword,
+                            modifier = Modifier
+                                .weight(1f)
+                                .clickable{
+                                navHostController.navigate("search/${history.keyword}")
+                            })
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "삭제",
