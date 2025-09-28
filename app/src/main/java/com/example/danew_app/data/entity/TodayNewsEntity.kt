@@ -5,8 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "today_news")
 data class TodayNewsEntity (
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val newsId: String,
+    @PrimaryKey val newsId: String,
     val title: String,
     val description: String,
     val imageUrl: String?,
