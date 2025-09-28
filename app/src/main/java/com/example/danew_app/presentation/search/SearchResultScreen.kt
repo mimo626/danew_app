@@ -1,6 +1,8 @@
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,7 +41,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.room.util.TableInfo
 import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.widget.CustomLoadingIndicator
 import com.example.danew_app.data.mapper.toDomain
 import com.example.danew_app.presentation.viewmodel.NewsViewModel
 import com.example.danew_app.presentation.home.NewsItem
@@ -111,22 +116,41 @@ fun SearchResultScreen(query:String, navHostController: NavHostController) {
                 HorizontalDivider(thickness = 6.dp, color = ColorsLight.lightGrayColor)
 
                 Spacer(modifier = Modifier.height(16.dp))
-                Row (
+                Text("검색 결과", fontWeight = FontWeight.SemiBold, fontSize = 16.sp,
                     modifier = Modifier.fillMaxWidth()
-                        .padding(horizontal = 20.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ){
-                    Text("뉴스", fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        "334",
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 16.sp,
-                        color = ColorsLight.grayColor
-                    )
-                }
+                        .padding(horizontal = 20.dp),)
                 Spacer(modifier = Modifier.height(16.dp))
             }
+
+            // 초기 로딩 중일 때 로딩 인디케이터 표시
+            if (newsPagingItems.loadState.refresh is LoadState.Loading) {
+                item {
+                    CustomLoadingIndicator()
+                }
+            }
+
+            if(newsPagingItems.itemCount <= 0) {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillParentMaxSize()
+                            .padding(padding),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text("\'${searchQuery}\'에 대한 검색 결과가 없습니다.",
+                            color = ColorsLight.grayColor,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text("단어의 철자가 정확한지 확인해주세요.",
+                            color = ColorsLight.grayColor,
+                            fontSize = 12.sp
+                        )
+                    }
+                }
+            }
+
             // PagingData items 렌더링
             items(newsPagingItems.itemCount) { index ->
                 val item = newsPagingItems[index]
