@@ -11,4 +11,5 @@ interface UserRepository {
     suspend fun checkUserId(userId: String):Boolean
     suspend fun getUser(token: String,): UserEntity
     suspend fun updateUser(token: String, updateUserRequest: UpdateUserRequest): UserEntity
+    suspend fun updateKeyword(token: String, keyword:List<String>): UserEntity
 }
