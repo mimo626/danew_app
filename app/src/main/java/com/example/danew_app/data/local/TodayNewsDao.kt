@@ -9,7 +9,7 @@ import com.example.danew_app.data.entity.TodayNewsEntity
 @Dao
 interface TodayNewsDao {
 
-    @Query("SELECT * FROM today_news WHERE savedAt = :date ORDER BY id DESC")
+    @Query("SELECT * FROM today_news WHERE savedAt = :date ORDER BY savedAt DESC")
     suspend fun getTodayNews(date: String): List<TodayNewsEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
