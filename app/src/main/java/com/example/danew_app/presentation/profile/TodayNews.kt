@@ -42,7 +42,7 @@ fun TodayNews(sectionTitle:String, navController: NavHostController){
         todayNewsViewModel.getNews()
     }
 
-    Column (modifier = Modifier.padding(horizontal = 16.dp)){
+    Column (modifier = Modifier.padding(horizontal = 20.dp)){
         Row(
             modifier = Modifier
                 .fillMaxWidth()
