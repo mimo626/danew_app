@@ -32,4 +32,10 @@ interface UserApi {
         @Header("Authorization") token: String,
         @Body request: UpdateUserRequest
     ): Call<ApiResponse<UserEntity>>
+
+    @PATCH("/api/auth/updateKeyword")
+    fun updateKeyword(
+        @Header("Authorization") token: String,
+        @Body keyword: List<String>
+    ): Call<ApiResponse<UserEntity>>
 }
