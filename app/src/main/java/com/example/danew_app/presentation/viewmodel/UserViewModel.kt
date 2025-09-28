@@ -183,6 +183,24 @@ class UserViewModel @Inject constructor(
         }
     }
 
+    // -------------------- 키워드 수정 --------------------
+    fun updateKeyword(keywordList: List<String>){
+        viewModelScope.launch {
+            isLoading = true
+            errorMessage = null
+            try {
+                val token = userDataSource.getToken() ?: ""
+                val userData = updateUserUseCase.keyword(token, keywordList)
+                _user.value = userData
+            }catch (e: Exception) {
+                errorMessage = e.localizedMessage
+                Log.e("User 수정", "updateKeyword 오류", e)
+            } finally {
+                isLoading = false
+            }
+        }
+    }
+
     // -------------------- 아이디 중복체크 --------------------
     fun checkUserId(userId: String) {
         viewModelScope.launch {
