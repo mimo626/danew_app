@@ -161,6 +161,37 @@ class UserRepositoryImpl @Inject constructor(
         }
 
     @OptIn(ExperimentalCoroutinesApi::class)
+    override suspend fun updateKeyword(token: String, keyword:List<String>): UserEntity =
+        suspendCancellableCoroutine { cont ->
+            api.updateKeyword(token, keyword).enqueue(object : Callback<ApiResponse<UserEntity>> {
+                override fun onResponse(call: Call<ApiResponse<UserEntity>>, response: Response<ApiResponse<UserEntity>>) {
+                    val body = response.body()
+                    if (response.isSuccessful && body != null) {
+                        if (body.status == "success" && body.data != null) {
+                            val user = body.data
+                            cont.resume(user) {}
+                            Log.i("User 키워드 수정", "성공: ${user}")
+                        } else {
+                            // 서버에서 status가 error인 경우
+                            val msg = body.message ?: "유저 키워드 수정 실패"
+                            cont.resumeWithException(RuntimeException(msg))
+                            Log.e("User 키워드 수정", "실패: $msg")
+                        }
+                    } else {
+                        val errorMsg = response.errorBody()?.string() ?: "유저 키워드 수정 실패"
+                        cont.resumeWithException(RuntimeException(errorMsg))
+                        Log.e("User 키워드 수정", "실패: $errorMsg")
+                    }
+                }
+
+                override fun onFailure(call: Call<ApiResponse<UserEntity>>, t: Throwable) {
+                    cont.resumeWithException(t)
+                    Log.e("User 수정", "네트워크 실패", t)
+                }
+            })
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun checkUserId(userId: String) :Boolean =
         suspendCancellableCoroutine{ cont ->
         api.checkUserId(userId).enqueue(object : Callback<ApiResponse<Boolean>> {
