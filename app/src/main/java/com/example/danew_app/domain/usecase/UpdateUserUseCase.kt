@@ -12,4 +12,8 @@ class UpdateUserUseCase @Inject constructor(
     suspend operator fun invoke(token:String, updateUserRequest: UpdateUserRequest):UserModel{
         return userRepository.updateUser(token, updateUserRequest).toDomain()
     }
+
+    suspend fun keyword(token:String, keyword:List<String>):UserModel{
+        return userRepository.updateKeyword(token, keyword).toDomain()
+    }
 }
