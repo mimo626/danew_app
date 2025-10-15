@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface NewsRepository {
     suspend fun getNewsByCategory(category: String): Flow<PagingData<NewsEntity>>
-    suspend fun getNewsById(id: String): List<NewsEntity>
+    suspend fun getNewsById(id: String): NewsEntity
     suspend fun getNewsBySearchQuery(searchQuery: String): Flow<PagingData<NewsEntity>>
 }
 
