@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetNewsByIdUseCase @Inject constructor(
     private val repository: NewsRepository
 ) {
-    suspend operator fun invoke(id: String): List<NewsModel> {
-        return repository.getNewsById(id).map { it.toDomain() }
+    suspend operator fun invoke(id: String): NewsModel{
+        return repository.getNewsById(id).toDomain()
     }
 }
