@@ -11,7 +11,7 @@ data class NewsEntity(
     @SerialName("article_id") val article_id: String, // Room의 Primary Key는 Nullable이면 안 됩니다.
     val title: String? = null,
     val link: String? = null,
-    val keywords: List<String> = emptyList(), // @TypeConverters 필요
+    val keywords: List<String>? = emptyList(), // @TypeConverters 필요
     val creator: List<String>? = emptyList(), // @TypeConverters 필요
     val description: String? = null,
     val content: String? = null,
