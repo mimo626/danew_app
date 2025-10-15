@@ -32,7 +32,7 @@ import com.example.danew.presentation.profile.MyPageScreen
 import com.example.danew.presentation.profile.ProfileEditScreen
 import com.example.danew_app.domain.model.DiaryModel
 import com.example.danew_app.presentation.login.KeywordScreen
-import com.example.danew_app.presentation.main.KeywordUpdateScreen
+import com.example.danew_app.presentation.profile.KeywordUpdateScreen
 import com.example.danew_app.presentation.profile.TodayNewsScreen
 import com.example.danew_app.presentation.viewmodel.UserViewModel
 
