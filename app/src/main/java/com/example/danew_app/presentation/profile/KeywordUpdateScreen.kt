@@ -1,9 +1,7 @@
-package com.example.danew_app.presentation.main
+package com.example.danew_app.presentation.profile
 
 import android.annotation.SuppressLint
 import com.example.danew_app.presentation.viewmodel.UserViewModel
-import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -43,12 +41,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.MainTopAppBar
-import com.example.danew_app.core.widget.CustomLinearProgressIndicator
 
 @SuppressLint("UnrememberedGetBackStackEntry")
 @Composable
@@ -144,6 +140,12 @@ fun KeywordUpdateScreen(navHostController: NavHostController) {
                     Text("생성")
                 }
             }
+            Text(
+                "최대 5개까지 선택할 수 있습니다.",
+                fontSize = 14.sp,
+                color = ColorsLight.grayColor,
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
+            )
             // 키워드 그리드
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),
@@ -184,12 +186,6 @@ fun KeywordUpdateScreen(navHostController: NavHostController) {
                         }
                     }
                 }
-            )
-            Text(
-                "최대 5개까지 선택할 수 있습니다.",
-                fontSize = 14.sp,
-                color = ColorsLight.grayColor,
-                modifier = Modifier.padding(horizontal = 20.dp),
             )
         }
     }
