@@ -39,8 +39,8 @@ class NewsViewModel @Inject constructor(
     private val newsRepository: NewsRepository,
 ) : ViewModel() {
 
-    private val _newsListById = MutableStateFlow<List<NewsModel>>(emptyList())
-    val newsListById: StateFlow<List<NewsModel>> = _newsListById
+    private val _newsListById = MutableStateFlow(NewsModel())
+    val newsListById: StateFlow<NewsModel> = _newsListById
 
     private val _newsByCategory = MutableStateFlow<PagingData<NewsModel>>(PagingData.empty())
     val newsByCategory: StateFlow<PagingData<NewsModel>> = _newsByCategory
