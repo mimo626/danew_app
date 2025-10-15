@@ -191,6 +191,7 @@ class UserViewModel @Inject constructor(
             try {
                 val token = userDataSource.getToken() ?: ""
                 val userData = updateUserUseCase.keyword(token, keywordList)
+                updateKeyword(keywordList)
                 _user.value = userData
             }catch (e: Exception) {
                 errorMessage = e.localizedMessage
