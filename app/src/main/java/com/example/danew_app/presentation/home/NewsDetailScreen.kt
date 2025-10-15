@@ -1,5 +1,8 @@
 package com.example.danew.presentation.home
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Icon
@@ -48,8 +52,7 @@ import com.example.danew_app.presentation.viewmodel.TodayNewsViewModel
 @Composable
 fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
     val newsViewModel: NewsViewModel = hiltViewModel()
-    val newsList by newsViewModel.newsListById.collectAsState()
-    var news:NewsModel
+    val news by newsViewModel.newsListById.collectAsState()
     val isLoading = newsViewModel.isLoading
     val errorMessage = newsViewModel.errorMessage
 
@@ -63,9 +66,8 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
         bookmarkViewModel.checkBookmark(newsId)
     }
 
-    LaunchedEffect(newsList) {
-        if (newsList.isNotEmpty()) {
-            news = newsList[0]
+    LaunchedEffect(news) {
+        if (news != NewsModel()) {
             todayNewsViewModel.addNews(news)
         }
     }
@@ -110,8 +112,7 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
             }
 
             // 뉴스 내용
-            if (newsList.isNotEmpty()) {
-                news = newsList[0]
+            if (news != NewsModel()) {
                 // 카테고리 태그
                 news.category?.firstOrNull()?.let { category ->
                     item {
@@ -204,6 +205,18 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
                             )
                         }
                         Spacer(modifier = Modifier.width(4.dp))
+                        IconButton(
+                            onClick = {
+
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.AddCircle,
+                                contentDescription = "원문 보기",
+                                tint = if (isBookmarked) Color.Red else ColorsLight.darkGrayColor
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(4.dp))
                         ShareButton(newsLink = news.link)
                     }
                 }
@@ -213,26 +226,13 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "AI 뉴스 요약본",
-                        fontSize = 14.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = Color.Gray,
                         modifier = Modifier.padding(horizontal = 20.dp)
                     )
                     Spacer(modifier = Modifier.height(16.dp))
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(news.description, fontSize = 14.sp)
-                        Text(
-                            text = "뉴스 원문 보기",
-                            color = ColorsLight.grayColor,
-                            fontSize = 14.sp,
-                            modifier = Modifier.clickable { /* 링크 열기 */ }
-                        )
-                    }
+                    Text(news.description, fontSize = 16.sp, modifier = Modifier.padding(horizontal = 20.dp))
                 }
 
                 // 이미지
