@@ -33,7 +33,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -53,8 +57,10 @@ import com.example.danew_app.presentation.viewmodel.TodayNewsViewModel
 fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
     val newsViewModel: NewsViewModel = hiltViewModel()
     val news by newsViewModel.newsListById.collectAsState()
+    val newsLink = news.link
     val isLoading = newsViewModel.isLoading
     val errorMessage = newsViewModel.errorMessage
+    val context = LocalContext.current
 
     val bookmarkViewModel: BookmarkViewModel = hiltViewModel()
     val isBookmarked by bookmarkViewModel.isBookmark.collectAsState()
@@ -205,18 +211,6 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
                             )
                         }
                         Spacer(modifier = Modifier.width(4.dp))
-                        IconButton(
-                            onClick = {
-
-                            }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.AddCircle,
-                                contentDescription = "원문 보기",
-                                tint = if (isBookmarked) Color.Red else ColorsLight.darkGrayColor
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(4.dp))
                         ShareButton(newsLink = news.link)
                     }
                 }
@@ -250,6 +244,18 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                     }
+                }
+
+                item {
+                    Text("뉴스 원문 보기",
+                        color =  ColorsLight.blueColor,
+                        style = TextStyle(textDecoration = TextDecoration.Underline),
+                        modifier = Modifier
+                            .padding(horizontal = 20.dp)
+                            .clickable{
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(newsLink))
+                            context.startActivity(intent)
+                    })
                 }
             }
         }
