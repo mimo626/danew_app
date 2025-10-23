@@ -27,7 +27,6 @@ import kotlinx.coroutines.flow.flattenConcat
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import java.util.Collections.emptyList
 import javax.inject.Inject
 
 @HiltViewModel
