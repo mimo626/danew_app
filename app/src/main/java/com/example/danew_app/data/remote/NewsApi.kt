@@ -1,6 +1,7 @@
 package com.example.danew_app.data.remote
 
 import com.example.danew_app.data.dto.NewsResponse
+import org.intellij.lang.annotations.Language
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -8,6 +9,7 @@ import retrofit2.http.Query
 interface NewsApi {
     @GET("latest")
     suspend fun fetchNewsByCategory(
+        @Query("language") language: String = "korean",
         @Query("country") country: String = "kr",
         @Query("category") category: String,
         @Query("apikey") apiKey: String = "pub_83780fb69a56440dbbeb6c4373fcb5ebb1535",
@@ -23,6 +25,7 @@ interface NewsApi {
     @GET("latest")
     suspend fun fetchNewsBySearchQuery(
         @Query("q") searchQuery: String,
+        @Query("language") language: String = "korean",
         @Query("country") country: String = "kr",
         @Query("apikey") apiKey: String = "pub_83780fb69a56440dbbeb6c4373fcb5ebb1535",
         @Query("page") page: String? = null
