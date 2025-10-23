@@ -36,4 +36,9 @@ object AppDatabaseModule {
     fun provideTodayNewsDao(db: AppDatabase): TodayNewsDao {
         return db.todayNewsDao()
     }
+
+    @Provides
+    fun provideNewsSummaryDao(db: AppDatabase): NewsSummaryDao {
+        return db.newsSummaryDao()
+    }
 }
