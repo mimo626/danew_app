@@ -15,7 +15,6 @@ import com.example.danew_app.data.mapper.toDomain
 import com.example.danew_app.domain.model.NewsModel
 import com.example.danew_app.domain.repository.NewsRepository
 import com.example.danew_app.domain.usecase.GetCustomNewsListUseCase
-import com.example.danew_app.domain.usecase.GetNewsByIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -33,7 +32,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewsViewModel @Inject constructor(
-    private val getNewsByIdUseCase: GetNewsByIdUseCase,
     private val getCustomNewsListUseCase: GetCustomNewsListUseCase,
     private val userDataSource: UserDataSource,
     private val newsRepository: NewsRepository,
@@ -101,9 +99,10 @@ class NewsViewModel @Inject constructor(
             isLoading = true
             errorMessage = null
             try {
-                val data = getNewsByIdUseCase(id)
-                _newsListById.value = data
-                Log.d("NewsViewModel", "newsListById: $data")
+                newsRepository.getNewsById(id).collect { news ->
+                    _newsListById.value = news.toDomain()
+                }
+                Log.d("NewsViewModel", "newsListById: ${_newsListById.value}")
             } catch (e: Exception) {
                 errorMessage = e.localizedMessage
             } finally {
