@@ -8,7 +8,7 @@ import retrofit2.http.Query
 interface NewsApi {
     @GET("latest")
     suspend fun fetchNewsByCategory(
-        @Query("language") language: String = "korean",
+        @Query("language") language: String = "ko",
         @Query("country") country: String = "kr",
         @Query("category") category: String,
         @Query("apikey") apiKey: String = "pub_83780fb69a56440dbbeb6c4373fcb5ebb1535",
@@ -24,7 +24,7 @@ interface NewsApi {
     @GET("latest")
     suspend fun fetchNewsBySearchQuery(
         @Query("q") searchQuery: String,
-        @Query("language") language: String = "korean",
+        @Query("language") language: String = "ko",
         @Query("country") country: String = "kr",
         @Query("apikey") apiKey: String = "pub_83780fb69a56440dbbeb6c4373fcb5ebb1535",
         @Query("page") page: String? = null
