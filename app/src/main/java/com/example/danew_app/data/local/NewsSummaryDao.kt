@@ -14,4 +14,7 @@ interface NewsSummaryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNewsSummary(summary: NewsSummaryEntity)
+
+    @Query("DELETE FROM news_summary")
+    suspend fun deleteAllSummaries()
 }
