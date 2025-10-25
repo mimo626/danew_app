@@ -130,7 +130,9 @@ fun SearchResultScreen(query:String, navHostController: NavHostController) {
                     Column(
                         modifier = Modifier
                             .fillParentMaxSize()
-                            .padding(padding),
+                            .padding(padding)
+                            .padding(horizontal = 20.dp)
+                        ,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text("\'${searchQuery}\'에 대한 검색 결과가 없습니다.",
