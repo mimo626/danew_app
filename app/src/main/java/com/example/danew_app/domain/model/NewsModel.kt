@@ -3,7 +3,7 @@ package com.example.danew_app.domain.model
 data class NewsModel(
     val newsId: String = "",
     val title: String = "",
-    val description: String = "",
+    val content: String = "",
     val imageUrl: String? = "",
     val sourceName: String = "",
     val pubDate: String = "",
