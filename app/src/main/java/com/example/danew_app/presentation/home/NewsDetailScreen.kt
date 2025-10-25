@@ -223,7 +223,7 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
                         modifier = Modifier.padding(horizontal = 20.dp)
                     )
                     Spacer(modifier = Modifier.height(16.dp))
-                    Text(news.description, fontSize = 16.sp, modifier = Modifier.padding(horizontal = 20.dp))
+                    Text(news.content, fontSize = 16.sp, modifier = Modifier.padding(horizontal = 20.dp))
                 }
 
                 // 이미지
