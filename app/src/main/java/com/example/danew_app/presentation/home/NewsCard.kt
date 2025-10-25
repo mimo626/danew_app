@@ -42,7 +42,7 @@ fun NewsCard(newsModel: NewsModel, navController: NavHostController,) {
                 overflow = TextOverflow.Ellipsis
             )
             Spacer(modifier = Modifier.height(4.dp))
-            Text(newsModel.content, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(newsModel.description, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Spacer(modifier = Modifier.height(8.dp))
             // Todo 시간으로 계산
             Text((newsModel.pubDate), color = Color.Gray, fontSize = 12.sp)

@@ -12,7 +12,7 @@ fun NewsEntity.toDomain(): NewsModel {
     return NewsModel(
         newsId = this.article_id ?: "",
         title = this.title ?: "제목 없음",
-        content = this.description ?: "설명이 없습니다.",
+        description = this.description ?: "설명이 없습니다.",
         imageUrl = this.image_url,
         sourceName = this.source_name ?: "알 수 없음",
         pubDate = this.pubDate,
@@ -28,7 +28,7 @@ fun MetaNewsEntity.toDomain(): NewsModel {
     return NewsModel(
         newsId = this.id,
         title = this.title,
-        content = this.description,
+        description = this.description,
         imageUrl = this.imageUrl,
         sourceName = this.sourceName,
         pubDate = this.pubDate,
@@ -61,7 +61,7 @@ fun NewsModel.toMeta():MetaNewsEntity{
     return MetaNewsEntity(
         id = this.newsId,
         title = this.title,
-        description = this.content,
+        description = this.description,
         imageUrl = this.imageUrl,
         sourceName = this.sourceName,
         pubDate = this.pubDate,
@@ -79,7 +79,7 @@ fun NewsModel.toTodayNews():TodayNewsEntity{
     return TodayNewsEntity(
         newsId = this.newsId,
         title = this.title,
-        description = this.content,
+        description = this.description,
         imageUrl = this.imageUrl,
         sourceName = this.sourceName,
         pubDate = this.pubDate,
@@ -97,7 +97,7 @@ fun TodayNewsEntity.toDomain():NewsModel{
     return NewsModel(
         newsId = this.newsId,
         title = this.title,
-        content = this.description,
+        description = this.description,
         imageUrl = this.imageUrl,
         sourceName = this.sourceName,
         pubDate = this.pubDate,
