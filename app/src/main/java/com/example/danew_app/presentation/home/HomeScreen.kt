@@ -13,6 +13,9 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -32,10 +35,13 @@ import com.example.danew_app.presentation.home.NewsItem
 import com.example.danew_app.presentation.home.NowTopNews
 import com.example.danew_app.presentation.home.SearchBar
 import com.example.danew_app.presentation.viewmodel.NewsViewModel
+import com.example.danew_app.presentation.viewmodel.UserViewModel
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
     val newsViewModel: NewsViewModel = hiltViewModel()
+    val userViewModel: UserViewModel = hiltViewModel()
+    val user by userViewModel.getUserData.collectAsState()
     val newsPagingItems = newsViewModel.recommendedNewsFlow.collectAsLazyPagingItems()
 
     // 아이템 그룹화 상수 정의
@@ -45,6 +51,10 @@ fun HomeScreen(navController: NavHostController) {
 
     // NowTopNews에 표시할 키워드는 임의로 설정하거나 ViewModel에서 가져와야 합니다.
     val topNewsKeyword = "주요"
+
+    LaunchedEffect(Unit) {
+        userViewModel.getUser()   // 화면 진입 시 한 번 실행
+    }
 
     Scaffold(
         containerColor = ColorsLight.whiteColor,
@@ -112,7 +122,7 @@ fun HomeScreen(navController: NavHostController) {
                         if (positionInGroup == 0) {
                             Spacer(modifier = Modifier.height(8.dp)) // 상단 여백 추가
                             Text(
-                                "민주님을 위한 추천 뉴스",
+                                "${user.name}님을 위한 추천 뉴스",
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 16.sp,
                                 modifier = Modifier.padding(horizontal = 20.dp)
