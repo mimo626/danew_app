@@ -149,12 +149,12 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
                     item {
                         Box(
                             modifier = Modifier
-                                .padding(horizontal = 20.dp, vertical = 8.dp)
+                                .padding(horizontal = 20.dp, vertical = 16.dp)
                                 .background(
                                     color = ColorsLight.secondaryColor,
                                     shape = RoundedCornerShape(8.dp)
                                 )
-                                .padding(horizontal = 12.dp, vertical = 16.dp)
+                                .padding(horizontal = 12.dp, vertical = 8.dp)
                         ) {
                             Text(
                                 text = category,
