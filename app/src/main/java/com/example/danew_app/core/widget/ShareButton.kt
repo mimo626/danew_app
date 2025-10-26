@@ -1,12 +1,15 @@
 package com.example.danew_app.core.widget
 
 import android.content.Intent
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import com.example.danew_app.core.theme.ColorsLight
 
 @Composable
@@ -27,7 +30,8 @@ fun ShareButton(newsLink:String?){
         Icon(
             tint = ColorsLight.darkGrayColor,
             imageVector = Icons.Default.Share,
-            contentDescription = "공유"
+            contentDescription = "공유",
+            modifier = Modifier.size(32.dp)
         )
     }
 }
