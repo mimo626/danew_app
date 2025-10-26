@@ -22,7 +22,7 @@ import com.example.danew_app.core.widget.MainTopAppBar
 fun SettingScreen(navHostController: NavHostController,) {
 
     val settingList = listOf(
-        "알림 설정", "개인정보 처리 방침", "서비스 이용약관", "로그아웃", "탈퇴하기"
+        "알림 설정", "개인정보 처리 방침", "서비스 이용약관", "탈퇴하기"
     )
     Scaffold(
         containerColor = ColorsLight.whiteColor,
