@@ -11,7 +11,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.danew.core.componet.BottomNavBar
 import com.example.danew.core.navigation.BottomNavGraph
-import com.example.danew.core.navigation.BottomNavItem
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
