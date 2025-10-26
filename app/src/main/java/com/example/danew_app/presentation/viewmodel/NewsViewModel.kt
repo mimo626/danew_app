@@ -1,6 +1,8 @@
 package com.example.danew_app.presentation.viewmodel
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -48,6 +50,7 @@ class NewsViewModel @Inject constructor(
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun fetchNewsByCategory(category: String) {
         viewModelScope.launch {
             try {
@@ -93,6 +96,7 @@ class NewsViewModel @Inject constructor(
         //    위에서 새로운 Pager Flow를 만들고, PagingSource의 load()가 호출됩니다.
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun fetchNewsById(id: String) {
         viewModelScope.launch {
             isLoading = true
