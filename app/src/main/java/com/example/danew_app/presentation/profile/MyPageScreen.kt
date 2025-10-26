@@ -95,7 +95,7 @@ fun MyPageScreen(navController: NavHostController,) {
                 Icon(
                     imageVector = Icons.Default.AccountCircle,
                     contentDescription = "프로필",
-                    tint = ColorsLight.primaryColor,
+                    tint = ColorsLight.darkGrayColor,
                     modifier = Modifier
                         .size(56.dp)
                 )
