@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -86,6 +87,33 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
                 isHome = false,
                 isBackIcon = true
             )
+        },
+        bottomBar = {
+            Row(
+                horizontalArrangement = Arrangement.Start,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+            ) {
+                IconButton(
+                    onClick = {
+                        if (isBookmarked) {
+                            bookmarkViewModel.deleteBookmark(news.newsId)
+                        } else {
+                            bookmarkViewModel.saveBookmark(news)
+                        }
+                    }
+                ) {
+                    Icon(
+                        imageVector = if (isBookmarked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = if (isBookmarked) "북마크 취소" else "북마크",
+                        tint = if (isBookmarked) Color.Red else ColorsLight.darkGrayColor,
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.width(4.dp))
+                ShareButton(newsLink = news.link)
+            }
         }
     ) { paddingValues ->
 
@@ -148,17 +176,6 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
                     )
                 }
 
-                // 날짜
-                item {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = news.pubDate,
-                        fontSize = 12.sp,
-                        color = ColorsLight.grayColor,
-                        modifier = Modifier.padding(horizontal = 20.dp)
-                    )
-                }
-
                 // 작성자
                 news.creator?.firstOrNull()?.let { creator ->
                     item {
@@ -183,38 +200,9 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
                     }
                 }
 
-                // 북마크 + 공유 버튼
-                item {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row(
-                        horizontalArrangement = Arrangement.End,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp)
-                    ) {
-                        IconButton(
-                            onClick = {
-                                if (isBookmarked) {
-                                    bookmarkViewModel.deleteBookmark(news.newsId)
-                                } else {
-                                    bookmarkViewModel.saveBookmark(news)
-                                }
-                            }
-                        ) {
-                            Icon(
-                                imageVector = if (isBookmarked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                                contentDescription = if (isBookmarked) "북마크 취소" else "북마크",
-                                tint = if (isBookmarked) Color.Red else ColorsLight.darkGrayColor
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(4.dp))
-                        ShareButton(newsLink = news.link)
-                    }
-                }
-
                 // AI 요약
                 item {
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(40.dp))
                     Text(
                         text = "AI 뉴스 요약본",
                         fontSize = 16.sp,
@@ -244,15 +232,29 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
                 }
 
                 item {
-                    Text("뉴스 원문 보기",
-                        color =  ColorsLight.blueColor,
-                        style = TextStyle(textDecoration = TextDecoration.Underline),
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
+                            .fillMaxWidth()
                             .padding(horizontal = 20.dp)
-                            .clickable{
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(newsLink))
-                            context.startActivity(intent)
-                    })
+                    ){
+                        Text("뉴스 원문 보기",
+                            color =  ColorsLight.blueColor,
+                            style = TextStyle(textDecoration = TextDecoration.Underline),
+                            modifier = Modifier
+                                .clickable{
+                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(newsLink))
+                                    context.startActivity(intent)
+                                }
+                        )
+                        // 날짜
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = news.pubDate,
+                            fontSize = 14.sp,
+                            color = ColorsLight.grayColor,
+                        )
+                    }
                 }
             }
         }
