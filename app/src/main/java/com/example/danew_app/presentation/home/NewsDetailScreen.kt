@@ -154,7 +154,7 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
                                     color = ColorsLight.secondaryColor,
                                     shape = RoundedCornerShape(8.dp)
                                 )
-                                .padding(horizontal = 12.dp, vertical = 8.dp)
+                                .padding(horizontal = 12.dp, vertical = 16.dp)
                         ) {
                             Text(
                                 text = category,
@@ -167,7 +167,6 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
 
                 // 뉴스 제목
                 item {
-                    Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         text = news.title,
                         fontWeight = FontWeight.Bold,
@@ -202,28 +201,28 @@ fun NewsDetailScreen(newsId: String, navHostController: NavHostController) {
 
                 // AI 요약
                 item {
-                    Spacer(modifier = Modifier.height(40.dp))
+                    Spacer(modifier = Modifier.height(32.dp))
                     Text(
                         text = "AI 뉴스 요약본",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.Gray,
+                        color = ColorsLight.primaryColor,
                         modifier = Modifier.padding(horizontal = 20.dp)
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(news.description, fontSize = 16.sp, modifier = Modifier.padding(horizontal = 20.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(news.description, fontSize = 18.sp, modifier = Modifier.padding(horizontal = 20.dp))
                 }
 
                 // 이미지
                 news.imageUrl?.let { imageUrl ->
                     item {
-                        Spacer(modifier = Modifier.height(24.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
                         AsyncImage(
                             model = imageUrl,
                             contentDescription = "뉴스 이미지",
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(200.dp)
+                                .height(220.dp)
                                 .padding(horizontal = 20.dp),
                             contentScale = ContentScale.Crop
                         )
