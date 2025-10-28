@@ -1,3 +1,5 @@
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -44,6 +46,7 @@ import com.example.danew_app.data.mapper.toDomain
 import com.example.danew_app.presentation.viewmodel.NewsViewModel
 import com.example.danew_app.presentation.home.NewsItem
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SearchResultScreen(query:String, navHostController: NavHostController) {
     val viewModel: NewsViewModel = hiltViewModel()
@@ -153,7 +156,9 @@ fun SearchResultScreen(query:String, navHostController: NavHostController) {
             items(newsPagingItems.itemCount) { index ->
                 val item = newsPagingItems[index]
                 if (item != null) {
-                    NewsItem(item.toDomain(), navHostController)
+                    NewsItem(item.toDomain(), onItemClick = {
+                        navHostController.navigate("details/noScroll/${item.toDomain().newsId}")
+                    })
                 }
             }
 
