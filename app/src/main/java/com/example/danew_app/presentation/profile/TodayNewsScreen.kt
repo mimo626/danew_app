@@ -61,7 +61,9 @@ fun TodayNewsScreen(navHostController: NavHostController) {
                 item { Spacer(modifier = Modifier.height(16.dp)) }
                 if (todayNews.isNotEmpty()) {
                     items(todayNews){
-                        NewsItem(it.toDomain(), navController = navHostController)
+                        NewsItem(it.toDomain(), onItemClick = {
+                            navHostController.navigate("details/noScroll/${it.newsId}")
+                        })
 
                     }
                     item { Spacer(modifier = Modifier.height(28.dp)) }
