@@ -1,5 +1,7 @@
 package com.example.danew.presentation.category
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -45,6 +47,7 @@ import com.example.danew_app.presentation.home.NowTopNews
 
 val newsCategoryKr = NewsCategory.categoryKrToEn.keys.toList()
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = hiltViewModel()) {
     var selectedTabIndex by remember { mutableStateOf(0) }
@@ -123,9 +126,11 @@ fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = 
             item {
                 val topNews = newsPagingItems.itemSnapshotList.items.take(topNewsCount)
                 NowTopNews(
-                    sectionTitle = "실시간 인기 뉴스",
+                    title = "실시간 인기 뉴스",
                     newsList = topNews,
-                    navController = navController
+                    onItemClick = {
+
+                    }
                 )
                 Spacer(Modifier.height(36.dp))
                 Text(
@@ -142,7 +147,9 @@ fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = 
                 items(totalItemsCount - topNewsCount) { index ->
                     val item = newsPagingItems[index + topNewsCount]
                     if (item != null) {
-                        NewsItem(item, navController)
+                        NewsItem(item, onItemClick = {
+                            //TODO 인덱스로 이동하는 함수 추가
+                        })
                     }
                 }
             }
