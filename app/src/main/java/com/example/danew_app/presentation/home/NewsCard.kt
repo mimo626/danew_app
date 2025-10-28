@@ -24,7 +24,7 @@ import com.example.danew_app.domain.model.NewsModel
 
 // 가로로 뉴스 카드(제목만)
 @Composable
-fun NewsCard(newsModel: NewsModel, navController: NavHostController,) {
+fun NewsCard(newsModel: NewsModel, onClick: () -> Unit) {
 
     Box(
         modifier = Modifier
@@ -32,7 +32,7 @@ fun NewsCard(newsModel: NewsModel, navController: NavHostController,) {
             .padding(end = 16.dp)
             .background(ColorsLight.lightGrayColor, shape = RoundedCornerShape(4.dp))
             .clickable {
-                navController.navigate("details/${newsModel.newsId}")
+                onClick()
             },
         contentAlignment = Alignment.CenterStart
     ) {
