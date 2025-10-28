@@ -37,14 +37,14 @@ import com.example.danew_app.domain.model.NewsModel
 
 // 가로로 뉴스 카드(작은 사진)
 @Composable
-fun NewsItem(newsModel: NewsModel, navController: NavHostController) {
+fun NewsItem(newsModel: NewsModel, onItemClick: () -> Unit) {
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 16.dp, horizontal = 20.dp)
             .clickable{
-                navController.navigate("details/${newsModel.newsId}")
+                onItemClick()
             }
         ,
         horizontalArrangement = Arrangement.SpaceBetween
