@@ -24,7 +24,8 @@ import com.example.danew_app.domain.model.NewsModel
 @Composable
 fun MainImageCard(newsModel: NewsModel, navController:NavHostController) {
     Column (modifier = Modifier.clickable{
-        navController.navigate("details/${newsModel.newsId}")
+        //TODO 인덱스 변수로 받아서 수정
+        navController.navigate("detail/home/0")
     }){
         Image(
             painter = rememberAsyncImagePainter(newsModel.imageUrl),
