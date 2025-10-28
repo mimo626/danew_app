@@ -65,7 +65,9 @@ fun TodayNews(sectionTitle:String, navController: NavHostController){
             }
             else{
                 items(todayNews) {
-                    NewsCard(newsModel = it.toDomain(), navController = navController)
+                    NewsCard(newsModel = it.toDomain(), onClick = {
+                        navController.navigate("details/noScroll/${it.newsId}")
+                    })
                 }
             }
         }
