@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
@@ -31,6 +32,7 @@ import com.example.danew.presentation.login.SignupScreen
 import com.example.danew.presentation.profile.MyPageScreen
 import com.example.danew.presentation.profile.ProfileEditScreen
 import com.example.danew_app.domain.model.DiaryModel
+import com.example.danew_app.presentation.bookmark.NoScrollNewsDetailScreen
 import com.example.danew_app.presentation.login.KeywordScreen
 import com.example.danew_app.presentation.profile.KeywordUpdateScreen
 import com.example.danew_app.presentation.profile.TodayNewsScreen
@@ -81,10 +83,36 @@ fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier, isL
                 SignupFinishScreen(navHostController, viewModel)
             }
         }
-        
-        composable("details/{newsId}") { backStackEntry ->
+
+        composable(
+            // 1. 새로운 경로 적용
+            route = "detail/{listType}/{index}?category={categoryName}",
+            arguments = listOf(
+                navArgument("listType") { type = NavType.StringType },
+                navArgument("index") { type = NavType.IntType },
+                navArgument("categoryName") { // 선택적 인자
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                }
+            )
+        ) { backStackEntry ->
+            // 2. 인자들 꺼내기
+            val listType = backStackEntry.arguments?.getString("listType") ?: "home"
+            val index = backStackEntry.arguments?.getInt("index") ?: 0
+            val categoryName = backStackEntry.arguments?.getString("categoryName")
+
+            // 3. NewsDetailScreen에 전달
+            NewsDetailScreen(
+                initialIndex = index,
+                listType = listType, // listType 전달
+                categoryName = categoryName, // categoryName 전달
+                navHostController = navHostController
+            )
+        }
+        composable("details/noScroll/{newsId}") { backStackEntry ->
             val newsId = backStackEntry.arguments?.getString("newsId")
-            newsId?.let { NewsDetailScreen(it, navHostController) }
+            newsId?.let { NoScrollNewsDetailScreen(it, navHostController) }
         }
 
         composable(
