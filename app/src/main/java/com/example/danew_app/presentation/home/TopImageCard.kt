@@ -27,10 +27,10 @@ import com.example.danew_app.domain.model.NewsModel
 
 //현재 Top뉴스의 첫번째 카드
 @Composable
-fun TopImageCard(newsModel: NewsModel, navController: NavHostController,) {
+fun TopImageCard(newsModel: NewsModel, onClick: () -> Unit) {
     Column (
         modifier = Modifier.clickable{
-            navController.navigate("details/${newsModel.newsId}")
+            onClick()
         }
     ){
         if(newsModel.imageUrl != null){
