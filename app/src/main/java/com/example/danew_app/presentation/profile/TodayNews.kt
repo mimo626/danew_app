@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.danew_app.data.mapper.toDomain
-import com.example.danew_app.domain.model.NewsModel
 import com.example.danew_app.presentation.viewmodel.TodayNewsViewModel
 
 // 오늘 본 뉴스 위젯
