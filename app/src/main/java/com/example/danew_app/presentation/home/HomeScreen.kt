@@ -1,5 +1,6 @@
 package com.example.danew.presentation.home
 
+import android.util.Log
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -27,7 +29,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.example.danew_app.core.theme.ColorsLight
-import com.example.danew_app.core.widget.CustomLoadingIndicator
+import com.example.danew_app.core.widget.LazyLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.domain.model.NewsModel
 import com.example.danew_app.presentation.home.MainImageCard
@@ -56,6 +58,15 @@ fun HomeScreen(navController: NavHostController) {
         userViewModel.getUser()   // 화면 진입 시 한 번 실행
     }
 
+    LaunchedEffect(newsPagingItems) {
+        snapshotFlow { newsPagingItems.itemSnapshotList.items }
+            .collect { list ->
+                Log.d("News", "현재 로드된 아이템 수: ${list.size}")
+                list.forEachIndexed { index, item ->
+                    Log.d("News", "[$index] ${item.title}")
+                }
+            }
+    }
     Scaffold(
         containerColor = ColorsLight.whiteColor,
         topBar = {
@@ -82,7 +93,7 @@ fun HomeScreen(navController: NavHostController) {
             // 초기 로딩 중일 때 로딩 인디케이터 표시
             if (newsPagingItems.loadState.refresh is LoadState.Loading) {
                 item {
-                    CustomLoadingIndicator()
+                    LazyLoadingIndicator()
                 }
             }
 
@@ -113,7 +124,6 @@ fun HomeScreen(navController: NavHostController) {
                     val item = newsPagingItems[actualIndex]
 
                     if (item != null) {
-
                         // 현재 아이템이 섹션 내에서 차지하는 위치 (0부터 11까지 반복)
                         val positionInGroup = (actualIndex - startIndex) % TOTAL_ITEMS_PER_SECTION
                         val topNewsStartIndex = NEWS_ITEMS_PER_GROUP // 8
@@ -132,7 +142,12 @@ fun HomeScreen(navController: NavHostController) {
 
                         // 8개 NewsItem 섹션: positionInGroup이 0부터 7까지
                         if (positionInGroup < topNewsStartIndex) {
-                            NewsItem(item, navController)
+                            NewsItem(newsModel = item,
+                                onItemClick = {
+                                    navController.navigate("detail/home/${actualIndex}")
+                                    Log.d("News actualIndex: ", "${actualIndex}")
+                                }
+                            )
                         }
 
                         // 4개 NowTopNews 섹션 (positionInGroup 8, 9, 10, 11)
@@ -153,7 +168,17 @@ fun HomeScreen(navController: NavHostController) {
                                 }
 
                                 // 4개의 아이템을 NowTopNews 위젯에 전달하여 하나의 섹션을 만듭니다.
-                                NowTopNews("현재 TOP $topNewsKeyword 뉴스", topNewsList, navController)
+                                // 수정된 코드
+                                NowTopNews(
+                                    title = "현재 TOP $topNewsKeyword 뉴스",
+                                    newsList = topNewsList,
+                                    onItemClick = { indexInList -> // indexInList는 0, 1, 2, 3 중 하나
+                                        // 시작 인덱스와 리스트 내 인덱스를 더해 최종 인덱스 계산
+                                        val finalIndex = currentSectionStart + indexInList
+                                        navController.navigate("detail/home/$finalIndex")
+                                        Log.d("News finalIndex: ", "${finalIndex}")
+                                    }
+                                )
                                 Spacer(modifier = Modifier.height(28.dp)) // 섹션 후 여백
                             }
                             // positionInGroup이 9, 10, 11인 경우: 아무것도 렌더링하지 않음 (NowTopNews 위젯에 자리를 양보).
