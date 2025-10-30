@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.map
 import com.example.danew_app.data.entity.NewsEntity
 import com.example.danew_app.data.entity.NewsSummaryEntity
 import com.example.danew_app.data.local.NewsSummaryDao
@@ -12,6 +13,7 @@ import com.example.danew_app.data.remote.NewsApi
 import com.example.danew_app.domain.repository.NewsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -30,13 +32,22 @@ class NewsRepositoryImpl @Inject constructor(
 
     override suspend fun getNewsBySearchQuery(searchQuery: String): Flow<PagingData<NewsEntity>> {
 
-        return Pager(
+        val newsFlow = Pager(
             config = PagingConfig(pageSize = 10, enablePlaceholders = false),
             pagingSourceFactory = {
-                // 검색어가 바뀔 때마다 새로운 PagingSource 인스턴스가 생성됨
                 SearchNewsPagingSource(newsApi, searchQuery)
             }
         ).flow
+
+        // Flow 내부 아이템 로그 찍기
+        return newsFlow.onEach { pagingData ->
+            // PagingData 내부는 바로 접근 불가하므로 map으로 임시 변환
+            val items = mutableListOf<NewsEntity>()
+            pagingData.map { item ->
+                items.add(item)
+            }
+            Log.i("뉴스 조회", "로딩된 뉴스 수: ${items.size}")
+        }
     }
 
     override suspend fun getNewsById(id: String): Flow<NewsEntity> = flow {
