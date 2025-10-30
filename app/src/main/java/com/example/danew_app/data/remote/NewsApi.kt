@@ -11,14 +11,14 @@ interface NewsApi {
         @Query("language") language: String = "ko",
         @Query("country") country: String = "kr",
         @Query("category") category: String,
-        @Query("apikey") apiKey: String = "pub_83780fb69a56440dbbeb6c4373fcb5ebb1535",
+        @Query("apikey") apiKey: String = "pub_0e80e132174840a89888ba29e55ff405",
         @Query("page") page: String? = null
     ): NewsResponse
 
     @GET("latest")
     suspend fun fetchNewsById(
         @Query("id") id: String,
-        @Query("apikey") apiKey: String = "pub_83780fb69a56440dbbeb6c4373fcb5ebb1535"
+        @Query("apikey") apiKey: String = "pub_0e80e132174840a89888ba29e55ff405"
     ): NewsResponse
 
     @GET("latest")
@@ -26,7 +26,7 @@ interface NewsApi {
         @Query("q") searchQuery: String,
         @Query("language") language: String = "ko",
         @Query("country") country: String = "kr",
-        @Query("apikey") apiKey: String = "pub_83780fb69a56440dbbeb6c4373fcb5ebb1535",
+        @Query("apikey") apiKey: String = "pub_0e80e132174840a89888ba29e55ff405",
         @Query("page") page: String? = null
     ): NewsResponse
 
