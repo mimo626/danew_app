@@ -10,12 +10,26 @@ import androidx.compose.ui.unit.dp
 import com.example.danew_app.core.theme.ColorsLight
 
 @Composable
-fun LazyItemScope.CustomLoadingIndicator(
+fun LazyItemScope.LazyLoadingIndicator(
     padding: PaddingValues = PaddingValues(0.dp)
 ) {
     Box(
         modifier = Modifier
             .fillParentMaxSize()
+            .padding(padding),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(color = ColorsLight.grayColor)
+    }
+}
+
+@Composable
+fun CustomLoadingIndicator(
+    padding: PaddingValues = PaddingValues(0.dp)
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
             .padding(padding),
         contentAlignment = Alignment.Center
     ) {
