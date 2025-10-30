@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.theme.ColorsLight
-import com.example.danew_app.core.widget.CustomLoadingIndicator
+import com.example.danew_app.core.widget.LazyLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.presentation.home.NewsItem
 import com.example.danew_app.presentation.viewmodel.BookmarkViewModel
@@ -54,12 +54,14 @@ fun BookmarkScreen(navController: NavHostController) {
             when {
                 isLoading -> {
                     item {
-                        CustomLoadingIndicator(padding)
+                        LazyLoadingIndicator(padding)
                     }
                 }
                 bookmarkedNewsList.isNotEmpty() -> {
                     items(bookmarkedNewsList) { news ->
-                        NewsItem(newsModel = news, navController = navController)
+                        NewsItem(newsModel = news, onItemClick = {
+                            navController.navigate("details/noScroll/${news.newsId}")
+                        })
                     }
                 }
                 else -> {
