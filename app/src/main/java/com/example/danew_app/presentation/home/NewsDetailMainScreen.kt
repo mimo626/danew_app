@@ -86,7 +86,6 @@ fun NewsDetailMainScreen(
             }
         }
         else -> {
-            // 로딩 성공: VerticalPager 표시
             VerticalPager(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize(),
