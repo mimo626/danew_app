@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.theme.ColorsLight
-import com.example.danew_app.core.widget.CustomLoadingIndicator
+import com.example.danew_app.core.widget.LazyLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.data.mapper.toDomain
 import com.example.danew_app.presentation.home.NewsItem
@@ -54,7 +54,7 @@ fun TodayNewsScreen(navHostController: NavHostController) {
             if (isLoading) {
                 // 로딩 화면
                 item{
-                    CustomLoadingIndicator(padding)
+                    LazyLoadingIndicator(padding)
                 }
             }
             else {
