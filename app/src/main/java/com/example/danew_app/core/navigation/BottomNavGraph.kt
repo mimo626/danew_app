@@ -22,7 +22,7 @@ import com.example.danew.presentation.diary.DiaryScreen
 import com.example.danew.presentation.diary.DiaryWriteScreen
 import com.example.danew.presentation.home.AlarmScreen
 import com.example.danew.presentation.home.HomeScreen
-import com.example.danew.presentation.home.NewsDetailScreen
+import com.example.danew.presentation.home.NewsDetailMainScreen
 import com.example.danew.presentation.home.SettingScreen
 import com.example.danew.presentation.home.StartScreen
 import com.example.danew.presentation.login.LoginScreen
@@ -103,7 +103,7 @@ fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier, isL
             val categoryName = backStackEntry.arguments?.getString("categoryName")
 
             // 3. NewsDetailScreen에 전달
-            NewsDetailScreen(
+            NewsDetailMainScreen(
                 initialIndex = index,
                 listType = listType, // listType 전달
                 categoryName = categoryName, // categoryName 전달
