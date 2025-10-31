@@ -27,6 +27,8 @@ class SearchNewsPagingSource(
                 nextKey = response.nextPage
             )
         } catch (e: Exception) {
+            Log.e("SearchNewsPagingSource 에러", "메시지: ${e}")
+
             LoadResult.Error(e)
         }
     }
