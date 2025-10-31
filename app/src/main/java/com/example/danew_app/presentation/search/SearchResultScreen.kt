@@ -41,7 +41,7 @@ import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.danew_app.core.theme.ColorsLight
-import com.example.danew_app.core.widget.CustomLoadingIndicator
+import com.example.danew_app.core.widget.LazyLoadingIndicator
 import com.example.danew_app.data.mapper.toDomain
 import com.example.danew_app.presentation.viewmodel.NewsViewModel
 import com.example.danew_app.presentation.home.NewsItem
@@ -124,7 +124,7 @@ fun SearchResultScreen(query:String, navHostController: NavHostController) {
             // 초기 로딩 중일 때 로딩 인디케이터 표시
             if (newsPagingItems.loadState.refresh is LoadState.Loading) {
                 item {
-                    CustomLoadingIndicator()
+                    LazyLoadingIndicator()
                 }
             }
 
