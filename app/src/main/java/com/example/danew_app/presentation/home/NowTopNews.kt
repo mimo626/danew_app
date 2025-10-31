@@ -25,7 +25,11 @@ import com.example.danew_app.domain.model.NewsModel
 
 // 현재 Top 뉴스 위젯
 @Composable
-fun NowTopNews(sectionTitle: String, newsList: List<NewsModel>, navController: NavHostController,) {
+fun NowTopNews(
+    title: String,
+    newsList: List<NewsModel>, // 4개의 뉴스가 담긴 원본 리스트
+    onItemClick: (Int) -> Unit  // (Int) -> Unit 콜백
+) {
     // imageUrl 있는 첫 번째 뉴스
     val topNews = newsList.firstOrNull { !it.imageUrl.isNullOrBlank() }
     // 나머지 뉴스들 (topNews 제외)
@@ -34,25 +38,44 @@ fun NowTopNews(sectionTitle: String, newsList: List<NewsModel>, navController: N
     Column (
         modifier = Modifier.padding(horizontal = 20.dp)
     ){
-        Text(sectionTitle, fontWeight = FontWeight.Bold, fontSize = 16.sp,
+        Text(title, fontWeight = FontWeight.Bold, fontSize = 16.sp,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),)
 
         Spacer(modifier = Modifier.height(16.dp))
-
         // 나머지 뉴스 중 최대 3개 표시
         LazyRow {
             items(otherNews.take(3)) { news ->
-                NewsCard(newsModel = news, navController = navController)
+                // 1. navController 대신 onClick 람다 전달
+                NewsCard(
+                    newsModel = news,
+                    onClick = {
+                        // 원본 newsList에서 이 news의 인덱스를 찾아 콜백 실행
+                        val originalIndex = newsList.indexOf(news)
+                        if (originalIndex != -1) {
+                            onItemClick(originalIndex)
+                        }
+                    }
+                )
             }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
 
         // 이미지 있는 뉴스가 있으면 TopImageCard로 표시
-        topNews?.let {
-            TopImageCard(it, navController = navController)
+        topNews?.let { topNewsItem -> // (변수명 'it' -> 'topNewsItem'으로 변경)
+            // 2. navController 대신 onClick 람다 전달
+            TopImageCard(
+                newsModel = topNewsItem,
+                onClick = {
+                    // 원본 newsList에서 이 topNewsItem의 인덱스를 찾아 콜백 실행
+                    val originalIndex = newsList.indexOf(topNewsItem)
+                    if (originalIndex != -1) {
+                        onItemClick(originalIndex)
+                    }
+                }
+            )
         }
         Spacer(modifier = Modifier.height(16.dp))
     }
