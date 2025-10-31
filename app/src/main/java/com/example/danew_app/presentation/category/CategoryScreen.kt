@@ -40,7 +40,7 @@ import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.danew_app.core.theme.ColorsLight
-import com.example.danew_app.core.widget.CustomLoadingIndicator
+import com.example.danew_app.core.widget.LazyLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.presentation.home.NewsItem
 import com.example.danew_app.presentation.home.NowTopNews
@@ -119,7 +119,7 @@ fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = 
             // 초기 로딩 상태 체크
             if (newsPagingItems.loadState.refresh is LoadState.Loading) {
                 item {
-                    CustomLoadingIndicator() // 상단 로딩 표시
+                    LazyLoadingIndicator() // 상단 로딩 표시
                 }
             }
             // 상위 4개 뉴스
