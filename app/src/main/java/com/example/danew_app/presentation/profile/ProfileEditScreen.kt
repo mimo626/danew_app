@@ -11,11 +11,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -24,6 +27,7 @@ import androidx.navigation.NavHostController
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.CustomRadioButton
+import com.example.danew_app.core.widget.CustomUnderlinedTextField
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.data.dto.UpdateUserRequest
 import com.example.danew_app.presentation.viewmodel.UserViewModel
@@ -104,27 +108,28 @@ fun ProfileEditScreen(navHostController: NavHostController) {
                     Icon(Icons.Default.Edit, contentDescription = "이미지 변경", tint = Color.White, modifier = Modifier.size(16.dp))
                 }
             }
-            Spacer(Modifier.height(32.dp))
-            OutlinedTextField(
+            Spacer(Modifier.height(24.dp))
+            CustomUnderlinedTextField(
                 value = name,
                 onValueChange = { name = it },
-                label = { Text("이름") },
-                modifier = Modifier.fillMaxWidth()
+                label = "이름"
             )
-            Spacer(Modifier.height(16.dp))
-            OutlinedTextField(
-                value = age, // String 타입
-                onValueChange = { age = it }, // it은 String 타입
-                label = { Text("나이") },
-                modifier = Modifier.fillMaxWidth()
+            CustomUnderlinedTextField(
+                value = age,
+                onValueChange = { age = it },
+                label = "나이"
             )
-            Spacer(Modifier.height(16.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp),
             ) {
-                Text("성별", fontSize = 16.sp, fontWeight = FontWeight.Medium)
-                Spacer(Modifier.width(16.dp))
+                Text(
+                    text = "성별",
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        color = ColorsLight.grayColor
+                    ),
+                    modifier = Modifier.padding(vertical = 16.dp)
+                )
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
