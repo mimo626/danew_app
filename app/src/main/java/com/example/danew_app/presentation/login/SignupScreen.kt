@@ -16,6 +16,7 @@ import androidx.navigation.NavHostController
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.CustomLinearProgressIndicator
+import com.example.danew_app.core.widget.CustomUnderlinedTextField
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.presentation.viewmodel.UserViewModel
 
@@ -80,18 +81,17 @@ fun SignupScreen(navHostController: NavHostController, viewModel: UserViewModel)
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.Bottom,
             ) {
-                OutlinedTextField(
+                CustomUnderlinedTextField(
                     value = id,
                     onValueChange = {
                         id = it
                         isIdChecked = false // 아이디 변경되면 다시 체크해야 함
                     },
-                    label = { Text("아이디") },
-                    modifier = Modifier.weight(1f),
+                    label = "아이디",
+                    modifier = Modifier.padding(end = 8.dp).weight(1f)
                 )
-                Spacer(Modifier.width(8.dp))
                 Button(
                     colors = ButtonDefaults.buttonColors(containerColor = ColorsLight.darkGrayColor),
                     onClick = {
@@ -119,30 +119,26 @@ fun SignupScreen(navHostController: NavHostController, viewModel: UserViewModel)
                 else -> {}
             }
 
-            Spacer(Modifier.height(16.dp))
-
             // 비밀번호 입력
-            OutlinedTextField(
+            CustomUnderlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text("비밀번호") },
+                label = "비밀번호",
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
-                visualTransformation = PasswordVisualTransformation()
+                isPassword = true,
             )
 
-            Spacer(Modifier.height(16.dp))
-
             // 비밀번호 확인 입력
-            OutlinedTextField(
+            CustomUnderlinedTextField(
                 value = confirmPassword,
                 onValueChange = { confirmPassword = it },
-                label = { Text("비밀번호 확인") },
+                label = "비밀번호 확인",
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
-                visualTransformation = PasswordVisualTransformation()
+                isPassword = true,
             )
 
             // 비밀번호 불일치 시 안내
