@@ -44,6 +44,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.BottomButton
+import com.example.danew_app.core.widget.CustomUnderlinedTextField
 import com.example.danew_app.core.widget.MainTopAppBar
 
 @SuppressLint("UnrememberedGetBackStackEntry")
@@ -115,17 +116,16 @@ fun KeywordUpdateScreen(navHostController: NavHostController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.Bottom,
             ) {
-                OutlinedTextField(
+                CustomUnderlinedTextField(
                     value = createdKeyword,
                     onValueChange = {
                         createdKeyword = it
                     },
-                    label = { Text("키워드") },
-                    modifier = Modifier.weight(1f),
+                    label = "키워드",
+                    modifier = Modifier.padding(end = 8.dp).weight(1f)
                 )
-                Spacer(Modifier.width(8.dp))
                 Button(
                     colors = ButtonDefaults.buttonColors(containerColor = ColorsLight.darkGrayColor),
                     onClick = {
@@ -135,7 +135,7 @@ fun KeywordUpdateScreen(navHostController: NavHostController) {
                             createdKeyword = "" // 입력창 초기화
                         }
                     },
-                    modifier = Modifier.height(56.dp) // TextField와 같은 높이
+                    modifier = Modifier.height(56.dp)
                 ) {
                     Text("생성")
                 }
