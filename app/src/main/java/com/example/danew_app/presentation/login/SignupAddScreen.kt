@@ -6,6 +6,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -15,6 +16,7 @@ import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.CustomLinearProgressIndicator
 import com.example.danew_app.core.widget.CustomRadioButton
+import com.example.danew_app.core.widget.CustomUnderlinedTextField
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.presentation.viewmodel.UserViewModel
 
@@ -53,6 +55,7 @@ fun SignupAddScreen(navHostController: NavHostController, viewModel: UserViewMod
         Column(
             modifier = Modifier
                 .padding(padding)
+                .padding(horizontal = 20.dp)
                 .fillMaxSize(),
             horizontalAlignment = Alignment.Start
         ) {
@@ -62,50 +65,44 @@ fun SignupAddScreen(navHostController: NavHostController, viewModel: UserViewMod
 
             Text("추가 정보 입력", fontSize = 22.sp,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(horizontal = 20.dp),
             )
 
             Spacer(modifier = Modifier.weight(1f))
 
             // 이름 입력
-            OutlinedTextField(
+            CustomUnderlinedTextField(
                 value = name,
                 onValueChange = { name = it },
-                label = { Text("이름") },
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+                label = "이름",
             )
-
-            Spacer(Modifier.height(16.dp))
 
             // 생년월일 입력
-            OutlinedTextField(
+            CustomUnderlinedTextField(
                 value = age,
                 onValueChange = { age = it },
-                label = { Text("나이") },
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+                label = "나이",
             )
 
-            Spacer(Modifier.height(16.dp))
-
             // 성별
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp),
             ) {
-                Text("성별", fontSize = 16.sp, fontWeight = FontWeight.Medium)
-                Spacer(Modifier.width(16.dp))
+                Text(
+                    text = "성별",
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        color = ColorsLight.grayColor
+                    ),
+                    modifier = Modifier.padding(vertical = 16.dp)
+                )
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
+                    CustomRadioButton(
+                        selected = gender == "남성",
+                        text = "남성"
                     ) {
-                        CustomRadioButton(
-                            selected = gender == "남성",
-                            text = "남성"
-                        ) {
-                            gender = "남성"
-                        }
+                        gender = "남성"
                     }
                 }
                 Spacer(Modifier.width(16.dp))
@@ -120,7 +117,6 @@ fun SignupAddScreen(navHostController: NavHostController, viewModel: UserViewMod
                     }
                 }
             }
-
             Spacer(modifier = Modifier.weight(1f))
         }
     }
