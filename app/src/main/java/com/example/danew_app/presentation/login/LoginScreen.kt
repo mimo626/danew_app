@@ -14,6 +14,7 @@ import com.example.danew_app.presentation.viewmodel.UserViewModel
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.widget.CustomUnderlinedTextField
 
 
 @Composable
@@ -48,6 +49,7 @@ fun LoginScreen(navHostController: NavHostController, viewModel: UserViewModel= 
         Column(
             modifier = Modifier
                 .padding(padding)
+                .padding(horizontal = 20.dp)
                 .fillMaxSize(),
             horizontalAlignment = Alignment.Start,
         ) {
@@ -55,21 +57,20 @@ fun LoginScreen(navHostController: NavHostController, viewModel: UserViewModel= 
             Spacer(modifier = Modifier.weight(1f))
 
             // 아이디 입력
-            OutlinedTextField(
+            CustomUnderlinedTextField(
                 value = id,
                 onValueChange = { id = it },
-                label = { Text("아이디") },
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+                label = "아이디",
             )
 
             Spacer(Modifier.height(16.dp))
 
             // 비밀번호 입력
-            OutlinedTextField(
+            CustomUnderlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text("비밀번호") },
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+                label = "비밀번호",
+                isPassword = true,
             )
 
             // 로그인 결과 메시지 표시
@@ -77,7 +78,7 @@ fun LoginScreen(navHostController: NavHostController, viewModel: UserViewModel= 
                 Text(
                     text = it,
                     color = ColorsLight.redColor,
-                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
+                    modifier = Modifier.padding(vertical = 8.dp)
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
