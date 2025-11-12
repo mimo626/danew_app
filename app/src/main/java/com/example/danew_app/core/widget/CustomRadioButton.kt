@@ -12,7 +12,7 @@ fun CustomRadioButton(text:String, selected:Boolean, onCLick: () -> Unit){
         selected = selected,
         onClick =  onCLick,
         colors = RadioButtonColors(
-            selectedColor = ColorsLight.primaryColor,
+            selectedColor = ColorsLight.blueColor,
             unselectedColor = ColorsLight.grayColor,
             disabledSelectedColor = ColorsLight.grayColor,
             disabledUnselectedColor = ColorsLight.grayColor,)
