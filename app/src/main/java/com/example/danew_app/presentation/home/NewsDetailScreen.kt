@@ -43,10 +43,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.widget.CustomLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.core.widget.ShareButton
 import com.example.danew_app.domain.model.NewsModel
 import com.example.danew_app.presentation.viewmodel.BookmarkViewModel
+import com.example.danew_app.presentation.viewmodel.NewsViewModel
 import com.example.danew_app.presentation.viewmodel.TodayNewsViewModel
 
 // 2. 개별 뉴스 페이지 UI (기존 NewsDetailScreen의 Scaffold와 LazyColumn)
@@ -55,21 +57,23 @@ import com.example.danew_app.presentation.viewmodel.TodayNewsViewModel
 fun NewsDetailScreen(
     news: NewsModel,
     navHostController: NavHostController,
-    bookmarkViewModel: BookmarkViewModel = hiltViewModel(), // 각 페이지가 자신의 ViewModel을 가짐
+    bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
     todayNewsViewModel: TodayNewsViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val newsLink = news.link
+    val newsViewModel: NewsViewModel = hiltViewModel()
 
-    // --- 이 페이지(뉴스)에 대한 상태 관리 ---
+    val newsList by newsViewModel.newsListById.collectAsState()
+    val isLoading = newsViewModel.isLoading
+    val errorMessage = newsViewModel.errorMessage
     val isBookmarked by bookmarkViewModel.isBookmark.collectAsState()
 
-    // Pager가 이 페이지로 스크롤될 때(news.newsId가 변경될 때) 실행
     LaunchedEffect(news.newsId) {
+        newsViewModel.fetchNewsById(id = news.newsId)
         bookmarkViewModel.checkBookmark(news.newsId)
         todayNewsViewModel.addNews(news)
     }
-    // --- ---
 
     Scaffold(
         containerColor = ColorsLight.whiteColor,
@@ -111,8 +115,6 @@ fun NewsDetailScreen(
         }
     ) { paddingValues ->
 
-        // 이 LazyColumn은 *기사 내용이 길 때* 스크롤됩니다.
-        // Pager 스크롤과는 다릅니다.
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -120,13 +122,11 @@ fun NewsDetailScreen(
             horizontalAlignment = Alignment.Start
         ) {
 
-            // --- 기존 코드와 동일한 LazyColumn 내용 ---
-
-            // 카테고리 태그
             news.category?.firstOrNull()?.let { category ->
                 item {
                     Box(
                         modifier = Modifier
+                            // ... (기존 스타일)
                             .padding(horizontal = 20.dp, vertical = 16.dp)
                             .background(
                                 color = ColorsLight.secondaryColor,
@@ -143,7 +143,6 @@ fun NewsDetailScreen(
                 }
             }
 
-            // 뉴스 제목
             item {
                 Text(
                     text = news.title,
@@ -153,7 +152,6 @@ fun NewsDetailScreen(
                 )
             }
 
-            // 작성자
             news.creator?.firstOrNull()?.let { creator ->
                 item {
                     Spacer(modifier = Modifier.height(8.dp))
@@ -161,6 +159,7 @@ fun NewsDetailScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.padding(horizontal = 20.dp)
                     ) {
+                        // ... (기존 작성자 UI) ...
                         Box(
                             modifier = Modifier
                                 .background(
@@ -177,7 +176,7 @@ fun NewsDetailScreen(
                 }
             }
 
-            // AI 요약
+            // [로드 필요] AI 요약 (ViewModel의 상태에 따라 분기 처리)
             item {
                 Spacer(modifier = Modifier.height(32.dp))
                 Text(
@@ -188,10 +187,41 @@ fun NewsDetailScreen(
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
                 Spacer(modifier = Modifier.height(12.dp))
-                Text(news.description, fontSize = 18.sp, modifier = Modifier.padding(horizontal = 20.dp))
+
+                when {
+                    isLoading -> {
+                        // 요약본 섹션만 로딩 중 표시
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 20.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CustomLoadingIndicator(padding = paddingValues) // 또는 CustomLoadingIndicator
+                        }
+                    }
+                    errorMessage != null -> {
+                        // 요약본 섹션만 에러 표시
+                        Text(
+                            text = "요약본을 불러오는 데 실패했습니다: $errorMessage",
+                            color = Color.Red,
+                            modifier = Modifier.padding(horizontal = 20.dp)
+                        )
+                    }
+                    newsList != null -> {
+                        // 성공: ViewModel에서 받아온 상세 데이터(newsList)를 사용
+                        // **주의: news.description이 아닌,
+                        // fetchNewsById로 가져온 객체(newsList)의 description을 사용해야 합니다.**
+                        Text(
+                            text = newsList!!.description, // <-- 'newsList'의 데이터 사용
+                            fontSize = 18.sp,
+                            modifier = Modifier.padding(horizontal = 20.dp)
+                        )
+                    }
+                }
             }
 
-            // 이미지
+            // 5. [즉시 표시] Paging으로 받은 'news' 객체의 데이터 (이미지)
             news.imageUrl?.let { imageUrl ->
                 item {
                     Spacer(modifier = Modifier.height(16.dp))
@@ -208,7 +238,7 @@ fun NewsDetailScreen(
                 }
             }
 
-            // 뉴스 원문 보기 및 날짜
+            // 6. [즉시 표시] Paging으로 받은 'news' 객체의 데이터 (원문 링크 및 날짜)
             item {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -216,6 +246,7 @@ fun NewsDetailScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)
                 ){
+                    // ... (기존 원문 보기 UI) ...
                     Text("뉴스 원문 보기",
                         color =  ColorsLight.blueColor,
                         style = TextStyle(textDecoration = TextDecoration.Underline),
@@ -225,10 +256,9 @@ fun NewsDetailScreen(
                                 context.startActivity(intent)
                             }
                     )
-                    // 날짜
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = news.pubDate, // (이전에 만든 시간 변환 함수 적용)
+                        text = news.pubDate,
                         fontSize = 14.sp,
                         color = ColorsLight.grayColor,
                     )
