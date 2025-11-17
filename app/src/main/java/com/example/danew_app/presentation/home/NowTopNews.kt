@@ -28,12 +28,12 @@ fun NowTopNews(
     val otherNews = newsList.filter { it != topNews }
 
     Column (
-        modifier = Modifier.padding(horizontal = 20.dp)
+        modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp)
     ){
         Text(title, fontWeight = FontWeight.Bold, fontSize = 16.sp,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp),)
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
         // 나머지 뉴스 중 최대 3개 표시
