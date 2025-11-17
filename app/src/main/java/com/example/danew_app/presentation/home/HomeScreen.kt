@@ -176,10 +176,8 @@ fun HomeScreen(navController: NavHostController) {
                                         // 시작 인덱스와 리스트 내 인덱스를 더해 최종 인덱스 계산
                                         val finalIndex = currentSectionStart + indexInList
                                         navController.navigate("detail/home/$finalIndex")
-                                        Log.d("News finalIndex: ", "${finalIndex}")
                                     }
                                 )
-                                Spacer(modifier = Modifier.height(28.dp)) // 섹션 후 여백
                             }
                             // positionInGroup이 9, 10, 11인 경우: 아무것도 렌더링하지 않음 (NowTopNews 위젯에 자리를 양보).
                         }
