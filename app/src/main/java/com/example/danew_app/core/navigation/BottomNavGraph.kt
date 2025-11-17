@@ -6,6 +6,7 @@ import SearchResultScreen
 import SearchScreen
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -101,6 +102,8 @@ fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier, isL
             val listType = backStackEntry.arguments?.getString("listType") ?: "home"
             val index = backStackEntry.arguments?.getInt("index") ?: 0
             val categoryName = backStackEntry.arguments?.getString("categoryName")
+
+            Log.d("News 상세: ", "${index}")
 
             // 3. NewsDetailScreen에 전달
             NewsDetailMainScreen(
