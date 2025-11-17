@@ -55,7 +55,6 @@ class NewsViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 errorMessage = null
-                Log.d("NewsViewModel", "카테고리 뉴스 조회 스크롤1")
 
                 newsRepository.getNewsByCategory(category) // Flow<PagingData<NewsEntity>>
                     .map { pagingData ->
@@ -105,7 +104,6 @@ class NewsViewModel @Inject constructor(
                 newsRepository.getNewsById(id).collect { news ->
                     _newsListById.value = news.toDomain()
                 }
-                Log.d("NewsViewModel", "newsListById: ${_newsListById.value}")
             } catch (e: Exception) {
                 errorMessage = e.localizedMessage
             } finally {
