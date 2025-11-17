@@ -41,7 +41,7 @@ fun NewsItem(newsModel: NewsModel, onItemClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp, horizontal = 20.dp)
+            .padding(horizontal = 20.dp)
             .clickable{
                 onItemClick()
             }
@@ -51,7 +51,8 @@ fun NewsItem(newsModel: NewsModel, onItemClick: () -> Unit) {
         Column(modifier = Modifier.weight(1f)) {
             Text(newsModel.title, maxLines = 1, fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(top = 16.dp)
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(newsModel.description, maxLines = 1, overflow = TextOverflow.Ellipsis)
