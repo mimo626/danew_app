@@ -1,23 +1,14 @@
 package com.example.danew.presentation.home
 
+import android.os.Build
 import android.util.Log
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.snapshotFlow
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -39,23 +30,23 @@ import com.example.danew_app.presentation.home.SearchBar
 import com.example.danew_app.presentation.viewmodel.NewsViewModel
 import com.example.danew_app.presentation.viewmodel.UserViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen(navController: NavHostController) {
-    val newsViewModel: NewsViewModel = hiltViewModel()
+fun HomeScreen(navController: NavHostController,newsViewModel: NewsViewModel) {
     val userViewModel: UserViewModel = hiltViewModel()
     val user by userViewModel.getUserData.collectAsState()
+
+    // Paging 아이템 수집
     val newsPagingItems = newsViewModel.recommendedNewsFlow.collectAsLazyPagingItems()
 
-    // 아이템 그룹화 상수 정의
+    // 상수 정의
     val NEWS_ITEMS_PER_GROUP = 8
     val TOP_NEWS_ITEMS_COUNT = 4
     val TOTAL_ITEMS_PER_SECTION = NEWS_ITEMS_PER_GROUP + TOP_NEWS_ITEMS_COUNT
-
-    // NowTopNews에 표시할 키워드는 임의로 설정하거나 ViewModel에서 가져와야 합니다.
     val topNewsKeyword = "주요"
 
     LaunchedEffect(Unit) {
-        userViewModel.getUser()   // 화면 진입 시 한 번 실행
+        userViewModel.getUser()
     }
 
     LaunchedEffect(newsPagingItems) {
@@ -67,6 +58,7 @@ fun HomeScreen(navController: NavHostController) {
                 }
             }
     }
+
     Scaffold(
         containerColor = ColorsLight.whiteColor,
         topBar = {
@@ -90,47 +82,50 @@ fun HomeScreen(navController: NavHostController) {
                 Spacer(modifier = Modifier.height(24.dp))
             }
 
-            // 초기 로딩 중일 때 로딩 인디케이터 표시
+            // 1. 초기 로딩 상태 처리
             if (newsPagingItems.loadState.refresh is LoadState.Loading) {
-                item {
-                    LazyLoadingIndicator()
-                }
+                item { LazyLoadingIndicator() }
             }
 
-            // Paging 아이템의 총 개수가 0보다 클 때만 접근 시도
+            // 2. 데이터가 있을 때 렌더링 시작
             if (newsPagingItems.itemCount > 0) {
 
-                // 1. 첫 번째 배너 (MainImageCard)
+                // --- 상단 배너 처리 ---
                 val firstBannerItem = newsPagingItems.peek(0)
-                val isBannerShown = firstBannerItem != null && firstBannerItem.imageUrl != null
+                val isBannerShown = firstBannerItem?.imageUrl != null
 
                 if (isBannerShown) {
-                    item(key = "banner_0") {
-                        MainImageCard(firstBannerItem!!, navController)
+                    item(key = "banner_header") {
+                        // 배너 클릭 시에도 ID로 이동
+                        MainImageCard(
+                            newsModel = firstBannerItem!!,
+                            navController = navController
+                        )
                         Spacer(modifier = Modifier.height(28.dp))
                     }
                 }
 
-                // 2. 나머지 Paging 아이템 리스트
+                // --- 메인 리스트 처리 ---
+                // 배너가 있으면 1번 인덱스부터, 없으면 0번부터 리스트 시작
                 val startIndex = if (isBannerShown) 1 else 0
 
                 items(
                     count = newsPagingItems.itemCount - startIndex,
+                    // key 최적화: Paging 아이템의 고유 ID 사용 (매우 중요)
                     key = newsPagingItems.itemKey { it.newsId }
                 ) { relativeIndex ->
 
-                    // 실제 PagingItems에서의 인덱스
+                    // PagingData 내부의 실제 인덱스 계산
                     val actualIndex = relativeIndex + startIndex
                     val item = newsPagingItems[actualIndex]
 
                     if (item != null) {
-                        // 현재 아이템이 섹션 내에서 차지하는 위치 (0부터 11까지 반복)
+                        // 섹션 내 위치 계산 (0 ~ 11)
                         val positionInGroup = (actualIndex - startIndex) % TOTAL_ITEMS_PER_SECTION
-                        val topNewsStartIndex = NEWS_ITEMS_PER_GROUP // 8
 
-                        // "민주님을 위한 추천 뉴스" 헤더 표시 로직 추가
+                        // 1) 추천 뉴스 헤더 (각 섹션의 시작 부분)
                         if (positionInGroup == 0) {
-                            Spacer(modifier = Modifier.height(8.dp)) // 상단 여백 추가
+                            Spacer(modifier = Modifier.height(8.dp))
                             Text(
                                 "${user.name}님을 위한 추천 뉴스",
                                 fontWeight = FontWeight.Bold,
@@ -140,67 +135,66 @@ fun HomeScreen(navController: NavHostController) {
                             Spacer(modifier = Modifier.height(8.dp))
                         }
 
-                        // 8개 NewsItem 섹션: positionInGroup이 0부터 7까지
-                        if (positionInGroup < topNewsStartIndex) {
-                            NewsItem(newsModel = item,
+                        // 2) 일반 뉴스 아이템 (0~7번)
+                        if (positionInGroup < NEWS_ITEMS_PER_GROUP) {
+                            NewsItem(
+                                newsModel = item,
                                 onItemClick = {
-                                    navController.navigate("detail/home/${actualIndex}")
-                                    Log.d("News actualIndex: ", "${actualIndex}")
+                                    // 💡 ID를 사용하여 상세 페이지로 이동
+                                    navController.navigate("detail/home/${item.newsId}")
                                 }
                             )
                         }
+                        // 3) Top 뉴스 위젯 (8번째 자리에서 4개를 묶어서 보여줌)
+                        else if (positionInGroup == NEWS_ITEMS_PER_GROUP) {
 
-                        // 4개 NowTopNews 섹션 (positionInGroup 8, 9, 10, 11)
-                        else {
-                            // 8번째 아이템일 때만 NowTopNews 위젯을 표시합니다.
-                            if (positionInGroup == topNewsStartIndex) { // 8번째 아이템일 때
-
-                                // NowTopNews에 사용할 4개의 뉴스 아이템을 Paging Items에서 가져옵니다.
-                                val currentSectionStart = actualIndex
-                                val topNewsList = mutableListOf<NewsModel>()
-
+                            // 현재 위치부터 4개의 아이템 수집
+                            val topNewsList = remember(actualIndex, newsPagingItems.itemSnapshotList) {
+                                val list = mutableListOf<NewsModel>()
                                 for (i in 0 until TOP_NEWS_ITEMS_COUNT) {
-                                    // peek(index)를 사용하여 아이템을 가져옵니다.
-                                    val newsData = newsPagingItems.peek(currentSectionStart + i)
-                                    if (newsData != null) {
-                                        topNewsList.add(newsData)
-                                    }
+                                    // peek을 사용하여 불필요한 로드 방지하면서 데이터 확인
+                                    newsPagingItems.peek(actualIndex + i)?.let { list.add(it) }
                                 }
+                                list
+                            }
 
-                                // 4개의 아이템을 NowTopNews 위젯에 전달하여 하나의 섹션을 만듭니다.
-                                // 수정된 코드
+                            // 데이터가 4개 다 모였거나, 리스트 끝이라 남은거라도 있을 때 표시
+                            if (topNewsList.isNotEmpty()) {
                                 NowTopNews(
                                     title = "현재 TOP $topNewsKeyword 뉴스",
                                     newsList = topNewsList,
-                                    onItemClick = { indexInList -> // indexInList는 0, 1, 2, 3 중 하나
-                                        // 시작 인덱스와 리스트 내 인덱스를 더해 최종 인덱스 계산
-                                        val finalIndex = currentSectionStart + indexInList
-                                        navController.navigate("detail/home/$finalIndex")
+                                    onItemClick = { clickedIndexInWidget ->
+                                        // clickedIndexInWidget: 위젯 내부 인덱스 (0, 1, 2, 3)
+
+                                        // 💡 [중요 수정] topNewsList는 새로 만든 리스트이므로
+                                        // global index가 아닌 0~3 인덱스로 접근해야 함!
+                                        val selectedNews = topNewsList.getOrNull(clickedIndexInWidget)
+
+                                        selectedNews?.let { news ->
+                                            // ID로 이동
+                                            navController.navigate("detail/home/${news.newsId}")
+                                        }
                                     }
                                 )
                             }
-                            // positionInGroup이 9, 10, 11인 경우: 아무것도 렌더링하지 않음 (NowTopNews 위젯에 자리를 양보).
                         }
+                        // 4) 9, 10, 11번 인덱스는 위젯에 포함되었으므로 빈 공간으로 처리 (렌더링 X)
                     }
                 }
             }
 
-            // 추가 로딩/에러 (스크롤 끝에 더 로드 중/오류 표시)
+            // 3. 추가 로딩(Append) 상태 처리
             newsPagingItems.apply {
                 when (loadState.append) {
                     is LoadState.Loading -> item {
-                        CircularProgressIndicator(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                                .wrapContentSize(Alignment.Center)
-                        )
+                        Box(modifier = Modifier.fillMaxWidth().padding(16.dp), contentAlignment = Alignment.Center) {
+                            CircularProgressIndicator()
+                        }
                     }
                     is LoadState.Error -> item {
-                        Text(
-                            text = "뉴스 로딩 중 오류가 발생했습니다.",
-                            modifier = Modifier.fillMaxWidth().padding(16.dp).wrapContentSize(Alignment.Center)
-                        )
+                        Box(modifier = Modifier.fillMaxWidth().padding(16.dp), contentAlignment = Alignment.Center) {
+                            Text("오류 발생", color = ColorsLight.redColor)
+                        }
                     }
                     else -> {}
                 }
