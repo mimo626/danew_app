@@ -31,7 +31,7 @@ fun NewsDetailMainScreen(
     listType:String,
     categoryName:String?,
     navHostController: NavHostController,
-    newsViewModel: NewsViewModel = hiltViewModel() // ViewModel 주입
+    newsViewModel: NewsViewModel
 ) {
     val pagingFlow = remember(listType, categoryName) {
         when (listType) {
