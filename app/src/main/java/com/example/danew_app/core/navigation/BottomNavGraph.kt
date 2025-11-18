@@ -10,6 +10,8 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.app.ComponentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -37,6 +39,7 @@ import com.example.danew_app.presentation.bookmark.NoScrollNewsDetailScreen
 import com.example.danew_app.presentation.login.KeywordScreen
 import com.example.danew_app.presentation.profile.KeywordUpdateScreen
 import com.example.danew_app.presentation.profile.TodayNewsScreen
+import com.example.danew_app.presentation.viewmodel.NewsViewModel
 import com.example.danew_app.presentation.viewmodel.UserViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -44,9 +47,11 @@ import com.example.danew_app.presentation.viewmodel.UserViewModel
 @Composable
 fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier, isLoggedIn: Boolean) {
     val startDestination = if (isLoggedIn) BottomNavItem.Home.route else "start"
+    val sharedNewsViewModel: NewsViewModel = hiltViewModel()
 
     NavHost(navHostController, startDestination = startDestination, modifier = modifier) {
-        composable(BottomNavItem.Home.route) { HomeScreen(navHostController) }
+        composable(BottomNavItem.Home.route) {
+            HomeScreen(navHostController, newsViewModel = sharedNewsViewModel) }
         composable(BottomNavItem.Category.route) { CategoryScreen(navHostController) }
         composable(BottomNavItem.Diary.route) { DiaryScreen(navHostController) }
         composable(BottomNavItem.Bookmark.route) { BookmarkScreen(navHostController) }
@@ -87,10 +92,10 @@ fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier, isL
 
         composable(
             // 1. 새로운 경로 적용
-            route = "detail/{listType}/{index}?category={categoryName}",
+            route = "detail/{listType}/{newsId}?category={categoryName}",
             arguments = listOf(
                 navArgument("listType") { type = NavType.StringType },
-                navArgument("index") { type = NavType.IntType },
+                navArgument("newsId") { type = NavType.StringType },
                 navArgument("categoryName") { // 선택적 인자
                     type = NavType.StringType
                     nullable = true
@@ -100,17 +105,15 @@ fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier, isL
         ) { backStackEntry ->
             // 2. 인자들 꺼내기
             val listType = backStackEntry.arguments?.getString("listType") ?: "home"
-            val index = backStackEntry.arguments?.getInt("index") ?: 0
+            val newsId = backStackEntry.arguments?.getString("newsId") ?: ""
             val categoryName = backStackEntry.arguments?.getString("categoryName")
-
-            Log.d("News 상세: ", "${index}")
-
             // 3. NewsDetailScreen에 전달
             NewsDetailMainScreen(
-                initialIndex = index,
+                initialNewsId = newsId,
                 listType = listType, // listType 전달
                 categoryName = categoryName, // categoryName 전달
-                navHostController = navHostController
+                navHostController = navHostController,
+                newsViewModel = sharedNewsViewModel
             )
         }
         composable("details/noScroll/{newsId}") { backStackEntry ->
