@@ -27,7 +27,7 @@ import com.example.danew_app.presentation.home.NewsDetailScreen
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NewsDetailMainScreen(
-    initialIndex: Int,
+    initialNewsId: String,
     listType:String,
     categoryName:String?,
     navHostController: NavHostController,
@@ -51,23 +51,6 @@ fun NewsDetailMainScreen(
     val newsPagingItems = pagingFlow.collectAsLazyPagingItems()
 
 
-    // Pager의 상태를 관리 (초기 페이지 설정)
-    //TODO 새로운 뉴스 상세로 클릭 시 initialIndex는 변경되는데 화면에 뉴스 업데이트 문제 해결 필요
-    val pagerState = rememberPagerState(
-        initialPage = initialIndex,
-        pageCount = { newsPagingItems.itemCount },
-    )
-
-    LaunchedEffect(newsPagingItems.itemCount, initialIndex) {
-        if (newsPagingItems.itemCount > 0 &&
-            initialIndex < newsPagingItems.itemCount
-        ) {
-            pagerState.scrollToPage(initialIndex)
-            Log.d("News 상세", "초기 페이지 이동: $initialIndex / 총 ${newsPagingItems.itemCount}")
-        }
-    }
-
-
     // Paging 데이터의 로드 상태 확인
     when (newsPagingItems.loadState.refresh) {
         is LoadState.Loading -> {
@@ -85,23 +68,63 @@ fun NewsDetailMainScreen(
                 )
             }
         }
-        else -> {
-            VerticalPager(
-                state = pagerState,
-                modifier = Modifier.fillMaxSize(),
-            ) { pageIndex -> // 현재 페이지의 index
+        else -> { // LoadState.NotLoading (성공)
 
-                val news = newsPagingItems[pageIndex]
+            val pagerState = rememberPagerState(
+                initialPage = 0, // 일단 0으로 시작 (나중에 ID로 찾아서 이동함)
+                pageCount = { newsPagingItems.itemCount },
+            )
 
-                if (news != null) {
-                    // 2. 실제 UI를 그리는 NewsDetailPage 호출
-                    NewsDetailScreen(
-                        news = news,
-                        navHostController = navHostController
+            // 💡 핵심 로직 변경: ID로 인덱스 찾기
+            LaunchedEffect(newsPagingItems.itemCount, initialNewsId) {
+                if (newsPagingItems.itemCount > 0) {
+                    // 목록을 순회하며 initialNewsId와 일치하는 뉴스의 위치(index)를 찾음
+                    var targetIndex = -1
+                    for (i in 0 until newsPagingItems.itemCount) {
+                        // peek(i)는 데이터를 로드하지 않고 확인만 함 (안전함)
+                        val item = newsPagingItems.peek(i)
+                        if (item?.newsId == initialNewsId) {
+                            targetIndex = i
+                            break // 찾았으면 중단
+                        }
+                    }
+
+                    // 찾았고, 현재 페이지가 그 위치가 아니라면 이동
+                    if (targetIndex != -1 && pagerState.currentPage != targetIndex) {
+                        pagerState.scrollToPage(targetIndex)
+                        Log.d("News 상세", "ID($initialNewsId)를 찾음 -> 인덱스 $targetIndex 로 이동")
+                    } else if (targetIndex == -1) {
+                        Log.d("News 상세", "해당 ID($initialNewsId)를 목록에서 찾을 수 없음")
+                        // 필요하다면 여기서 찾지 못했을 때 처리 (예: 첫 페이지 보여주기)
+                    }
+                }
+            }
+            // 💡 추가: 로드는 성공했지만 아이템이 0개일 경우 Pager를 그리면 안 됩니다.
+            if (newsPagingItems.itemCount == 0) {
+                Scaffold(containerColor = ColorsLight.whiteColor) { padding ->
+                    Text(
+                        text = "표시할 뉴스가 없습니다.",
+                        modifier = Modifier.padding(padding).fillMaxSize().padding(20.dp),
                     )
-                } else {
-                    // 개별 페이지가 로드 중일 때 (Paging 특성)
-                    CustomLinearProgressIndicator(progress = 2.0F)
+                }
+            } else {
+                // 아이템이 1개 이상일 때만 Pager를 그립니다.
+                VerticalPager(
+                    state = pagerState,
+                    modifier = Modifier.fillMaxSize(),
+                ) { pageIndex ->
+
+                    val news = newsPagingItems[pageIndex]
+                    Log.d("News 상세: ", "${pageIndex} ${news}")
+
+                    if (news != null) {
+                        NewsDetailScreen(
+                            news = news,
+                            navHostController = navHostController
+                        )
+                    } else {
+                        CustomLinearProgressIndicator(progress = 2.0F)
+                    }
                 }
             }
         }
