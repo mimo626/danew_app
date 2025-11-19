@@ -22,6 +22,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
@@ -29,6 +30,7 @@ import kotlinx.coroutines.flow.flattenConcat
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,8 +40,8 @@ class NewsViewModel @Inject constructor(
     private val newsRepository: NewsRepository,
 ) : ViewModel() {
 
-    private val _newsListById = MutableStateFlow(NewsModel())
-    val newsListById: StateFlow<NewsModel> = _newsListById
+    private val _newsMap = MutableStateFlow<Map<String, NewsModel>>(emptyMap())
+    val newsMap: StateFlow<Map<String, NewsModel>> = _newsMap.asStateFlow()
 
     private val _newsByCategory = MutableStateFlow<PagingData<NewsModel>>(PagingData.empty())
     val newsByCategory: StateFlow<PagingData<NewsModel>> = _newsByCategory
@@ -97,12 +99,25 @@ class NewsViewModel @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun fetchNewsById(id: String) {
+        // [핵심 1] 캐싱: 이미 Map에 해당 ID의 데이터가 있다면 API를 호출하지 않고 종료합니다.
+        if (_newsMap.value.containsKey(id)) {
+            isLoading = true
+            errorMessage = null
+
+            return
+        }
+
         viewModelScope.launch {
             isLoading = true
             errorMessage = null
             try {
                 newsRepository.getNewsById(id).collect { news ->
-                    _newsListById.value = news.toDomain()
+                    val domainNews = news.toDomain()
+                    // [핵심 2] Map 업데이트
+                    // 기존 Map에 새로운 (id -> news) 쌍을 추가하여 업데이트합니다.
+                    _newsMap.update { currentMap ->
+                        currentMap + (id to domainNews)
+                    }
                 }
             } catch (e: Exception) {
                 errorMessage = e.localizedMessage
