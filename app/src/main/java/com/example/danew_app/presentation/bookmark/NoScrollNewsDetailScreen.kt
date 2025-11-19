@@ -55,8 +55,8 @@ import com.example.danew_app.presentation.viewmodel.TodayNewsViewModel
 @Composable
 fun NoScrollNewsDetailScreen(newsId: String, navHostController: NavHostController) {
     val newsViewModel: NewsViewModel = hiltViewModel()
-    val news by newsViewModel.newsListById.collectAsState()
-    val newsLink = news.link
+    val newsMap by newsViewModel.newsMap.collectAsState()
+    val detailedNews = newsMap[newsId]
     val isLoading = newsViewModel.isLoading
     val errorMessage = newsViewModel.errorMessage
     val context = LocalContext.current
@@ -71,9 +71,9 @@ fun NoScrollNewsDetailScreen(newsId: String, navHostController: NavHostControlle
         bookmarkViewModel.checkBookmark(newsId)
     }
 
-    LaunchedEffect(news) {
-        if (news != NewsModel()) {
-            todayNewsViewModel.addNews(news)
+    LaunchedEffect(detailedNews) {
+        if (detailedNews != null) {
+            todayNewsViewModel.addNews(detailedNews)
         }
     }
 
@@ -96,24 +96,28 @@ fun NoScrollNewsDetailScreen(newsId: String, navHostController: NavHostControlle
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
             ) {
-                IconButton(
-                    onClick = {
-                        if (isBookmarked) {
-                            bookmarkViewModel.deleteBookmark(news.newsId)
-                        } else {
-                            bookmarkViewModel.saveBookmark(news)
+                if(detailedNews != null){
+                    IconButton(
+                        onClick = {
+                            if (isBookmarked) {
+                                bookmarkViewModel.deleteBookmark(detailedNews.newsId)
+                            } else {
+                                bookmarkViewModel.saveBookmark(detailedNews)
+                            }
                         }
+                    ) {
+                        Icon(
+                            imageVector = if (isBookmarked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                            contentDescription = if (isBookmarked) "북마크 취소" else "북마크",
+                            tint = if (isBookmarked) Color.Red else ColorsLight.darkGrayColor,
+                            modifier = Modifier.size(32.dp)
+                        )
                     }
-                ) {
-                    Icon(
-                        imageVector = if (isBookmarked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                        contentDescription = if (isBookmarked) "북마크 취소" else "북마크",
-                        tint = if (isBookmarked) Color.Red else ColorsLight.darkGrayColor,
-                        modifier = Modifier.size(32.dp)
-                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    ShareButton(newsLink = detailedNews.link)
+                } else {
+                    Spacer(modifier = Modifier.width(4.dp))
                 }
-                Spacer(modifier = Modifier.width(4.dp))
-                ShareButton(newsLink = news.link)
             }
         }
     ) { paddingValues ->
@@ -124,15 +128,11 @@ fun NoScrollNewsDetailScreen(newsId: String, navHostController: NavHostControlle
                 .padding(paddingValues),
             horizontalAlignment = Alignment.Start
         ) {
-
-            // 로딩
             if (isLoading) {
                 item {
                     LazyLoadingIndicator(paddingValues)
                 }
             }
-
-            // 에러
             if (errorMessage != null) {
                 item {
                     Text(
@@ -142,11 +142,9 @@ fun NoScrollNewsDetailScreen(newsId: String, navHostController: NavHostControlle
                     )
                 }
             }
-
-            // 뉴스 내용
-            if (news != NewsModel()) {
+            if (detailedNews != null) {
                 // 카테고리 태그
-                news.category?.firstOrNull()?.let { category ->
+                detailedNews.category?.firstOrNull()?.let { category ->
                     item {
                         Box(
                             modifier = Modifier
@@ -169,7 +167,7 @@ fun NoScrollNewsDetailScreen(newsId: String, navHostController: NavHostControlle
                 // 뉴스 제목
                 item {
                     Text(
-                        text = news.title,
+                        text = detailedNews.title,
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
                         modifier = Modifier.padding(horizontal = 20.dp)
@@ -177,7 +175,7 @@ fun NoScrollNewsDetailScreen(newsId: String, navHostController: NavHostControlle
                 }
 
                 // 작성자
-                news.creator?.firstOrNull()?.let { creator ->
+                detailedNews.creator?.firstOrNull()?.let { creator ->
                     item {
                         Spacer(modifier = Modifier.height(8.dp))
                         Row(
@@ -211,11 +209,11 @@ fun NoScrollNewsDetailScreen(newsId: String, navHostController: NavHostControlle
                         modifier = Modifier.padding(horizontal = 20.dp)
                     )
                     Spacer(modifier = Modifier.height(12.dp))
-                    Text(news.description, fontSize = 18.sp, modifier = Modifier.padding(horizontal = 20.dp))
+                    Text(detailedNews.description, fontSize = 18.sp, modifier = Modifier.padding(horizontal = 20.dp))
                 }
 
                 // 이미지
-                news.imageUrl?.let { imageUrl ->
+                detailedNews.imageUrl?.let { imageUrl ->
                     item {
                         Spacer(modifier = Modifier.height(16.dp))
                         AsyncImage(
@@ -243,14 +241,14 @@ fun NoScrollNewsDetailScreen(newsId: String, navHostController: NavHostControlle
                             style = TextStyle(textDecoration = TextDecoration.Underline),
                             modifier = Modifier
                                 .clickable{
-                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(newsLink))
+                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(detailedNews.link))
                                     context.startActivity(intent)
                                 }
                         )
                         // 날짜
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = news.pubDate,
+                            text = detailedNews.pubDate,
                             fontSize = 14.sp,
                             color = ColorsLight.grayColor,
                         )
