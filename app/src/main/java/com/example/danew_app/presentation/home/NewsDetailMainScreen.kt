@@ -116,10 +116,13 @@ fun NewsDetailMainScreen(
                     val news = newsPagingItems[pageIndex]
                     Log.d("News 상세: ", "${pageIndex} ${news}")
 
+                    val isPageFocused = pagerState.currentPage == pageIndex
+
                     if (news != null) {
                         NewsDetailScreen(
                             news = news,
-                            navHostController = navHostController
+                            navHostController = navHostController,
+                            isPageFocused = isPageFocused
                         )
                     } else {
                         CustomLinearProgressIndicator(progress = 2.0F)
