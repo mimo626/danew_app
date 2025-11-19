@@ -217,7 +217,7 @@ fun NewsDetailScreen(
                         // **주의: news.description이 아닌,
                         // fetchNewsById로 가져온 객체(newsList)의 description을 사용해야 합니다.**
                         Text(
-                            text = newsList!!.description, // <-- 'newsList'의 데이터 사용
+                            text = newsList.description, // <-- 'newsList'의 데이터 사용
                             fontSize = 18.sp,
                             modifier = Modifier.padding(horizontal = 20.dp)
                         )
