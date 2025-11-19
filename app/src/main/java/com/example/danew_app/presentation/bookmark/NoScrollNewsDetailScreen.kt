@@ -47,7 +47,6 @@ import com.example.danew_app.core.widget.LazyLoadingIndicator
 import com.example.danew_app.presentation.viewmodel.NewsViewModel
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.core.widget.ShareButton
-import com.example.danew_app.domain.model.NewsModel
 import com.example.danew_app.presentation.viewmodel.BookmarkViewModel
 import com.example.danew_app.presentation.viewmodel.TodayNewsViewModel
 
