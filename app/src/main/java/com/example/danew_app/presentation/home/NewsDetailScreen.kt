@@ -57,6 +57,7 @@ import com.example.danew_app.presentation.viewmodel.TodayNewsViewModel
 fun NewsDetailScreen(
     news: NewsModel,
     navHostController: NavHostController,
+    isPageFocused: Boolean,
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
     todayNewsViewModel: TodayNewsViewModel = hiltViewModel()
 ) {
@@ -69,10 +70,13 @@ fun NewsDetailScreen(
     val errorMessage = newsViewModel.errorMessage
     val isBookmarked by bookmarkViewModel.isBookmark.collectAsState()
 
-    LaunchedEffect(news.newsId) {
-        newsViewModel.fetchNewsById(id = news.newsId)
-        bookmarkViewModel.checkBookmark(news.newsId)
-        todayNewsViewModel.addNews(news)
+    LaunchedEffect(news.newsId, isPageFocused) {
+        if (isPageFocused) {
+            // 이 페이지가 현재 주인공일 때만 데이터를 가져옵니다.
+            newsViewModel.fetchNewsById(id = news.newsId)
+            bookmarkViewModel.checkBookmark(news.newsId)
+            todayNewsViewModel.addNews(news)
+        }
     }
 
     Scaffold(
