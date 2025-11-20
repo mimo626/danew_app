@@ -65,7 +65,40 @@ class BookmarkRepositoryImpl @Inject constructor(
                         if (body.status == "success" && body.data != null) {
                             val newsList = body.data
                             cont.resume(newsList){}
-                            Log.i("Bookmark 뉴스 조회", "성공: ${newsList.size}")
+                            Log.i("Bookmark 뉴스 리스트 조회", "성공: ${newsList.size}")
+
+                        }
+                        else {
+                            val msg = body.message ?: "북마크 뉴스 리스트 조회 실패"
+                            Log.e("Bookmark 뉴스 리스트 조회", "실패: $msg")
+                        }
+                    } else {
+                        val errorMsg = response.errorBody()?.string() ?: "북마크 뉴스 리스트 조회 실패"
+                        cont.resumeWithException(RuntimeException(errorMsg))
+                        Log.e("Bookmark 리스트 뉴스 조회", "실패: $errorMsg")                    }
+                }
+
+                override fun onFailure(call: Call<ApiResponse<List<MetaNewsEntity>>>, t: Throwable) {
+                    cont.resumeWithException(t)
+                    Log.e("Bookmark 리스트 뉴스 조회", "네트워크 실패", t)
+                }
+            })
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override suspend fun getBookmarkNews(newsId: String): MetaNewsEntity =
+        suspendCancellableCoroutine { cont ->
+            api.getBookmarkNews(newsId).enqueue(object : Callback<ApiResponse<MetaNewsEntity>>{
+                override fun onResponse(
+                    call: Call<ApiResponse<MetaNewsEntity>>,
+                    response: Response<ApiResponse<MetaNewsEntity>>
+                ) {
+                    val body = response.body()
+                    if (response.isSuccessful && body != null){
+                        if (body.status == "success" && body.data != null) {
+                            val news = body.data
+                            cont.resume(news){}
+                            Log.i("Bookmark 뉴스 조회", "성공: ${news.id}")
 
                         }
                         else {
@@ -78,7 +111,7 @@ class BookmarkRepositoryImpl @Inject constructor(
                         Log.e("Bookmark 뉴스 조회", "실패: $errorMsg")                    }
                 }
 
-                override fun onFailure(call: Call<ApiResponse<List<MetaNewsEntity>>>, t: Throwable) {
+                override fun onFailure(call: Call<ApiResponse<MetaNewsEntity>>, t: Throwable) {
                     cont.resumeWithException(t)
                     Log.e("Bookmark 뉴스 조회", "네트워크 실패", t)
                 }
