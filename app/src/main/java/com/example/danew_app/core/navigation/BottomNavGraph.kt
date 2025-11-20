@@ -31,6 +31,7 @@ import com.example.danew.presentation.login.SignupFinishScreen
 import com.example.danew.presentation.login.SignupScreen
 import com.example.danew.presentation.profile.MyPageScreen
 import com.example.danew.presentation.profile.ProfileEditScreen
+import com.example.danew_app.data.entity.NewsDetailType
 import com.example.danew_app.domain.model.DiaryModel
 import com.example.danew_app.presentation.bookmark.NoScrollNewsDetailScreen
 import com.example.danew_app.presentation.login.KeywordScreen
@@ -86,36 +87,47 @@ fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier, isL
                 SignupFinishScreen(navHostController, viewModel)
             }
         }
-
         composable(
-            // 1. 새로운 경로 적용
-            route = "detail/{listType}/{newsId}?category={categoryName}",
+            route = "details/{listType}/{newsId}",
             arguments = listOf(
                 navArgument("listType") { type = NavType.StringType },
-                navArgument("newsId") { type = NavType.StringType },
-                navArgument("categoryName") { // 선택적 인자
-                    type = NavType.StringType
-                    nullable = true
-                    defaultValue = null
-                }
+                navArgument("newsId") { type = NavType.StringType }
             )
         ) { backStackEntry ->
-            // 2. 인자들 꺼내기
-            val listType = backStackEntry.arguments?.getString("listType") ?: "home"
-            val newsId = backStackEntry.arguments?.getString("newsId") ?: ""
-            val categoryName = backStackEntry.arguments?.getString("categoryName")
-            // 3. NewsDetailScreen에 전달
-            NewsDetailMainScreen(
-                initialNewsId = newsId,
-                listType = listType, // listType 전달
-                categoryName = categoryName, // categoryName 전달
-                navHostController = navHostController,
-                newsViewModel = sharedNewsViewModel
-            )
-        }
-        composable("details/noScroll/{newsId}") { backStackEntry ->
+            // 1. 문자열로 받기 (오타 수정: ge -> getString)
+            val typeString = backStackEntry.arguments?.getString("listType")
+
+            // 2. 문자열을 Enum으로 변환 (핵심!)
+            val newsType: NewsDetailType = try {
+                if (typeString != null) NewsDetailType.valueOf(typeString)
+                else NewsDetailType.SEARCH
+            } catch (e: IllegalArgumentException) {
+                NewsDetailType.SEARCH // 혹시 모를 변환 에러 방지
+            }
+
             val newsId = backStackEntry.arguments?.getString("newsId")
-            newsId?.let { NoScrollNewsDetailScreen(it, navHostController) }
+
+            // 3. 화면에 Enum 타입으로 전달
+            if(newsId != null){
+                if (newsType == NewsDetailType.SEARCH ||
+                    newsType==NewsDetailType.TODAY ||
+                    newsType==NewsDetailType.BOOKMARK) {
+                    NoScrollNewsDetailScreen(
+                        newsId = newsId,
+                        listType = newsType, // 이제 String이 아니라 Enum이 들어갑니다
+                        navHostController = navHostController // (변수명 navController 확인 필요)
+                    )
+                }
+                if (newsType == NewsDetailType.HOME ||
+                    newsType == NewsDetailType.CATEGORY){
+                    NewsDetailMainScreen(
+                        initialNewsId = newsId,
+                        listType = newsType, // listType 전달
+                        navHostController = navHostController,
+                        newsViewModel = sharedNewsViewModel
+                    )
+                }
+            }
         }
 
         composable(
