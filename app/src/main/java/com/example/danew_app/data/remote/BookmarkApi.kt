@@ -20,6 +20,11 @@ interface BookmarkApi {
     fun getBookmarks(
         @Header("Authorization") token: String):Call<ApiResponse<List<MetaNewsEntity>>>
 
+    @GET("api/bookmark/getBookmarkNews/{articleId}")
+    fun getBookmarkNews(
+        @Path("articleId") articleId: String
+    ): Call<ApiResponse<MetaNewsEntity>>
+
     @GET("api/bookmark/check-bookmark/{articleId}")
     fun checkBookmark(
         @Header("Authorization") token: String,
