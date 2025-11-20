@@ -74,7 +74,11 @@ fun NewsDetailScreen(
             // 이 페이지가 현재 주인공일 때만 데이터를 가져옵니다.
             newsViewModel.fetchNewsById(id = news.newsId)
             bookmarkViewModel.checkBookmark(news.newsId)
-            todayNewsViewModel.addNews(news)
+        }
+    }
+    LaunchedEffect(detailedNews) {
+        if (detailedNews != null) {
+            todayNewsViewModel.addNews(detailedNews)
         }
     }
 
