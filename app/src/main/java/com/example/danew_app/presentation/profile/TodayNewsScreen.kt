@@ -20,6 +20,7 @@ import androidx.navigation.NavHostController
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.LazyLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
+import com.example.danew_app.data.entity.NewsDetailType
 import com.example.danew_app.data.mapper.toDomain
 import com.example.danew_app.presentation.home.NewsItem
 import com.example.danew_app.presentation.viewmodel.TodayNewsViewModel
@@ -61,10 +62,11 @@ fun TodayNewsScreen(navHostController: NavHostController) {
                 item { Spacer(modifier = Modifier.height(16.dp)) }
                 if (todayNews.isNotEmpty()) {
                     items(todayNews){
-                        NewsItem(it.toDomain(), onItemClick = {
-                            navHostController.navigate("details/noScroll/${it.newsId}")
-                        })
-
+                        if(it != null){
+                            NewsItem(it.toDomain(), onItemClick = {
+                                navHostController.navigate("details/${NewsDetailType.TODAY}/${it.newsId}")
+                            })
+                        }
                     }
                     item { Spacer(modifier = Modifier.height(28.dp)) }
                 }
