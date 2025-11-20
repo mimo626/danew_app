@@ -44,11 +44,9 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.LazyLoadingIndicator
-import com.example.danew_app.presentation.viewmodel.NewsViewModel
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.core.widget.ShareButton
 import com.example.danew_app.data.entity.NewsDetailType
-import com.example.danew_app.domain.model.NewsModel
 import com.example.danew_app.presentation.viewmodel.BookmarkViewModel
 import com.example.danew_app.presentation.viewmodel.NewsDetailViewModel
 import com.example.danew_app.presentation.viewmodel.TodayNewsViewModel
