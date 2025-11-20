@@ -15,8 +15,12 @@ class TodayNewsRepository @Inject constructor(
 ) {
     private fun today(): String = LocalDate.now().toString()
 
-    suspend fun getTodayNews(): List<TodayNewsEntity> {
-        return dao.getTodayNews(today())
+    suspend fun getTodayNewsList(): List<TodayNewsEntity> {
+        return dao.getTodayNewsList(today())
+    }
+
+    suspend fun getTodayNews(newsId:String): TodayNewsEntity {
+        return dao.getTodayNews(newsId)
     }
 
     suspend fun addNews(newsModel: NewsModel) {
