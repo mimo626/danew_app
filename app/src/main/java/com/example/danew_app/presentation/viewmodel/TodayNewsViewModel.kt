@@ -1,6 +1,7 @@
 package com.example.danew_app.presentation.viewmodel
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,7 +42,7 @@ class TodayNewsViewModel @Inject constructor(
             errorMessage = null
             try {
                 repository.clearOldNews() // ✅ 날짜 바뀌면 이전 데이터 삭제
-                _todayNews.value = repository.getTodayNews()
+                _todayNews.value = repository.getTodayNewsList()
             }catch (e:Exception){
                 errorMessage = e.localizedMessage
             } finally {
@@ -55,7 +56,9 @@ class TodayNewsViewModel @Inject constructor(
             isLoading = true
             errorMessage = null
             try {
-                repository.addNews(newsModel)
+                if(newsModel.newsId != ""){
+                    repository.addNews(newsModel)
+                }
             }catch (e:Exception){
                 errorMessage = e.localizedMessage
             } finally {
@@ -69,7 +72,8 @@ class TodayNewsViewModel @Inject constructor(
             isLoading = true
             errorMessage = null
             try {
-                _todayNews.value = repository.getTodayNews()
+                _todayNews.value = repository.getTodayNewsList()
+                Log.d("Today News 조회", "${_todayNews.value}")
             }catch (e:Exception){
                 errorMessage = e.localizedMessage
             } finally {
@@ -84,7 +88,7 @@ class TodayNewsViewModel @Inject constructor(
             errorMessage = null
             try {
                 repository.clearAll()
-                _todayNews.value = emptyList()            }catch (e:Exception){
+            }catch (e:Exception){
                 errorMessage = e.localizedMessage
             } finally {
                 isLoading = false
