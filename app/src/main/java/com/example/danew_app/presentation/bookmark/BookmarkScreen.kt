@@ -20,15 +20,18 @@ import androidx.navigation.NavHostController
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.LazyLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
+import com.example.danew_app.data.entity.NewsDetailType
 import com.example.danew_app.presentation.home.NewsItem
 import com.example.danew_app.presentation.viewmodel.BookmarkViewModel
 
 @Composable
 fun BookmarkScreen(navController: NavHostController) {
     val bookmarkViewModel: BookmarkViewModel = hiltViewModel()
+    val bookmarkMap by bookmarkViewModel.bookmarkMap.collectAsState()
 
-    // StateFlow를 Compose에서 관찰
-    val bookmarkedNewsList by bookmarkViewModel.bookmarkedNewsList.collectAsState()
+    // Map의 값(NewsModel)들만 모아서 리스트로 만듭니다.
+    val bookmarkedNewsList = bookmarkMap.values.toList()
+
     val isLoading by bookmarkViewModel.isLoading.collectAsState()
 
     LaunchedEffect(Unit) {
@@ -60,7 +63,7 @@ fun BookmarkScreen(navController: NavHostController) {
                 bookmarkedNewsList.isNotEmpty() -> {
                     items(bookmarkedNewsList) { news ->
                         NewsItem(newsModel = news, onItemClick = {
-                            navController.navigate("details/noScroll/${news.newsId}")
+                            navController.navigate("details/${NewsDetailType.BOOKMARK}/${news.newsId}")
                         })
                     }
                 }
