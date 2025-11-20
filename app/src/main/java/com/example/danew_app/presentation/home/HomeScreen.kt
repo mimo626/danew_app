@@ -22,6 +22,7 @@ import androidx.paging.compose.itemKey
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.LazyLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
+import com.example.danew_app.data.entity.NewsDetailType
 import com.example.danew_app.domain.model.NewsModel
 import com.example.danew_app.presentation.home.MainImageCard
 import com.example.danew_app.presentation.home.NewsItem
@@ -141,7 +142,7 @@ fun HomeScreen(navController: NavHostController,newsViewModel: NewsViewModel) {
                                 newsModel = item,
                                 onItemClick = {
                                     // 💡 ID를 사용하여 상세 페이지로 이동
-                                    navController.navigate("detail/home/${item.newsId}")
+                                    navController.navigate("details/${NewsDetailType.HOME}/${item.newsId}")
                                 }
                             )
                         }
@@ -172,7 +173,7 @@ fun HomeScreen(navController: NavHostController,newsViewModel: NewsViewModel) {
 
                                         selectedNews?.let { news ->
                                             // ID로 이동
-                                            navController.navigate("detail/home/${news.newsId}")
+                                            navController.navigate("details/${NewsDetailType.HOME}/${news.newsId}")
                                         }
                                     }
                                 )
