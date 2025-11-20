@@ -42,6 +42,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.LazyLoadingIndicator
+import com.example.danew_app.data.entity.NewsDetailType
 import com.example.danew_app.data.mapper.toDomain
 import com.example.danew_app.presentation.viewmodel.NewsViewModel
 import com.example.danew_app.presentation.home.NewsItem
@@ -157,7 +158,7 @@ fun SearchResultScreen(query:String, navHostController: NavHostController) {
                 val item = newsPagingItems[index]
                 if (item != null) {
                     NewsItem(item.toDomain(), onItemClick = {
-                        navHostController.navigate("details/noScroll/${item.toDomain().newsId}")
+                        navHostController.navigate("details/${NewsDetailType.SEARCH}/${item.toDomain().newsId}")
                     })
                 }
             }
