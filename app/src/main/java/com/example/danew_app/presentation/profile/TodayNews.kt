@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.danew_app.data.entity.NewsDetailType
 import com.example.danew_app.data.mapper.toDomain
 import com.example.danew_app.presentation.viewmodel.TodayNewsViewModel
 
@@ -64,9 +65,11 @@ fun TodayNews(sectionTitle:String, navController: NavHostController){
             }
             else{
                 items(todayNews) {
-                    NewsCard(newsModel = it.toDomain(), onClick = {
-                        navController.navigate("details/noScroll/${it.newsId}")
-                    })
+                    if(it != null) {
+                        NewsCard(newsModel = it.toDomain(), onClick = {
+                            navController.navigate("details/${NewsDetailType.TODAY}/${it.newsId}")
+                        })
+                    }
                 }
             }
         }
