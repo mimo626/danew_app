@@ -42,6 +42,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.LazyLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
+import com.example.danew_app.data.entity.NewsDetailType
 import com.example.danew_app.presentation.home.NewsItem
 import com.example.danew_app.presentation.home.NowTopNews
 
@@ -128,8 +129,12 @@ fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = 
                 NowTopNews(
                     title = "실시간 인기 뉴스",
                     newsList = topNews,
-                    onItemClick = {
+                    onItemClick = { clickedIndexInWidget ->
+                        val selectedNews = topNews.getOrNull(clickedIndexInWidget)
 
+                        selectedNews?.let { news ->
+                            navController.navigate("details/${NewsDetailType.CATEGORY}/${news.newsId}")
+                        }
                     }
                 )
                 Spacer(Modifier.height(36.dp))
@@ -148,7 +153,7 @@ fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = 
                     val item = newsPagingItems[index + topNewsCount]
                     if (item != null) {
                         NewsItem(item, onItemClick = {
-                            //TODO 인덱스로 이동하는 함수 추가
+                            navController.navigate("details/${NewsDetailType.CATEGORY}/${item.newsId}")
                         })
                     }
                 }
