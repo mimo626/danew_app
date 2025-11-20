@@ -47,35 +47,39 @@ import com.example.danew_app.core.widget.LazyLoadingIndicator
 import com.example.danew_app.presentation.viewmodel.NewsViewModel
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.core.widget.ShareButton
+import com.example.danew_app.data.entity.NewsDetailType
+import com.example.danew_app.domain.model.NewsModel
 import com.example.danew_app.presentation.viewmodel.BookmarkViewModel
+import com.example.danew_app.presentation.viewmodel.NewsDetailViewModel
 import com.example.danew_app.presentation.viewmodel.TodayNewsViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NoScrollNewsDetailScreen(newsId: String, navHostController: NavHostController) {
-    val newsViewModel: NewsViewModel = hiltViewModel()
-    val newsMap by newsViewModel.newsMap.collectAsState()
-    val detailedNews = newsMap[newsId]
-    val isLoading = newsViewModel.isLoading
-    val errorMessage = newsViewModel.errorMessage
+fun NoScrollNewsDetailScreen(
+    newsId: String,
+    listType: NewsDetailType,
+    navHostController: NavHostController,
+    newsDetailViewModel: NewsDetailViewModel = hiltViewModel(),
+    ) {
     val context = LocalContext.current
 
     val bookmarkViewModel: BookmarkViewModel = hiltViewModel()
-    val isBookmarked by bookmarkViewModel.isBookmark.collectAsState()
-
     val todayNewsViewModel: TodayNewsViewModel = hiltViewModel()
 
-    LaunchedEffect(Unit) {
-        newsViewModel.fetchNewsById(id = newsId)
+    val isBookmarked by bookmarkViewModel.isBookmark.collectAsState()
+    val detailedNews by newsDetailViewModel.newsDetail.collectAsState()
+    val isLoading = newsDetailViewModel.isLoading
+    val errorMessage = newsDetailViewModel.errorMessage
+
+    // 4. 데이터 요청 로직 분기 (API 호출 vs 로컬 조회)
+    LaunchedEffect(newsId, listType) {
         bookmarkViewModel.checkBookmark(newsId)
-    }
+        newsDetailViewModel.fetchNewsDetail(newsId, listType)
 
+    }
     LaunchedEffect(detailedNews) {
-        if (detailedNews != null) {
-            todayNewsViewModel.addNews(detailedNews)
-        }
+        todayNewsViewModel.addNews(detailedNews)
     }
-
 
     Scaffold(
         containerColor = ColorsLight.whiteColor,
