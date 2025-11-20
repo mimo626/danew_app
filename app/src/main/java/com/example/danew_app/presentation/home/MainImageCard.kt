@@ -18,13 +18,14 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.data.entity.NewsDetailType
 import com.example.danew_app.domain.model.NewsModel
 
 //홈의 첫번째 이미지 카드
 @Composable
 fun MainImageCard(newsModel: NewsModel, navController:NavHostController) {
     Column (modifier = Modifier.clickable{
-        navController.navigate("detail/home/${newsModel.newsId}")
+        navController.navigate("details/${NewsDetailType.HOME}/${newsModel.newsId}")
     }){
         Image(
             painter = rememberAsyncImagePainter(newsModel.imageUrl),
