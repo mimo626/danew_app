@@ -21,23 +21,23 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.danew_app.core.widget.CustomLinearProgressIndicator
 import com.example.danew_app.core.widget.CustomLoadingIndicator
+import com.example.danew_app.data.entity.NewsDetailType
 import com.example.danew_app.presentation.home.NewsDetailScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NewsDetailMainScreen(
     initialNewsId: String,
-    listType:String,
-    categoryName:String?,
+    listType:NewsDetailType,
     navHostController: NavHostController,
     newsViewModel: NewsViewModel
 ) {
-    val pagingFlow = remember(listType, categoryName) {
+    val pagingFlow = remember(listType) {
         when (listType) {
-            "category" -> {
+            NewsDetailType.CATEGORY -> {
                 newsViewModel.newsByCategory
             }
-            "home" -> {
+            NewsDetailType.HOME -> {
                 newsViewModel.recommendedNewsFlow
             }
             else -> {
