@@ -1,6 +1,7 @@
 package com.example.danew_app.presentation.viewmodel
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -100,8 +101,6 @@ class NewsViewModel @Inject constructor(
     fun fetchNewsById(id: String) {
         // [핵심 1] 캐싱: 이미 Map에 해당 ID의 데이터가 있다면 API를 호출하지 않고 종료합니다.
         if (_newsMap.value.containsKey(id)) {
-            isLoading = true
-            errorMessage = null
 
             return
         }
@@ -112,6 +111,8 @@ class NewsViewModel @Inject constructor(
             try {
                 newsRepository.getNewsById(id).collect { news ->
                     val domainNews = news.toDomain()
+                    Log.d("News 가져오기: ", "${domainNews}")
+
                     // [핵심 2] Map 업데이트
                     // 기존 Map에 새로운 (id -> news) 쌍을 추가하여 업데이트합니다.
                     _newsMap.update { currentMap ->
@@ -120,6 +121,8 @@ class NewsViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 errorMessage = e.localizedMessage
+                Log.e("News 가져오기 실패", "${e}, ${_newsMap.value}")
+
             } finally {
                 isLoading = false
             }
