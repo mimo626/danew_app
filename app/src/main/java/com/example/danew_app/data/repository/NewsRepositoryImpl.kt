@@ -54,7 +54,7 @@ class NewsRepositoryImpl @Inject constructor(
         val result = newsApi.fetchNewsById(id = id).results
         val newsEntity = result[0]
 
-        emit(newsEntity) // 원문 즉시 emit
+        emit(newsEntity.copy(description = ""))
 
         // 로컬 캐시 확인
         val cached = newsSummaryDao.getSummarizedNews(id)
