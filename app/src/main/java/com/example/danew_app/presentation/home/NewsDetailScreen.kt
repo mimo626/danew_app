@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -43,6 +44,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.widget.CustomLoadingIndicator
 import com.example.danew_app.core.widget.LazyLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.core.widget.ShareButton
@@ -132,20 +134,6 @@ fun NewsDetailScreen(
                 .padding(paddingValues),
             horizontalAlignment = Alignment.Start
         ) {
-            if (isLoading) {
-                item {
-                    LazyLoadingIndicator(paddingValues)
-                }
-            }
-            if (errorMessage != null) {
-                item {
-                    Text(
-                        text = "오류: $errorMessage",
-                        color = Color.Red,
-                        modifier = Modifier.padding(20.dp)
-                    )
-                }
-            }
             if(detailedNews != null) {
                 detailedNews.category?.firstOrNull()?.let { category ->
                     item {
@@ -200,6 +188,8 @@ fun NewsDetailScreen(
                 }
                 item {
                     Spacer(modifier = Modifier.height(32.dp))
+
+                    // 1. 제목은 항상 보여줍니다 (상태와 무관하게)
                     Text(
                         text = "AI 뉴스 요약본",
                         fontSize = 16.sp,
@@ -207,8 +197,60 @@ fun NewsDetailScreen(
                         color = ColorsLight.primaryColor,
                         modifier = Modifier.padding(horizontal = 20.dp)
                     )
+
                     Spacer(modifier = Modifier.height(12.dp))
-                    Text(detailedNews.description, fontSize = 18.sp, modifier = Modifier.padding(horizontal = 20.dp))
+
+                    // 2. 상태에 따른 분기 처리
+                    if (isLoading) {
+                        // [로딩 상태] 뺑뺑이와 안내 문구
+                        Column (
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 20.dp, vertical = 20.dp),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            CustomLoadingIndicator()
+                            Spacer(modifier = Modifier.height(12.dp))
+                            Text(
+                                text = "AI가 뉴스를 요약하고 있어요...",
+                                fontSize = 14.sp,
+                                color = Color.Gray
+                            )
+                        }
+                    } else if (errorMessage != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 20.dp)
+                                .background(Color(0xFFFFF0F0), shape = RoundedCornerShape(8.dp)) // 연한 빨간 배경
+                                .padding(16.dp)
+                        ) {
+                            Text(
+                                text = "요약에 실패했습니다: $errorMessage",
+                                fontSize = 14.sp,
+                                color = Color.Red
+                            )
+                        }
+                    } else {
+                        // [성공 상태] 요약 내용 표시 (기존 코드)
+                        // 내용이 비어있을 경우를 대비해 ifEmpty 처리도 하면 좋습니다
+                        if (detailedNews.description.isNotEmpty()) {
+                            Text(
+                                text = detailedNews.description,
+                                fontSize = 18.sp,
+                                lineHeight = 26.sp, // 줄간격 추가 (가독성 향상)
+                                modifier = Modifier.padding(horizontal = 20.dp)
+                            )
+                        } else {
+                            Text(
+                                text = "요약된 내용이 없습니다.",
+                                fontSize = 14.sp,
+                                color = Color.Gray,
+                                modifier = Modifier.padding(horizontal = 20.dp)
+                            )
+                        }
+                    }
                 }
 
                 // 5. [즉시 표시] Paging으로 받은 'news' 객체의 데이터 (이미지)
