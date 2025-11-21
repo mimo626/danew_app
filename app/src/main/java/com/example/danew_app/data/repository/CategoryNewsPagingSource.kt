@@ -19,12 +19,8 @@ class CategoryNewsPagingSource(
                 category = category,
                 page = page,
             )
-            Log.d("NewsPagingSource", "뉴스 페이지 ${page}")
-
 
             val newsList = response.results
-            Log.d("NewsPagingSource", "뉴스 리스트 ${newsList}")
-
 
             LoadResult.Page(
                 data = newsList,
