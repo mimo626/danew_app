@@ -40,7 +40,7 @@ fun CustomUnderlinedTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
-    modifier: Modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+    modifier: Modifier = Modifier.padding(vertical = 8.dp),
     isPassword: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default
