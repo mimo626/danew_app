@@ -23,7 +23,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flattenConcat
@@ -33,6 +32,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
+@RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class NewsViewModel @Inject constructor(
     private val getCustomNewsListUseCase: GetCustomNewsListUseCase,
@@ -43,65 +44,35 @@ class NewsViewModel @Inject constructor(
     private val _newsMap = MutableStateFlow<Map<String, NewsModel>>(emptyMap())
     val newsMap: StateFlow<Map<String, NewsModel>> = _newsMap.asStateFlow()
 
-    private val _newsByCategory = MutableStateFlow<PagingData<NewsModel>>(PagingData.empty())
-    val newsByCategory: StateFlow<PagingData<NewsModel>> = _newsByCategory
-
     var isLoading by mutableStateOf(false)
         private set
 
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    private val _selectedCategory = MutableStateFlow<String?>(null)
+
+    val newsByCategoryFlow: Flow<PagingData<NewsModel>> = _selectedCategory
+        .filterNotNull() // null이면 실행 안 함
+        .flatMapLatest { category ->
+            // Repository에서 Flow<PagingData>를 바로 리턴받아 연결
+            newsRepository.getNewsByCategory(category)
+                .map { pagingData ->
+                    pagingData.map { it.toDomain() }
+                }
+        }
+        .cachedIn(viewModelScope) // ⭐️ 중요: 여기서 캐싱을 해야 상세화면 갔다와도 데이터가 유지됨
+
     fun fetchNewsByCategory(category: String) {
-        viewModelScope.launch {
-            try {
-                errorMessage = null
-
-                newsRepository.getNewsByCategory(category) // Flow<PagingData<NewsEntity>>
-                    .map { pagingData ->
-                        pagingData.map { it.toDomain() } // PagingData.map
-                    }
-                    .cachedIn(viewModelScope)
-                    .collectLatest { pagingData ->
-                        _newsByCategory.value = pagingData  // PagingData 직접 저장
-                    }
-            } catch (e: Exception) {
-                errorMessage = e.localizedMessage
-            } finally {
-            }
+        // 이미 같은 카테고리면 다시 로드하지 않도록 방어 로직 추가 가능
+        if (_selectedCategory.value != category) {
+            _selectedCategory.value = category
         }
     }
 
-    private val searchQueryState = MutableStateFlow("")
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val newsBySearchQuery = searchQueryState
-        // 검색어가 변경될 때마다 새로운 Pager Flow를 생성
-        .flatMapLatest { query ->
-            if (query.isBlank()) {
-                // 빈 검색어일 경우 빈 PagingData 반환
-                flowOf(PagingData.empty())
-            } else {
-                // 검색어가 있을 경우 Pager 구성 및 Flow 방출
-                newsRepository.getNewsBySearchQuery(searchQuery = query)
-            }
-        }
-        .cachedIn(viewModelScope) // Flow를 캐시하여 화면 회전 등에 대응
-
-
-    fun fetchNewsBySearchQuery(query: String) {
-        // 1. Compose에서 이 함수를 호출하여 검색어 상태를 업데이트
-        searchQueryState.value = query
-
-        // 2. searchQueryState가 업데이트되면 flatMapLatest가 트리거되어
-        //    위에서 새로운 Pager Flow를 만들고, PagingSource의 load()가 호출됩니다.
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
     fun fetchNewsById(id: String) {
         // [핵심 1] 캐싱: 이미 Map에 해당 ID의 데이터가 있다면 API를 호출하지 않고 종료합니다.
         if (_newsMap.value.containsKey(id)) {
-
             return
         }
 
@@ -134,7 +105,6 @@ class NewsViewModel @Inject constructor(
 
     // 2. 토큰 변경에 반응하는 Paging Flow (로직 변경 없음)
     // token.isNullOrBlank()를 사용하여 null과 "" 모두 처리합니다.
-    @OptIn(ExperimentalCoroutinesApi::class)
     val recommendedNewsFlow: Flow<PagingData<NewsModel>> = userTokenState
         .filterNotNull() // null 값은 필터링하여 UseCase 호출 방지
         .flatMapLatest { token ->
@@ -163,6 +133,29 @@ class NewsViewModel @Inject constructor(
             // 가져온 토큰 값을 userTokenState에 설정하여 Paging Flow를 트리거합니다.
             userTokenState.value = token
         }
+    }
+
+    private val searchQueryState = MutableStateFlow("")
+    val newsBySearchQuery = searchQueryState
+        // 검색어가 변경될 때마다 새로운 Pager Flow를 생성
+        .flatMapLatest { query ->
+            if (query.isBlank()) {
+                // 빈 검색어일 경우 빈 PagingData 반환
+                flowOf(PagingData.empty())
+            } else {
+                // 검색어가 있을 경우 Pager 구성 및 Flow 방출
+                newsRepository.getNewsBySearchQuery(searchQuery = query)
+            }
+        }
+        .cachedIn(viewModelScope) // Flow를 캐시하여 화면 회전 등에 대응
+
+
+    fun fetchNewsBySearchQuery(query: String) {
+        // 1. Compose에서 이 함수를 호출하여 검색어 상태를 업데이트
+        searchQueryState.value = query
+
+        // 2. searchQueryState가 업데이트되면 flatMapLatest가 트리거되어
+        //    위에서 새로운 Pager Flow를 만들고, PagingSource의 load()가 호출됩니다.
     }
 
     // 외부(예: 로그인/로그아웃)에서 토큰이 변경될 때 수동으로 호출하는 함수.
