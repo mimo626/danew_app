@@ -2,12 +2,19 @@ package com.example.danew.presentation.login
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,12 +32,17 @@ fun SignupScreen(navHostController: NavHostController, viewModel: UserViewModel)
     var id by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
-    var isIdChecked by remember { mutableStateOf(false) } // 중복 체크 버튼 눌렀는지 여부
+    var isIdChecked by remember { mutableStateOf(false) }
+
+    val passwordFocusRequester = remember { FocusRequester() }
+    val confirmPasswordFocusRequester = remember { FocusRequester() }
+
+    // 키보드 숨기기 제어용
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     val parentEntry = navHostController.getBackStackEntry("signupFlow")
     val viewModel: UserViewModel = hiltViewModel(parentEntry)
 
-    // ViewModel 상태 관찰
     val isUserIdAvailable = viewModel.isUserIdAvailable
 
     // 버튼 활성화 조건
@@ -41,6 +53,18 @@ fun SignupScreen(navHostController: NavHostController, viewModel: UserViewModel)
             isIdChecked &&
             isUserIdAvailable == true
 
+    // 다음 단계로 이동하는 함수 (재사용을 위해 분리)
+    val onNextClick = {
+        if (isNextEnabled) {
+            viewModel.updateUserId(id)
+            viewModel.updatePassword(password)
+            navHostController.navigate("signupAdd")
+        } else {
+            // 조건이 안 맞으면 키보드만 내림 (선택 사항)
+            keyboardController?.hide()
+        }
+    }
+
     Scaffold(
         containerColor = ColorsLight.whiteColor,
         topBar = {
@@ -49,11 +73,9 @@ fun SignupScreen(navHostController: NavHostController, viewModel: UserViewModel)
         bottomBar = {
             BottomButton(
                 text = "다음",
-                isEnabled = isNextEnabled
+                isEnabled = isNextEnabled,
             ) {
-                viewModel.updateUserId(id)
-                viewModel.updatePassword(password)
-                navHostController.navigate("signupAdd")
+                onNextClick()
             }
         }
     ) { padding ->
@@ -75,7 +97,7 @@ fun SignupScreen(navHostController: NavHostController, viewModel: UserViewModel)
 
             Spacer(modifier = Modifier.weight(1f))
 
-            // 아이디 입력
+            // 1. 아이디 입력
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -86,24 +108,34 @@ fun SignupScreen(navHostController: NavHostController, viewModel: UserViewModel)
                     value = id,
                     onValueChange = {
                         id = it
-                        isIdChecked = false // 아이디 변경되면 다시 체크해야 함
+                        isIdChecked = false
                     },
                     label = "아이디",
-                    modifier = Modifier.padding(end = 8.dp).weight(1f)
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                        .weight(1f),
+
+                    // [핵심 2] 아이디 -> 비밀번호로 이동 설정
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { passwordFocusRequester.requestFocus() }
+                    )
                 )
                 Button(
                     colors = ButtonDefaults.buttonColors(containerColor = ColorsLight.darkGrayColor),
                     onClick = {
-                    viewModel.checkUserId(id)
-                    isIdChecked = true
+                        viewModel.checkUserId(id)
+                        isIdChecked = true
                     },
-                    modifier = Modifier.height(56.dp) // TextField와 같은 높이
+                    modifier = Modifier.height(56.dp)
                 ) {
                     Text("중복확인")
                 }
             }
 
-            // 중복 확인 결과 표시
             when (viewModel.isUserIdAvailable) {
                 true -> Text(
                     "사용 가능한 아이디입니다.",
@@ -118,29 +150,48 @@ fun SignupScreen(navHostController: NavHostController, viewModel: UserViewModel)
                 else -> {}
             }
 
-            // 비밀번호 입력
+            // 2. 비밀번호 입력
             CustomUnderlinedTextField(
                 value = password,
                 onValueChange = { password = it },
                 label = "비밀번호",
+                isPassword = true,
+
+                // [핵심 3] 비밀번호 포커스 연결 및 -> 확인창 이동 설정
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-                isPassword = true,
+                    .padding(horizontal = 20.dp)
+                    .focusRequester(passwordFocusRequester),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = { confirmPasswordFocusRequester.requestFocus() }
+                )
             )
 
-            // 비밀번호 확인 입력
+            // 3. 비밀번호 확인 입력
             CustomUnderlinedTextField(
                 value = confirmPassword,
                 onValueChange = { confirmPassword = it },
                 label = "비밀번호 확인",
+                isPassword = true,
+
+                // [핵심 4] 확인창 포커스 연결 및 -> 완료 시 동작 설정
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-                isPassword = true,
+                    .padding(horizontal = 20.dp)
+                    .focusRequester(confirmPasswordFocusRequester),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done // 마지막이니까 Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = { onNextClick() } // 완료 시 다음 화면 이동 시도
+                )
             )
 
-            // 비밀번호 불일치 시 안내
             if (confirmPassword.isNotEmpty() && password != confirmPassword) {
                 Text(
                     "비밀번호가 일치하지 않습니다.",
