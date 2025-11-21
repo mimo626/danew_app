@@ -120,7 +120,7 @@ fun NewsDetailMainScreen(
 
                     if (news != null) {
                         NewsDetailScreen(
-                            news = news,
+                            newsId = news.newsId,
                             navHostController = navHostController,
                             isPageFocused = isPageFocused
                         )
