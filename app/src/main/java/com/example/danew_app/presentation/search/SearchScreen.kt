@@ -12,6 +12,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActionScope
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
@@ -32,7 +35,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -46,6 +56,7 @@ fun SearchScreen(navHostController: NavHostController) {
     val recentSearches by viewModel.recentSearches.collectAsState()
 
     val focusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     // 화면 진입 시 포커스 요청
     LaunchedEffect(Unit) {
@@ -80,13 +91,35 @@ fun SearchScreen(navHostController: NavHostController) {
                         value = searchQuery,
                         onValueChange = { searchQuery = it },
                         singleLine = true,
+
+                        // [핵심 1] 키보드 엔터 키를 '검색(돋보기)' 아이콘으로 변경
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Search
+                        ),
+
+                        // [핵심 2] 검색 버튼 클릭 시 실행할 로직 정의
+                        keyboardActions = KeyboardActions(
+                            onSearch = {
+                                // 빈 값일 때는 검색하지 않도록 방어 코드 추가 (권장)
+                                if (searchQuery.isNotBlank()) {
+                                    viewModel.saveSearch(searchQuery)
+                                    navHostController.navigate("search/${searchQuery}")
+
+                                    // (선택사항) 검색 후 키보드 숨기기
+                                    keyboardController?.hide()
+                                }
+                            }
+                        ),
+
                         decorationBox = { innerTextField ->
                             if (searchQuery.isEmpty()) {
                                 Text("검색어를 입력해 주세요.", color = ColorsLight.grayColor)
                             }
                             innerTextField()
                         },
-                        modifier = Modifier.weight(1f).focusRequester(focusRequester)
+                        modifier = Modifier
+                            .weight(1f)
+                            .focusRequester(focusRequester)
                     )
                     Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.Gray,
                         modifier = Modifier.clickable{
