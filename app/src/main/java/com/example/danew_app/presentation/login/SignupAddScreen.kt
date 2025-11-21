@@ -2,12 +2,19 @@ package com.example.danew.presentation.login
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,10 +36,28 @@ fun SignupAddScreen(navHostController: NavHostController, viewModel: UserViewMod
     val parentEntry = navHostController.getBackStackEntry("signupFlow")
     val viewModel: UserViewModel = hiltViewModel(parentEntry)
 
+    val ageFocusRequester = remember { FocusRequester() }
+
+    // 키보드 숨기기 제어용
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     // 버튼 활성화 조건
     val isNextEnabled = name.isNotBlank() &&
             age.isNotBlank() &&
             gender.isNotBlank()
+
+    val onNextClick = {
+        if (isNextEnabled) {
+            viewModel.updateName(name)
+            viewModel.updateAge(age.toInt())
+            viewModel.updateGender(gender)
+
+            navHostController.navigate("keyword")
+        } else {
+            // 조건이 안 맞으면 키보드만 내림 (선택 사항)
+            keyboardController?.hide()
+        }
+    }
 
     Scaffold(
         containerColor = ColorsLight.whiteColor,
@@ -44,18 +69,13 @@ fun SignupAddScreen(navHostController: NavHostController, viewModel: UserViewMod
             BottomButton(text = "다음",
                 isEnabled = isNextEnabled
             ) {
-                viewModel.updateName(name)
-                viewModel.updateAge(age.toInt())
-                viewModel.updateGender(gender)
-
-                navHostController.navigate("keyword")
+                onNextClick()
             }
         }
     ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
-                .padding(horizontal = 20.dp)
                 .fillMaxSize(),
             horizontalAlignment = Alignment.Start
         ) {
@@ -65,7 +85,7 @@ fun SignupAddScreen(navHostController: NavHostController, viewModel: UserViewMod
 
             Text("추가 정보 입력", fontSize = 22.sp,
                 fontWeight = FontWeight.SemiBold,
-            )
+                modifier = Modifier.padding(horizontal = 20.dp),)
 
             Spacer(modifier = Modifier.weight(1f))
 
@@ -74,6 +94,14 @@ fun SignupAddScreen(navHostController: NavHostController, viewModel: UserViewMod
                 value = name,
                 onValueChange = { name = it },
                 label = "이름",
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = { ageFocusRequester.requestFocus() }
+                )
             )
 
             // 생년월일 입력
@@ -81,11 +109,21 @@ fun SignupAddScreen(navHostController: NavHostController, viewModel: UserViewMod
                 value = age,
                 onValueChange = { age = it },
                 label = "나이",
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
+                    .focusRequester(ageFocusRequester),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {  }
+                )
             )
 
             // 성별
             Column(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp),
+                modifier = Modifier.fillMaxWidth().
+                padding(horizontal = 38.dp),
             ) {
                 Text(
                     text = "성별",
