@@ -35,7 +35,7 @@ fun NewsDetailMainScreen(
     val pagingFlow = remember(listType) {
         when (listType) {
             NewsDetailType.CATEGORY -> {
-                newsViewModel.newsByCategory
+                newsViewModel.newsByCategoryFlow
             }
             NewsDetailType.HOME -> {
                 newsViewModel.recommendedNewsFlow
