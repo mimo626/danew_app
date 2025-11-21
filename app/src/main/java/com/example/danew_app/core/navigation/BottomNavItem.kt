@@ -42,7 +42,7 @@ sealed class BottomNavItem(
         "my",
         "MY",
         R.drawable.profile,
-        R.drawable.profile_fill
+        R.drawable.profile
     )
 
     /**
