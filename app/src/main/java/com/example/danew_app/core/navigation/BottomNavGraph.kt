@@ -46,11 +46,13 @@ import com.example.danew_app.presentation.viewmodel.UserViewModel
 fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier, isLoggedIn: Boolean) {
     val startDestination = if (isLoggedIn) BottomNavItem.Home.route else "start"
     val sharedNewsViewModel: NewsViewModel = hiltViewModel()
+    val sharedCategoryNewsViewModel: NewsViewModel = hiltViewModel()
 
     NavHost(navHostController, startDestination = startDestination, modifier = modifier) {
         composable(BottomNavItem.Home.route) {
             HomeScreen(navHostController, newsViewModel = sharedNewsViewModel) }
-        composable(BottomNavItem.Category.route) { CategoryScreen(navHostController) }
+        composable(BottomNavItem.Category.route) { CategoryScreen(navHostController,
+            newsViewModel = sharedCategoryNewsViewModel) }
         composable(BottomNavItem.Diary.route) { DiaryScreen(navHostController) }
         composable(BottomNavItem.Bookmark.route) { BookmarkScreen(navHostController) }
         composable(BottomNavItem.My.route) { MyPageScreen(navHostController) }
@@ -118,13 +120,20 @@ fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier, isL
                         navHostController = navHostController // (변수명 navController 확인 필요)
                     )
                 }
-                if (newsType == NewsDetailType.HOME ||
-                    newsType == NewsDetailType.CATEGORY){
+                if (newsType == NewsDetailType.HOME){
                     NewsDetailMainScreen(
                         initialNewsId = newsId,
                         listType = newsType, // listType 전달
                         navHostController = navHostController,
                         newsViewModel = sharedNewsViewModel
+                    )
+                }
+                if(newsType == NewsDetailType.CATEGORY){
+                    NewsDetailMainScreen(
+                        initialNewsId = newsId,
+                        listType = newsType, // listType 전달
+                        navHostController = navHostController,
+                        newsViewModel = sharedCategoryNewsViewModel
                     )
                 }
             }
