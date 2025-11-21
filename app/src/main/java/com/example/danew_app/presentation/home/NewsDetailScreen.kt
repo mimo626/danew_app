@@ -56,7 +56,7 @@ import com.example.danew_app.presentation.viewmodel.TodayNewsViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NewsDetailScreen(
-    news: NewsModel,
+    newsId: String,
     navHostController: NavHostController,
     isPageFocused: Boolean,
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
@@ -66,16 +66,16 @@ fun NewsDetailScreen(
     val newsViewModel: NewsViewModel = hiltViewModel()
 
     val newsMap by newsViewModel.newsMap.collectAsState()
-    val detailedNews = newsMap[news.newsId]
+    val detailedNews = newsMap[newsId]
     val isLoading = newsViewModel.isLoading
     val errorMessage = newsViewModel.errorMessage
     val isBookmarked by bookmarkViewModel.isBookmark.collectAsState()
 
-    LaunchedEffect(news.newsId, isPageFocused) {
+    LaunchedEffect(newsId, isPageFocused) {
         if (isPageFocused) {
             // 이 페이지가 현재 주인공일 때만 데이터를 가져옵니다.
-            newsViewModel.fetchNewsById(id = news.newsId)
-            bookmarkViewModel.checkBookmark(news.newsId)
+            newsViewModel.fetchNewsById(id = newsId)
+            bookmarkViewModel.checkBookmark(newsId)
         }
     }
     LaunchedEffect(detailedNews) {
@@ -134,6 +134,22 @@ fun NewsDetailScreen(
                 .padding(paddingValues),
             horizontalAlignment = Alignment.Start
         ) {
+            if (isLoading && detailedNews == null) {
+                item {
+                    LazyLoadingIndicator(paddingValues)
+                }
+            }
+
+            // 에러 메시지 (데이터가 없을 때만 상단에 표시)
+            if (errorMessage != null && detailedNews == null) {
+                item {
+                    Text(
+                        text = "오류: $errorMessage",
+                        color = Color.Red,
+                        modifier = Modifier.padding(20.dp)
+                    )
+                }
+            }
             if(detailedNews != null) {
                 detailedNews.category?.firstOrNull()?.let { category ->
                     item {
@@ -233,9 +249,8 @@ fun NewsDetailScreen(
                             )
                         }
                     } else {
-                        // [성공 상태] 요약 내용 표시 (기존 코드)
-                        // 내용이 비어있을 경우를 대비해 ifEmpty 처리도 하면 좋습니다
-                        if (detailedNews.description.isNotEmpty()) {
+                        // [성공 상태] 요약 내용 표시
+                        if (detailedNews.description.isNotBlank()) {
                             Text(
                                 text = detailedNews.description,
                                 fontSize = 18.sp,
