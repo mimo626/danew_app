@@ -50,11 +50,11 @@ val newsCategoryKr = NewsCategory.categoryKrToEn.keys.toList()
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = hiltViewModel()) {
+fun CategoryScreen(navController: NavHostController, newsViewModel: NewsViewModel) {
     var selectedTabIndex by remember { mutableStateOf(0) }
     val listState = rememberLazyListState()
     val topNewsCount = 4
-    val newsPagingItems = viewModel.newsByCategory.collectAsLazyPagingItems()
+    val newsPagingItems = newsViewModel.newsByCategoryFlow.collectAsLazyPagingItems()
     val totalItemsCount = newsPagingItems.itemCount
 
 
@@ -62,7 +62,7 @@ fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = 
     LaunchedEffect(selectedTabIndex) {
         val krCategory = newsCategoryKr[selectedTabIndex]
         val enCategory = NewsCategory.categoryKrToEn[krCategory] ?: "top"
-        viewModel.fetchNewsByCategory(enCategory)
+        newsViewModel.fetchNewsByCategory(enCategory)
     }
 
     Scaffold(
@@ -137,7 +137,6 @@ fun CategoryScreen(navController: NavHostController, viewModel: NewsViewModel = 
                         }
                     }
                 )
-                Spacer(Modifier.height(36.dp))
                 Text(
                     "${newsCategoryKr[selectedTabIndex]} 이슈 뉴스",
                     fontWeight = FontWeight.Bold,
