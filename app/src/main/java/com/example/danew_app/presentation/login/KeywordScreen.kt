@@ -20,10 +20,12 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,10 +39,15 @@ import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.core.widget.CustomLinearProgressIndicator
+import com.example.danew_app.core.widget.CustomSnackbarHost
+import com.example.danew_app.core.widget.showImmediateSnackbar
 
 @SuppressLint("UnrememberedGetBackStackEntry")
 @Composable
 fun KeywordScreen(navHostController: NavHostController, viewModel: UserViewModel) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
     val allKeywords:List<String> = listOf(
         "정치", "엔터", "경제",
         "취업", "문화", "IT",
@@ -59,6 +66,7 @@ fun KeywordScreen(navHostController: NavHostController, viewModel: UserViewModel
 
     Scaffold(
         containerColor = ColorsLight.whiteColor,
+        snackbarHost = { CustomSnackbarHost(hostState = snackbarHostState) },
         topBar = {
             MainTopAppBar(navController = navHostController, title = "", isBackIcon = true)
         },
@@ -118,6 +126,11 @@ fun KeywordScreen(navHostController: NavHostController, viewModel: UserViewModel
                                     } else {
                                         if (selectedKeywords.size < 5) {
                                             selectedKeywords.add(keyword) // 5개 미만일 때만 추가
+                                        } else{
+                                            snackbarHostState.showImmediateSnackbar(
+                                                scope = scope,
+                                                message = "키워드는 최대 5개까지만 선택할 수 있습니다."
+                                            )
                                         }
                                     }
                                 }
