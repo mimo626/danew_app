@@ -1,6 +1,5 @@
 package com.example.danew_app.data.repository
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.danew_app.data.entity.NewsEntity
