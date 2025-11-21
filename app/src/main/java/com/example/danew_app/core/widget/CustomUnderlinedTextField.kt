@@ -1,6 +1,7 @@
 package com.example.danew_app.core.widget
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material3.Icon
@@ -15,11 +16,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.danew_app.R
 import com.example.danew_app.core.theme.ColorsLight
 
 // import com.example.danew_app.core.theme.ColorsLight // (ColorsLight 임포트)
@@ -66,19 +69,23 @@ fun CustomUnderlinedTextField(
         },
 
         trailingIcon = {
-            if (isPassword) { // isPassword 플래그가 true일 때만 아이콘 표시
-                val icon = if (isPasswordVisible) {
-                    // 비밀번호가 보일 때 -> '숨기기' 아이콘 (VisibilityOff)
-                    Icons.Filled.Face
+            if (isPassword) {
+                // 1. painterResource를 사용하여 이미지 불러오기
+                val iconPainter = if (isPasswordVisible) {
+                    // 비밀번호가 보일 때 -> '눈' 모양 (eye.png)
+                    painterResource(id = R.drawable.eye)
                 } else {
-                    // 비밀번호가 숨겨졌을 때 -> '보이기' 아이콘 (Visibility)
-                    Icons.Default.Face
+                    // 비밀번호가 숨겨졌을 때 -> '눈 감은' 모양 (eye_hide.png)
+                    painterResource(id = R.drawable.eye_hide)
                 }
 
                 IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
                     Icon(
-                        imageVector = icon,
+                        // 2. imageVector 대신 painter 속성 사용
+                        painter = iconPainter,
                         contentDescription = "비밀번호 보기/숨기기",
+                        tint = ColorsLight.darkGrayColor,
+                        modifier = Modifier.padding(top = 8.dp).size(24.dp)
                     )
                 }
             }
