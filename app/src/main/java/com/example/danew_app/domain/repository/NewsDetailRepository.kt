@@ -5,7 +5,6 @@ import androidx.annotation.RequiresApi
 import com.example.danew_app.data.entity.NewsDetailType
 import com.example.danew_app.data.local.UserDataSource
 import com.example.danew_app.data.mapper.toDomain
-import com.example.danew_app.data.repository.NewsRepositoryImpl
 import com.example.danew_app.domain.model.NewsModel
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject

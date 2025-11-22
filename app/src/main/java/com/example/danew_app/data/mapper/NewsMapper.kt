@@ -7,7 +7,6 @@ import com.example.danew_app.data.entity.MetaNewsEntity
 import com.example.danew_app.data.entity.NewsEntity
 import com.example.danew_app.data.entity.TodayNewsEntity
 import com.example.danew_app.domain.model.NewsModel
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.Duration
