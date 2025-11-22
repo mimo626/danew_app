@@ -83,6 +83,7 @@ fun NewsModel.toMeta():MetaNewsEntity{
 @RequiresApi(Build.VERSION_CODES.O)
 fun NewsModel.toTodayNews():TodayNewsEntity{
     return TodayNewsEntity(
+        userId = "",
         newsId = this.newsId,
         title = this.title,
         description = this.description,
@@ -94,7 +95,7 @@ fun NewsModel.toTodayNews():TodayNewsEntity{
         creator = this.creator,
         language = this.language,
         keywords = this.keywords,
-        savedAt = LocalDate.now().toString()
+        savedAt = System.currentTimeMillis()
     )
 }
 
