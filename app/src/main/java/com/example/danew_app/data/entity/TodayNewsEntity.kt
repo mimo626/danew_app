@@ -3,9 +3,10 @@ package com.example.danew_app.data.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "today_news")
+@Entity(tableName = "today_news", primaryKeys = ["userId", "newsId"])
 data class TodayNewsEntity (
-    @PrimaryKey val newsId: String,
+    val newsId: String,
+    val userId: String,
     val title: String,
     val description: String,
     val imageUrl: String?,
@@ -16,5 +17,5 @@ data class TodayNewsEntity (
     val keywords: List<String>?,
     val link: String?,
     val language: String?,
-    val savedAt:String,
+    val savedAt: Long = System.currentTimeMillis()
 )
