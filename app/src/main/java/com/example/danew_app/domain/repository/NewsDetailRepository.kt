@@ -3,6 +3,7 @@ package com.example.danew_app.domain.repository
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.danew_app.data.entity.NewsDetailType
+import com.example.danew_app.data.local.UserDataSource
 import com.example.danew_app.data.mapper.toDomain
 import com.example.danew_app.data.repository.NewsRepositoryImpl
 import com.example.danew_app.domain.model.NewsModel
@@ -13,7 +14,8 @@ class NewsDetailRepository @Inject constructor(
     private val newsRepository: NewsRepository,
     private val bookmarkRepository: BookmarkRepository,
     private val todayNewsRepository: TodayNewsRepository,
-) {
+    private val userDataSource: UserDataSource,
+    ) {
     // 뷰모델은 이 함수 하나만 호출하면 됨
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getNewsDetail(id: String, type: NewsDetailType): NewsModel {
@@ -34,7 +36,8 @@ class NewsDetailRepository @Inject constructor(
             }
             NewsDetailType.TODAY -> {
                 // 로컬 DB 조회 후 변환하여 리턴
-                todayNewsRepository.getTodayNews(id).toDomain()
+                val userToken = userDataSource.getToken() ?: ""
+                todayNewsRepository.getTodayNews(userId = userToken, newsId = id).toDomain()
             }
         }
     }
