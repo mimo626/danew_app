@@ -1,5 +1,6 @@
 package com.example.danew.presentation.profile
 
+import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -43,11 +44,14 @@ import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.presentation.profile.TodayNews
 import com.example.danew_app.presentation.viewmodel.UserViewModel
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.danew_app.data.mapper.toDomain
 import com.example.danew_app.presentation.home.NewsCard
+import com.example.danew_app.presentation.profile.MyPageMenuItem
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -55,6 +59,7 @@ fun MyPageScreen(navController: NavHostController,) {
     val userViewModel: UserViewModel = hiltViewModel()
     val user by userViewModel.getUserData.collectAsState()  // StateFlow 구독
     val logoutResult = userViewModel.logoutResult
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         userViewModel.getUser()   // 화면 진입 시 한 번 실행
@@ -171,37 +176,15 @@ fun MyPageScreen(navController: NavHostController,) {
             MyPageMenuItem("공지사항") { }
             MyPageMenuItem("문의하기") { }
             MyPageMenuItem("자주 묻는 질문") { }
-            MyPageMenuItem("오픈소스 라이센스") { }
+            MyPageMenuItem("오픈소스 라이센스") {
+                val intent = Intent(context, OssLicensesMenuActivity::class.java)
+                intent.putExtra("title", "오픈소스 라이센스") // 상단 타이틀 설정
+                context.startActivity(intent)
+            }
             MyPageMenuItem("버전 정보", trailing = { Text("1.0", color = ColorsLight.grayColor) }) { }
             MyPageMenuItem("로그아웃", textColor = ColorsLight.grayColor) {
                 userViewModel.logout()
             }
         }
-    }
-}
-
-@Composable
-fun MyPageMenuItem(
-    title: String,
-    textColor: Color = Color.Black,
-    trailing: @Composable (() -> Unit)? = null,
-    onClick: () -> Unit
-) {
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .clickable(onClick = onClick)
-        .padding(horizontal = 20.dp)
-    ) {
-        HorizontalDivider(color = ColorsLight.lightGrayColor)
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(title, color = textColor)
-            trailing?.invoke()
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-
     }
 }
