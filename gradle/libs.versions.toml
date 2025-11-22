@@ -27,6 +27,7 @@ datastore = "1.1.7"
 runtimeLivedata = "1.9.0"
 paging = "3.3.2"
 paging-compose = "1.0.0-alpha18"
+oss = "17.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -68,6 +69,7 @@ datastore = {group = "androidx.datastore", name = "datastore-preferences", versi
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
 paging = {group = "androidx.paging", name = "paging-runtime", version.ref = "paging"}
 paging-compose = {group = "androidx.paging", name = "paging-compose", version.ref = "paging-compose"}
+oss = {group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "oss"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -75,4 +77,5 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt"}
 ksp = {id = "com.google.devtools.ksp", version.ref = "ksp"}
+oss = {id = "com.google.android.gms.oss-licenses-plugin", version.ref = "oss"}
 
