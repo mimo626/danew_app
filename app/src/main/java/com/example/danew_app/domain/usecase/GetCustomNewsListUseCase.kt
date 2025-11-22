@@ -1,5 +1,7 @@
 package com.example.danew_app.domain.usecase
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.example.danew_app.data.mapper.toDomain
@@ -15,6 +17,7 @@ class GetCustomNewsListUseCase @Inject constructor(
     private val userRepository: UserRepository,
     private val newsRepository: NewsRepository,
 ) {
+    @RequiresApi(Build.VERSION_CODES.O)
     suspend operator fun invoke(token: String): Flow<PagingData<NewsModel>> {
         // 1. 토큰으로 사용자 정보 및 키워드 리스트를 가져옵니다.
         val user = userRepository.getUser(token).toDomain()
