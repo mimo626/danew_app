@@ -32,11 +32,11 @@ import com.example.danew_app.presentation.viewmodel.TodayNewsViewModel
 @Composable
 fun TodayNewsScreen(navHostController: NavHostController) {
     val todayNewsViewModel: TodayNewsViewModel = hiltViewModel()
-    val todayNews by todayNewsViewModel.todayNews.collectAsState()
+    val todayNews by todayNewsViewModel.todayNewsList.collectAsState()
     val isLoading = todayNewsViewModel.isLoading
 
     LaunchedEffect(Unit) {
-        todayNewsViewModel.getNews()
+        todayNewsViewModel.getNewsList()
     }
 
     Scaffold(
