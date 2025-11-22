@@ -7,8 +7,8 @@ import javax.inject.Inject
 class SearchRepository @Inject constructor(
     private val dao: SearchHistoryDao
 ) {
-    suspend fun getRecentSearches() = dao.getRecentSearches()
-    suspend fun insertSearch(keyword: String) = dao.insertSearch(SearchHistoryEntity(keyword = keyword))
-    suspend fun deleteSearch(keyword: String) = dao.deleteSearch(keyword)
-    suspend fun clearAll() = dao.clearAll()
+    suspend fun getRecentSearches(userId:String) = dao.getRecentSearches(userId)
+    suspend fun insertSearch(searchHistory: SearchHistoryEntity) = dao.insertSearch(searchHistory)
+    suspend fun deleteSearch(userId: String, keyword: String) = dao.deleteSearch(userId, keyword)
+    suspend fun clearAll(userId: String) = dao.clearAll(userId)
 }
