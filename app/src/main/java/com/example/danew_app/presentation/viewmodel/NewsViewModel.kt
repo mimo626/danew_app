@@ -76,9 +76,9 @@ class NewsViewModel @Inject constructor(
             return
         }
 
+        isLoading = true
+        errorMessage = null
         viewModelScope.launch {
-            isLoading = true
-            errorMessage = null
             try {
                 newsRepository.getNewsById(id).collect { news ->
                     val domainNews = news.toDomain()
@@ -112,6 +112,7 @@ class NewsViewModel @Inject constructor(
                 flowOf(PagingData.empty())
             } else {
                 flow {
+                    Log.d("News 가져오기: ", "${userTokenState.value}")
                     // UseCase 호출
                     emit(getCustomNewsListUseCase(token))
                 }.flattenConcat()
@@ -125,13 +126,20 @@ class NewsViewModel @Inject constructor(
         loadUserTokenAndStartNewsLoad()
     }
 
+    fun refreshUserToken() {
+        loadUserTokenAndStartNewsLoad()
+    }
+
     private fun loadUserTokenAndStartNewsLoad() {
         viewModelScope.launch {
             // suspend 함수인 getToken()을 안전하게 호출합니다.
             val token = userDataSource.getToken() ?: ""
 
             // 가져온 토큰 값을 userTokenState에 설정하여 Paging Flow를 트리거합니다.
-            userTokenState.value = token
+            if (userTokenState.value != token) {
+                Log.d("NewsViewModel", "유저 변경 감지: 토큰 업데이트됨")
+                userTokenState.value = token
+            }
         }
     }
 
