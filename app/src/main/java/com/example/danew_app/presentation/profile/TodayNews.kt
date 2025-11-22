@@ -36,10 +36,10 @@ import com.example.danew_app.presentation.viewmodel.TodayNewsViewModel
 @Composable
 fun TodayNews(sectionTitle:String, navController: NavHostController){
     val todayNewsViewModel: TodayNewsViewModel = hiltViewModel()
-    val todayNews by todayNewsViewModel.todayNews.collectAsState()
+    val todayNews by todayNewsViewModel.todayNewsList.collectAsState()
 
     LaunchedEffect(Unit) {
-        todayNewsViewModel.getNews()
+        todayNewsViewModel.getNewsList()
     }
 
     Column (modifier = Modifier.padding(horizontal = 20.dp)){
