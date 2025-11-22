@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.danew_app.data.entity.SearchHistoryEntity
+import com.example.danew_app.data.local.UserDataSource
 import com.example.danew_app.domain.repository.SearchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,8 +16,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val repository: SearchRepository
-) : ViewModel() {
+    private val repository: SearchRepository,
+    private val userDataSource: UserDataSource,
+    ) : ViewModel() {
 
     private val _recentSearches = MutableStateFlow<List<SearchHistoryEntity>>(emptyList())
     val recentSearches = _recentSearches.asStateFlow()
@@ -37,7 +39,8 @@ class SearchViewModel @Inject constructor(
             isLoading = true
             errorMessage = null
             try {
-                _recentSearches.value = repository.getRecentSearches()
+                val userToken = userDataSource.getToken() ?: ""
+                _recentSearches.value = repository.getRecentSearches(userToken)
             } catch (e:Exception){
                 Log.e("DB 오류", "최근 검색어 조회 실패", e)
                 errorMessage = e.localizedMessage
@@ -52,7 +55,9 @@ class SearchViewModel @Inject constructor(
             isLoading = true
             errorMessage = null
             try {
-                repository.insertSearch(keyword)
+                val userToken = userDataSource.getToken() ?: ""
+                val searchHistoryEntity = SearchHistoryEntity(userId = userToken, keyword = keyword)
+                repository.insertSearch(searchHistoryEntity)
                 loadRecentSearches()
             } catch (e:Exception){
                 Log.e("DB 오류", "최근 검색어 저장 실패", e)
@@ -69,7 +74,8 @@ class SearchViewModel @Inject constructor(
             isLoading = true
             errorMessage = null
             try {
-                repository.deleteSearch(keyword)
+                val userToken = userDataSource.getToken() ?: ""
+                repository.deleteSearch(userId = userToken, keyword = keyword)
                 loadRecentSearches()
             } catch (e:Exception){
                 Log.e("DB 오류", "최근 검색어 삭제 실패", e)
@@ -86,7 +92,8 @@ class SearchViewModel @Inject constructor(
             isLoading = true
             errorMessage = null
             try {
-                repository.clearAll()
+                val userToken = userDataSource.getToken() ?: ""
+                repository.clearAll(userId = userToken)
                 loadRecentSearches()
             } catch (e:Exception){
                 Log.e("DB 오류", "최근 검색어 전체 삭제 실패", e)
