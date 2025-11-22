@@ -50,6 +50,12 @@ fun HomeScreen(navController: NavHostController,newsViewModel: NewsViewModel) {
         userViewModel.getUser()
     }
 
+    LaunchedEffect(user) {
+        // user가 로드되었다면(혹은 null에서 바뀌었다면) 토큰도 바뀌었을 확률이 높으므로 갱신 요청
+        Log.d("추천 News 업데이트", "유저 정보 변경 감지 -> 뉴스 갱신 요청")
+        newsViewModel.refreshUserToken()
+    }
+
     LaunchedEffect(newsPagingItems) {
         snapshotFlow { newsPagingItems.itemSnapshotList.items }
             .collect { list ->
