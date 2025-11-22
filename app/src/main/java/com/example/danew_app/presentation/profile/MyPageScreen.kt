@@ -45,11 +45,7 @@ import com.example.danew_app.presentation.profile.TodayNews
 import com.example.danew_app.presentation.viewmodel.UserViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.danew_app.data.mapper.toDomain
-import com.example.danew_app.presentation.home.NewsCard
 import com.example.danew_app.presentation.profile.MyPageMenuItem
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 
