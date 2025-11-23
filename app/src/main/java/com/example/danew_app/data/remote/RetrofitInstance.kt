@@ -67,5 +67,17 @@ object LocalRetrofitModule {
     fun provideAIApi(retrofit: Retrofit) : AIApi{
         return retrofit.create(AIApi::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun provideQuestionApi(retrofit: Retrofit) : QuestionApi{
+        return retrofit.create(QuestionApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAnnounceApi(retrofit: Retrofit) : AnnounceApi{
+        return retrofit.create(AnnounceApi::class.java)
+    }
 }
 
