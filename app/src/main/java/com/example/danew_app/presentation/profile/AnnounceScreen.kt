@@ -22,7 +22,7 @@ import com.example.danew_app.presentation.viewmodel.AnnounceViewModel
 @Composable
 fun AnnounceScreen(navController: NavHostController) {
     val announceViewModel: AnnounceViewModel = hiltViewModel()
-    val announceList = announceViewModel.announceList
+    val announceList = announceViewModel.announceMap.values.toList()
     val isLoading = announceViewModel.isLoading
     val errorMessage = announceViewModel.errorMessage
 
@@ -62,8 +62,11 @@ fun AnnounceScreen(navController: NavHostController) {
                     item { Spacer(modifier = Modifier.height(16.dp)) }
                     items(announceList) {
                         announce ->
-                        MyPageMenuItem(announce.title) {
-
+                        MyPageMenuItem(
+                            title = announce.title,
+                            fontSize = 16
+                        ) {
+                            navController.navigate("announce/${announce.announceId}")
                         }
                     }
                     item { Spacer(modifier = Modifier.height(28.dp)) }
