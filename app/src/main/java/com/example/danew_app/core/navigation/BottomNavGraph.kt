@@ -29,6 +29,7 @@ import com.example.danew.presentation.login.LoginScreen
 import com.example.danew.presentation.login.SignupAddScreen
 import com.example.danew.presentation.login.SignupFinishScreen
 import com.example.danew.presentation.login.SignupScreen
+import com.example.danew.presentation.profile.AnnounceScreen
 import com.example.danew.presentation.profile.MyPageScreen
 import com.example.danew.presentation.profile.ProfileEditScreen
 import com.example.danew_app.data.entity.NewsDetailType
@@ -36,6 +37,7 @@ import com.example.danew_app.domain.model.DiaryModel
 import com.example.danew_app.presentation.bookmark.NoScrollNewsDetailScreen
 import com.example.danew_app.presentation.login.KeywordScreen
 import com.example.danew_app.presentation.profile.KeywordUpdateScreen
+import com.example.danew_app.presentation.profile.QuestionScreen
 import com.example.danew_app.presentation.profile.TodayNewsScreen
 import com.example.danew_app.presentation.viewmodel.NewsViewModel
 import com.example.danew_app.presentation.viewmodel.UserViewModel
@@ -188,6 +190,14 @@ fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier, isL
 
         composable("keywordUpdate") { backStackEntry ->
             KeywordUpdateScreen(navHostController)
+        }
+
+        composable("announce") {
+            AnnounceScreen(navController = navHostController)
+        }
+
+        composable("question") {
+            QuestionScreen(navController = navHostController)
         }
     }
 }
