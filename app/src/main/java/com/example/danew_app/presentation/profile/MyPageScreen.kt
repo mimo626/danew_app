@@ -57,6 +57,9 @@ fun MyPageScreen(navController: NavHostController,) {
     val logoutResult = userViewModel.logoutResult
     val context = LocalContext.current
 
+//    val announceViewModel: AnnounceViewModel = hiltViewModel()
+//    val questionViewModel:QuestionViewModel = hiltViewModel()
+
     LaunchedEffect(Unit) {
         userViewModel.getUser()   // 화면 진입 시 한 번 실행
     }
@@ -169,9 +172,13 @@ fun MyPageScreen(navController: NavHostController,) {
 
             Spacer(modifier = Modifier.height(24.dp))
             // 설정 항목ㅌ 리스트
-            MyPageMenuItem("공지사항") { }
+            MyPageMenuItem("공지사항") {
+                navController.navigate("announce")
+            }
             MyPageMenuItem("문의하기") { }
-            MyPageMenuItem("자주 묻는 질문") { }
+            MyPageMenuItem("자주 묻는 질문") {
+                navController.navigate("question")
+            }
             MyPageMenuItem("오픈소스 라이센스") {
                 val intent = Intent(context, OssLicensesMenuActivity::class.java)
                 intent.putExtra("title", "오픈소스 라이센스") // 상단 타이틀 설정
