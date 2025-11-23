@@ -79,5 +79,11 @@ object LocalRetrofitModule {
     fun provideAnnounceApi(retrofit: Retrofit) : AnnounceApi{
         return retrofit.create(AnnounceApi::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun provideNotificationApi(retrofit: Retrofit) : NotificationApi{
+        return retrofit.create(NotificationApi::class.java)
+    }
 }
 
