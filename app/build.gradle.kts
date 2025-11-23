@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.google.services)
     id("kotlin-parcelize")
 }
 
@@ -94,4 +95,8 @@ dependencies {
     implementation(libs.paging)
     implementation(libs.paging.compose)
     implementation(libs.oss)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.messaging)
+    implementation(libs.converter.scalars)
 }
