@@ -28,6 +28,9 @@ runtimeLivedata = "1.9.0"
 paging = "3.3.2"
 paging-compose = "1.0.0-alpha18"
 oss = "17.1.0"
+google-services = "4.4.4"
+firebase-bom = "34.6.0"
+converter-scalars = "2.9.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -70,6 +73,10 @@ androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtim
 paging = {group = "androidx.paging", name = "paging-runtime", version.ref = "paging"}
 paging-compose = {group = "androidx.paging", name = "paging-compose", version.ref = "paging-compose"}
 oss = {group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "oss"}
+firebase-bom = {group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom"}
+firebase-analytics = {group = "com.google.firebase", name = "firebase-analytics"}
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
+converter-scalars = {group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "converter-scalars"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -77,5 +84,4 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt"}
 ksp = {id = "com.google.devtools.ksp", version.ref = "ksp"}
-oss = {id = "com.google.android.gms.oss-licenses-plugin", version.ref = "oss"}
-
+google-services = {id = "com.google.gms.google-services", version.ref = "google-services"}
