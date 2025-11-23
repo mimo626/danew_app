@@ -29,6 +29,7 @@ import com.example.danew.presentation.login.LoginScreen
 import com.example.danew.presentation.login.SignupAddScreen
 import com.example.danew.presentation.login.SignupFinishScreen
 import com.example.danew.presentation.login.SignupScreen
+import com.example.danew.presentation.profile.AnnounceDetailScreen
 import com.example.danew.presentation.profile.AnnounceScreen
 import com.example.danew.presentation.profile.MyPageScreen
 import com.example.danew.presentation.profile.ProfileEditScreen
@@ -194,6 +195,11 @@ fun BottomNavGraph(navHostController: NavHostController, modifier: Modifier, isL
 
         composable("announce") {
             AnnounceScreen(navController = navHostController)
+        }
+
+        composable("announce/{announceId}") { backStackEntry ->
+            val announceId = backStackEntry.arguments?.getString("announceId")
+            announceId?.let { AnnounceDetailScreen(announceId, navHostController) }
         }
 
         composable("question") {
