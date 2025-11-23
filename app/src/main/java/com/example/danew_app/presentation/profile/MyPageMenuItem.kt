@@ -13,7 +13,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.danew_app.core.theme.ColorsLight
 
 @Composable
@@ -21,6 +23,7 @@ fun MyPageMenuItem(
     title: String,
     textColor: Color = Color.Black,
     trailing: @Composable (() -> Unit)? = null,
+    fontSize: Int = 14,
     onClick: () -> Unit
 ) {
     Column(modifier = Modifier
@@ -34,7 +37,7 @@ fun MyPageMenuItem(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(title, color = textColor)
+            Text(title, color = textColor, fontSize = fontSize.sp)
             trailing?.invoke()
         }
         Spacer(modifier = Modifier.height(16.dp))
