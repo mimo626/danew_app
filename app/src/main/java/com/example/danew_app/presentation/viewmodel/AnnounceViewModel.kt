@@ -22,7 +22,7 @@ class AnnounceViewModel @Inject constructor(
     var content by mutableStateOf("")
 
     // 조회된 공지사항 리스트 상태
-    var announceList by mutableStateOf<List<AnnounceEntity>>(emptyList())
+    var announceMap by mutableStateOf<Map<String, AnnounceEntity>>(emptyMap())
         private set
 
     // 로딩, 에러, 성공 상태
@@ -35,18 +35,19 @@ class AnnounceViewModel @Inject constructor(
     var success by mutableStateOf(false)
         private set
 
-    // 초기화 시 리스트 불러오기 (필요하다면 주석 해제)
-    // init {
-    //     getAnnounceList()
-    // }
-
-    // 1. 공지사항 목록 조회
+    // 1. 공지사항 목록 조회 및 Map 변환
     fun getAnnounceList() {
         viewModelScope.launch {
             isLoading = true
             errorMessage = null
             try {
-                announceList = announceRepository.getAnnounceList()
+                // Repository는 여전히 List를 반환한다고 가정합니다.
+                val listResult = announceRepository.getAnnounceList()
+
+                // [핵심 변경] List를 Map으로 변환합니다.
+                // it.id 또는 it.announceId 부분은 실제 AnnounceEntity의 고유 ID 변수명으로 맞춰주세요.
+                announceMap = listResult.associateBy { it.announceId }
+
             } catch (e: Exception) {
                 errorMessage = e.localizedMessage
             } finally {
@@ -65,8 +66,10 @@ class AnnounceViewModel @Inject constructor(
                 val request = AnnounceRequest(title = title, content = content)
                 announceRepository.saveAnnounce(request)
                 success = true
-                // 저장 후 목록 갱신
+
+                // 저장 후 목록 갱신 (다시 서버에서 불러와 Map을 재구성)
                 getAnnounceList()
+
                 // 입력창 초기화
                 content = ""
             } catch (e: Exception) {
@@ -84,8 +87,13 @@ class AnnounceViewModel @Inject constructor(
             errorMessage = null
             try {
                 announceRepository.deleteAnnounce(announceId)
-                // 삭제 후 목록 갱신
+
+                // [방법 1] 삭제 후 서버에서 다시 목록을 불러와 갱신 (데이터 무결성 좋음)
                 getAnnounceList()
+
+                // [방법 2 - 참고용] 서버 호출 없이 로컬 Map에서만 즉시 제거하고 싶다면 아래 코드 사용
+                // announceMap = announceMap.toMutableMap().apply { remove(announceId) }
+
             } catch (e: Exception) {
                 errorMessage = e.localizedMessage
             } finally {
@@ -94,7 +102,7 @@ class AnnounceViewModel @Inject constructor(
         }
     }
 
-    // 성공 상태 초기화 (Snackbar 등을 띄운 후 호출)
+    // 성공 상태 초기화
     fun resetSuccess() {
         success = false
     }
