@@ -13,7 +13,8 @@ fun UserEntity.toDomain(): UserModel {
         gender = this.gender,
         createdAt = this.createdAt,
         keywordList = this.keywordList,
-        customList = this.customList
+        customList = this.customList,
+        fcmToken = fcmToken,
     )
 }
 
@@ -27,6 +28,7 @@ fun UserModel.toEntity(): UserEntity {
         gender = this.gender,
         createdAt = this.createdAt,
         keywordList = this.keywordList,
-        customList = this.customList
-    )
+        customList = this.customList,
+        fcmToken = fcmToken,
+        )
 }
