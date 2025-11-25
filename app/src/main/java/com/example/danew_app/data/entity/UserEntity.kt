@@ -13,5 +13,6 @@ data class UserEntity(
     val gender: String,
     val createdAt: String,
     val keywordList: List<String> = emptyList(),
-    val customList: List<String>? = emptyList()
+    val customList: List<String>? = emptyList(),
+    val fcmToken:String,
 )
