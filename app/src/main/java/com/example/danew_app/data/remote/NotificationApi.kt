@@ -9,6 +9,7 @@ interface NotificationApi {
     @POST("/api/notifications/send")
     fun sendSelfNotification(
         @Header("X-FCM-Token") token: String,
-        @Query("nickname") nickname: String
+        @Query("title") title: String,
+        @Query("content") content: String
     ): Call<String>
 }
