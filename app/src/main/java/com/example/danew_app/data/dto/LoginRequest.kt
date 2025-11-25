@@ -8,4 +8,7 @@ data class LoginRequest (
 
     @SerializedName("password")
     val password: String,
+
+    @SerializedName("fcmToken")
+    val fcmToken: String,
 )
