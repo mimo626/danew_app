@@ -17,10 +17,10 @@ class NotificationRepositoryImpl @Inject constructor(
     private val api: NotificationApi,
 ) : NotificationRepository {
 
-    override suspend fun sendNotification(token: String, nickname: String): String =
+    override suspend fun sendNotification(token: String, title: String, content:String): String =
         suspendCancellableCoroutine { cont ->
             // Retrofit의 enqueue를 사용하여 비동기 호출 시작
-            api.sendSelfNotification(token, nickname).enqueue(object : Callback<String> {
+            api.sendSelfNotification(token, title, content).enqueue(object : Callback<String> {
 
                 override fun onResponse(call: Call<String>, response: Response<String>) {
                     // 성공적으로 응답이 왔을 때
