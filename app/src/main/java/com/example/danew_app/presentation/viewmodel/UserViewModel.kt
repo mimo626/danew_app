@@ -85,6 +85,10 @@ class UserViewModel @Inject constructor(
         user = user.copy(keywordList = keywordList)
     }
 
+    fun updateFcmToken(fcmToken: String) {
+        user = user.copy(fcmToken = fcmToken)
+    }
+
     // -------------------- 회원가입 --------------------
     fun completeSignup() {
         viewModelScope.launch {
