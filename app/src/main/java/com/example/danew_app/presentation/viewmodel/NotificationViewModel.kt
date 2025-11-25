@@ -6,10 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.danew_app.data.dto.AnnounceRequest
-import com.example.danew_app.data.entity.AnnounceEntity
-import com.example.danew_app.data.local.UserDataSource
-import com.example.danew_app.domain.repository.AnnounceRepository
 import com.example.danew_app.domain.repository.NotificationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

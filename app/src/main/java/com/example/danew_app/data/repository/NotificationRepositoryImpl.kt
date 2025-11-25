@@ -3,7 +3,6 @@ package com.example.danew_app.data.repository
 import android.util.Log
 import com.example.danew_app.data.remote.NotificationApi // API 위치에 맞게 import 수정 필요
 import com.example.danew_app.domain.repository.NotificationRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import retrofit2.Call
 import retrofit2.Callback
