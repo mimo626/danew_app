@@ -41,7 +41,8 @@ class UserRepositoryImpl @Inject constructor(
                                 password = user.password, // 필요한 필드 채우기
                                 name = user.name,
                                 age = user.age,
-                                gender = user.gender
+                                gender = user.gender,
+                                fcmToken = user.fcmToken,
                             )
                             cont.resume(userEntity) {}
                             Log.i("User 회원가입", "성공: $userEntity")
@@ -66,9 +67,9 @@ class UserRepositoryImpl @Inject constructor(
         }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override suspend fun login(userId: String, password: String): UserResponse =
+    override suspend fun login(loginRequest: LoginRequest): UserResponse =
         suspendCancellableCoroutine { cont ->
-            api.login(LoginRequest(userId, password)).enqueue(object : Callback<ApiResponse<UserResponse>> {
+            api.login(loginRequest).enqueue(object : Callback<ApiResponse<UserResponse>> {
                 override fun onResponse(
                     call: Call<ApiResponse<UserResponse>>,
                     response: Response<ApiResponse<UserResponse>>) {
