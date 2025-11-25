@@ -47,6 +47,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.sp
 import com.example.danew_app.presentation.profile.MyPageMenuItem
+import com.example.danew_app.presentation.viewmodel.NotificationViewModel
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -56,12 +57,14 @@ fun MyPageScreen(navController: NavHostController,) {
     val user by userViewModel.getUserData.collectAsState()  // StateFlow 구독
     val logoutResult = userViewModel.logoutResult
     val context = LocalContext.current
+    val notificationViewModel:NotificationViewModel = hiltViewModel()
 
 //    val announceViewModel: AnnounceViewModel = hiltViewModel()
 //    val questionViewModel:QuestionViewModel = hiltViewModel()
 
     LaunchedEffect(Unit) {
-        userViewModel.getUser()   // 화면 진입 시 한 번 실행
+        userViewModel.getUser()
+        notificationViewModel.sendPush()
     }
 
     LaunchedEffect(logoutResult) {
