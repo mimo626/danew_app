@@ -8,7 +8,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.navigation.compose.rememberNavController
 import com.example.danew.presentation.main.MainScreen
-import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
