@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.danew_app.core.fcm.getFcmToken
+import com.example.danew_app.data.dto.LoginRequest
 import com.example.danew_app.data.dto.UpdateUserRequest
 import com.example.danew_app.data.dto.UserResponse
 import com.example.danew_app.data.local.UserDataSource
@@ -121,7 +122,9 @@ class UserViewModel @Inject constructor(
             isLoading = true
             errorMessage = null
             try {
-                val response:UserResponse = loginUseCase.invoke(userId, password)
+                val fcmToken = getFcmToken() ?: ""
+                val loginRequest = LoginRequest(userId = userId, password = password, fcmToken = fcmToken)
+                val response:UserResponse = loginUseCase.invoke(loginRequest)
                 if (response.token.isNotEmpty()) {
                     loginResult = "success"
                 } else {
