@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "16779237610",
+    "project_id": "danew-3d18c",
+    "storage_bucket": "danew-3d18c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:16779237610:android:0b693089d314ede57cdf93",
+        "android_client_info": {
+          "package_name": "com.example.danew_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaibOJObvBG4o5i05n-6UqYLsgEwPPZR4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
