@@ -18,7 +18,6 @@ import javax.inject.Inject
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
     private val notificationRepository: NotificationRepository,
-    private val userDataSource: UserDataSource,
     ) : ViewModel() {
 
     // 로딩, 에러, 성공 상태
@@ -36,8 +35,9 @@ class NotificationViewModel @Inject constructor(
             isLoading = true
             errorMessage = null
             try {
-                val token = userDataSource.getToken() ?: ""
-                val result = notificationRepository.sendNotification("fhfA4qcbQZ-mtKO5QnQwYF:APA91bGPB3lnH_vJ6LtWJtZX6iV-55ptFQ34pae3U1Zm3fWk3Rc_fO3M53LlJrIR0WHOblExPCN1jGRK_ujf-y6dFQZNN_IWYsTNhZF8WXtEiJNNGL9G5n4", "안드로이드유저")
+                val result = notificationRepository.sendNotification(
+                    "fhfA4qcbQZ-mtKO5QnQwYF:APA91bGPB3lnH_vJ6LtWJtZX6iV-55ptFQ34pae3U1Zm3fWk3Rc_fO3M53LlJrIR0WHOblExPCN1jGRK_ujf-y6dFQZNN_IWYsTNhZF8WXtEiJNNGL9G5n4",
+                    "매일 일기 루틴 만들기", "오늘도 뉴스를 읽고 일기를 작성해 보아요~")
                 Log.d("Notification 성공", "결과: $result")
             } catch (e: Exception) {
                 Log.e("Notification 실패", "에러 발생: ${e.message}")
