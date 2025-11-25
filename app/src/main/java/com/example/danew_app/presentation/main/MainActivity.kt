@@ -22,18 +22,18 @@ class MainActivity : ComponentActivity() {
 
         val isLoggedIn = intent.getBooleanExtra("isLoggedIn", false)
 
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w("FCM", "토큰 가져오기 실패", task.exception)
-                return@addOnCompleteListener
-            }
-
-            // 현재 단말기의 FCM 토큰 가져옴
-            val token = task.result
-            Log.d("FCM", "Current Token: $token")
-
-            // 이 토큰을 복사해서 Postman이나 서버 API 테스트에 사용하세요.
-        }
+//        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+//            if (!task.isSuccessful) {
+//                Log.w("FCM", "토큰 가져오기 실패", task.exception)
+//                return@addOnCompleteListener
+//            }
+//
+//            // 현재 단말기의 FCM 토큰 가져옴
+//            val token = task.result
+//            Log.d("FCM", "Current Token: $token")
+//
+//            // 이 토큰을 복사해서 Postman이나 서버 API 테스트에 사용하세요.
+//        }
         setContent {
             val navHostController = rememberNavController()
 
