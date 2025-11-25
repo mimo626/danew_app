@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.danew_app.core.fcm.getFcmToken
 import com.example.danew_app.data.dto.UpdateUserRequest
 import com.example.danew_app.data.dto.UserResponse
 import com.example.danew_app.data.local.UserDataSource
@@ -95,6 +96,9 @@ class UserViewModel @Inject constructor(
             isLoading = true
             errorMessage = null
             try {
+                val fcmToken = getFcmToken() ?: ""
+                Log.d("SignUp", "FCM Token 획득: $fcmToken")
+                updateFcmToken(fcmToken)
                 val user = insertUserUseCase.invoke(user)
                 if(user.userId.isNotEmpty()){
                     signUpResult = "success"
