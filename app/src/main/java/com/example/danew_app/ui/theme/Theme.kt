@@ -10,34 +10,38 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
+import com.example.danew_app.core.theme.DanewColors
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = DanewColors.primaryColor,
+    onPrimary = DanewColors.whiteColor,
+    secondary = DanewColors.lightGrayColor,
+    onSecondary = DanewColors.blackColor,
+    background = DanewColors.whiteColor,
+    onBackground = DanewColors.blackColor,
+    surface = DanewColors.lightGrayColor,
+    onSurface = DanewColors.darkGrayColor,
+    error = DanewColors.whiteColor,
+    onError = DanewColors.redColor,
+)
 
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+private val DarkColorScheme = darkColorScheme(
+    primary = DanewColors.primaryColor,
+    onPrimary = DanewColors.whiteColor,
+    secondary = DanewColors.darkGrayColor,
+    onSecondary = DanewColors.whiteColor,
+    background = DanewColors.blackColor,
+    onBackground = DanewColors.whiteColor,
+    surface = DanewColors.darkGrayColor,
+    onSurface = DanewColors.grayColor,
+    error = DanewColors.darkGrayColor,
+    onError = DanewColors.redColor,
 )
 
 @Composable
 fun Danew_appTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
