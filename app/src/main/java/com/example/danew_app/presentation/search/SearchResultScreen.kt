@@ -22,6 +22,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,7 +42,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.theme.DanewColors
+import com.example.danew_app.core.widget.CustomLoadingIndicator
 import com.example.danew_app.core.widget.LazyLoadingIndicator
 import com.example.danew_app.data.entity.NewsDetailType
 import com.example.danew_app.data.mapper.toDomain
@@ -51,19 +54,28 @@ import com.example.danew_app.presentation.home.NewsItem
 @Composable
 fun SearchResultScreen(query:String, navHostController: NavHostController) {
     val viewModel: NewsViewModel = hiltViewModel()
+    // 1. 사용자가 텍스트 필드에 입력 중인 값
     var searchQuery by remember { mutableStateOf(query) }
+
+    // 2. 실제로 검색 아이콘을 눌러서 완료된 검색어 (결과 메시지용)
+    var lastSearchedQuery by remember { mutableStateOf(query) }
     val listState = rememberLazyListState()
     val newsPagingItems = viewModel.newsBySearchQuery.collectAsLazyPagingItems()
 
+    // 검색 실행 로직을 함수로 분리
+    val performSearch = {
+        if (searchQuery.isNotBlank()) {
+            lastSearchedQuery = searchQuery // 화면에 표시될 '검색어' 업데이트
+            viewModel.fetchNewsBySearchQuery(searchQuery)
+            newsPagingItems.refresh()
+        }
+    }
     // 초기 검색 및 검색어 변경 시 로드 유도
     LaunchedEffect(query) {
-        // 1. ViewModel에 초기 검색어 설정
-        viewModel.fetchNewsBySearchQuery(query)
-        // 2. ViewModel이 반응형 구조가 아니라면, 강제로 새로고침하여 load() 호출
-        newsPagingItems.refresh()
+        performSearch()
     }
     Scaffold (
-        containerColor = ColorsLight.whiteColor,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             // 검색창
             Row (
@@ -81,7 +93,9 @@ fun SearchResultScreen(query:String, navHostController: NavHostController) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(ColorsLight.lightGrayColor, RoundedCornerShape(16.dp))
+                        .background(
+                            MaterialTheme.colorScheme.surface,
+                            RoundedCornerShape(16.dp))
                         .padding(horizontal = 16.dp, vertical = 12.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -89,16 +103,18 @@ fun SearchResultScreen(query:String, navHostController: NavHostController) {
                     BasicTextField(
                         value = searchQuery,
                         onValueChange = { searchQuery = it },
+                        textStyle = TextStyle(color = MaterialTheme.colorScheme.onSecondary
+                        ),
                         singleLine = true,
                         decorationBox = { innerTextField ->
                             innerTextField()
                         },
                         modifier = Modifier.weight(1f)
                     )
-                    Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.Gray,
+                    Icon(Icons.Default.Search, contentDescription = "Search",
+                        tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.clickable{
-                            viewModel.fetchNewsBySearchQuery(searchQuery)
-                            newsPagingItems.refresh()
+                            performSearch()
                         }
                     )
                 }
@@ -113,10 +129,13 @@ fun SearchResultScreen(query:String, navHostController: NavHostController) {
         ) {
             item {
                 Spacer(modifier = Modifier.height(32.dp))
-                HorizontalDivider(thickness = 6.dp, color = ColorsLight.lightGrayColor)
+                HorizontalDivider(thickness = 6.dp, color = MaterialTheme.colorScheme.secondary,
+                )
 
                 Spacer(modifier = Modifier.height(16.dp))
-                Text("검색 결과", fontWeight = FontWeight.SemiBold, fontSize = 16.sp,
+                Text("검색 결과", fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    fontSize = 16.sp,
                     modifier = Modifier.fillMaxWidth()
                         .padding(horizontal = 20.dp),)
                 Spacer(modifier = Modifier.height(16.dp))
@@ -139,14 +158,14 @@ fun SearchResultScreen(query:String, navHostController: NavHostController) {
                         ,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text("\'${searchQuery}\'에 대한 검색 결과가 없습니다.",
-                            color = ColorsLight.grayColor,
+                        Text("\'${lastSearchedQuery}\'에 대한 검색 결과가 없습니다.",
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.SemiBold
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text("단어의 철자가 정확한지 확인해주세요.",
-                            color = ColorsLight.grayColor,
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontSize = 12.sp
                         )
                     }
@@ -167,12 +186,7 @@ fun SearchResultScreen(query:String, navHostController: NavHostController) {
             newsPagingItems.apply {
                 when (loadState.append) {
                     is LoadState.Loading -> item {
-                        CircularProgressIndicator(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                                .wrapContentSize(Alignment.Center)
-                        )
+                        CustomLoadingIndicator()
                     }
                     is LoadState.Error -> item { Text("오류") }
                     else -> {}
