@@ -15,12 +15,14 @@ import com.example.danew_app.core.theme.DanewColors
 private val LightColorScheme = lightColorScheme(
     primary = DanewColors.primaryColor,
     onPrimary = DanewColors.whiteColor,
+    onTertiary = DanewColors.secondaryColor,
     secondary = DanewColors.lightGrayColor,
     onSecondary = DanewColors.blackColor,
     background = DanewColors.whiteColor,
     onBackground = DanewColors.blackColor,
     surface = DanewColors.lightGrayColor,
-    onSurface = DanewColors.darkGrayColor,
+    onSurface = DanewColors.grayColor,
+    tertiary = DanewColors.darkGrayColor,
     error = DanewColors.whiteColor,
     onError = DanewColors.redColor,
 )
@@ -28,12 +30,14 @@ private val LightColorScheme = lightColorScheme(
 private val DarkColorScheme = darkColorScheme(
     primary = DanewColors.primaryColor,
     onPrimary = DanewColors.whiteColor,
+    onTertiary = DanewColors.secondaryColor,
     secondary = DanewColors.darkGrayColor,
     onSecondary = DanewColors.whiteColor,
     background = DanewColors.blackColor,
     onBackground = DanewColors.whiteColor,
     surface = DanewColors.darkGrayColor,
     onSurface = DanewColors.grayColor,
+    tertiary = DanewColors.grayColor,
     error = DanewColors.darkGrayColor,
     onError = DanewColors.redColor,
 )
