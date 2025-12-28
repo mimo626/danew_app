@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,12 +44,11 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.theme.DanewColors
 import com.example.danew_app.core.widget.CustomLoadingIndicator
 import com.example.danew_app.core.widget.LazyLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.core.widget.ShareButton
-import com.example.danew_app.domain.model.NewsModel
 import com.example.danew_app.presentation.viewmodel.BookmarkViewModel
 import com.example.danew_app.presentation.viewmodel.NewsViewModel
 import com.example.danew_app.presentation.viewmodel.TodayNewsViewModel
@@ -85,7 +85,7 @@ fun NewsDetailScreen(
     }
 
     Scaffold(
-        containerColor = ColorsLight.whiteColor,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             MainTopAppBar(
                 navController = navHostController,
@@ -115,7 +115,7 @@ fun NewsDetailScreen(
                         Icon(
                             imageVector = if (isBookmarked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                             contentDescription = if (isBookmarked) "북마크 취소" else "북마크",
-                            tint = if (isBookmarked) Color.Red else ColorsLight.darkGrayColor,
+                            tint = if (isBookmarked) MaterialTheme.colorScheme.onError else MaterialTheme.colorScheme.tertiary,
                             modifier = Modifier.size(32.dp)
                         )
                     }
@@ -145,7 +145,7 @@ fun NewsDetailScreen(
                 item {
                     Text(
                         text = "오류: $errorMessage",
-                        color = Color.Red,
+                        color = MaterialTheme.colorScheme.tertiary,
                         modifier = Modifier.padding(20.dp)
                     )
                 }
@@ -157,14 +157,14 @@ fun NewsDetailScreen(
                             modifier = Modifier
                                 .padding(horizontal = 20.dp, vertical = 16.dp)
                                 .background(
-                                    color = ColorsLight.secondaryColor,
+                                    color = MaterialTheme.colorScheme.primary,
                                     shape = RoundedCornerShape(8.dp)
                                 )
                                 .padding(horizontal = 12.dp, vertical = 8.dp)
                         ) {
                             Text(
                                 text = category,
-                                color = ColorsLight.primaryColor,
+                                color = MaterialTheme.colorScheme.onPrimary,
                                 fontWeight = FontWeight.SemiBold
                             )
                         }
@@ -174,6 +174,7 @@ fun NewsDetailScreen(
                 item {
                     Text(
                         text = detailedNews.title,
+                        color = MaterialTheme.colorScheme.onSecondary,
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
                         modifier = Modifier.padding(horizontal = 20.dp)
@@ -190,15 +191,17 @@ fun NewsDetailScreen(
                             Box(
                                 modifier = Modifier
                                     .background(
-                                        ColorsLight.lightGrayColor,
+                                        MaterialTheme.colorScheme.surface,
                                         shape = RoundedCornerShape(4.dp)
                                     )
                                     .padding(horizontal = 6.dp, vertical = 2.dp)
                             ) {
-                                Text("작성자", fontSize = 12.sp, color = ColorsLight.grayColor)
+                                Text("작성자", fontSize = 12.sp,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
                             }
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text(creator, fontSize = 14.sp, color = ColorsLight.grayColor)
+                            Text(creator, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
                         }
                     }
                 }
@@ -210,7 +213,7 @@ fun NewsDetailScreen(
                         text = "AI 뉴스 요약본",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = ColorsLight.primaryColor,
+                        color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.padding(horizontal = 20.dp)
                     )
 
@@ -231,7 +234,7 @@ fun NewsDetailScreen(
                             Text(
                                 text = "AI가 뉴스를 요약하고 있어요...",
                                 fontSize = 14.sp,
-                                color = Color.Gray
+                                color = MaterialTheme.colorScheme.onSurface,
                             )
                         }
                     } else if (errorMessage != null) {
@@ -245,7 +248,7 @@ fun NewsDetailScreen(
                             Text(
                                 text = "요약에 실패했습니다: $errorMessage",
                                 fontSize = 14.sp,
-                                color = Color.Red
+                                color = MaterialTheme.colorScheme.onSurface,
                             )
                         }
                     } else {
@@ -253,6 +256,7 @@ fun NewsDetailScreen(
                         if (detailedNews.description.isNotBlank()) {
                             Text(
                                 text = detailedNews.description,
+                                color = MaterialTheme.colorScheme.onSecondary,
                                 fontSize = 18.sp,
                                 lineHeight = 26.sp, // 줄간격 추가 (가독성 향상)
                                 modifier = Modifier.padding(horizontal = 20.dp)
@@ -261,7 +265,7 @@ fun NewsDetailScreen(
                             Text(
                                 text = "요약된 내용이 없습니다.",
                                 fontSize = 14.sp,
-                                color = Color.Gray,
+                                color = MaterialTheme.colorScheme.onSurface,
                                 modifier = Modifier.padding(horizontal = 20.dp)
                             )
                         }
@@ -294,7 +298,7 @@ fun NewsDetailScreen(
                             .padding(horizontal = 20.dp)
                     ){
                         Text("뉴스 원문 보기",
-                            color =  ColorsLight.blueColor,
+                            color =  DanewColors.blueColor,
                             style = TextStyle(textDecoration = TextDecoration.Underline),
                             modifier = Modifier
                                 .clickable{
@@ -306,7 +310,7 @@ fun NewsDetailScreen(
                         Text(
                             text = detailedNews.pubDate,
                             fontSize = 14.sp,
-                            color = ColorsLight.grayColor,
+                            color = MaterialTheme.colorScheme.onSurface,
                         )
                     }
                     Spacer(modifier = Modifier.height(16.dp)) // 하단 여백 추가
