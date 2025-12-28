@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,7 +20,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.theme.DanewColors
 
 // 앱바
 @Composable
@@ -32,7 +32,9 @@ fun MainTopAppBar(
     isBackIcon: Boolean = false,
     onClick: () -> Unit = {  },
 ) {
-    Surface(color = ColorsLight.whiteColor) {
+    Surface(
+        color = MaterialTheme.colorScheme.background,
+        ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -56,7 +58,7 @@ fun MainTopAppBar(
             Text(
                 text = title,
                 fontWeight = if (isHome) FontWeight.Bold else FontWeight.SemiBold,
-                color = if (isHome) ColorsLight.primaryColor else ColorsLight.blackColor,
+                color = if (isHome) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary,
                 fontSize = if (isHome) 22.sp else 18.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -71,7 +73,8 @@ fun MainTopAppBar(
                 ) {
                     Icon(
                         imageVector = icon,
-                        contentDescription = "Localized description"
+                        contentDescription = "Localized description",
+                        tint = MaterialTheme.colorScheme.onSecondary
                     )
                 }
             }
