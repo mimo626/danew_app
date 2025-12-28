@@ -8,7 +8,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.theme.DanewColors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -24,10 +24,10 @@ fun CustomSnackbarHost(
         Snackbar(
             snackbarData = data,
             // 요청하신 디자인 적용
-            containerColor = ColorsLight.darkGrayColor,
-            contentColor = ColorsLight.whiteColor,         // 흰색 글씨
+            containerColor = DanewColors.darkGrayColor,
+            contentColor = DanewColors.whiteColor,         // 흰색 글씨
             shape = RoundedCornerShape(4.dp),   // 각진 네모 (살짝만 둥글게)
-            actionColor = ColorsLight.blueColor          // (혹시 버튼이 있다면) 노란색 포인트
+            actionColor = DanewColors.blueColor          // (혹시 버튼이 있다면) 노란색 포인트
         )
     }
 }
