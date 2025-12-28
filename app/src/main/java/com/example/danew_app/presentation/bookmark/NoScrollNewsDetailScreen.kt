@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,7 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.theme.DanewColors
 import com.example.danew_app.core.widget.LazyLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.core.widget.ShareButton
@@ -80,7 +81,7 @@ fun NoScrollNewsDetailScreen(
     }
 
     Scaffold(
-        containerColor = ColorsLight.whiteColor,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             MainTopAppBar(
                 navController = navHostController,
@@ -110,7 +111,7 @@ fun NoScrollNewsDetailScreen(
                         Icon(
                             imageVector = if (isBookmarked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                             contentDescription = if (isBookmarked) "북마크 취소" else "북마크",
-                            tint = if (isBookmarked) Color.Red else ColorsLight.darkGrayColor,
+                            tint = if (isBookmarked) MaterialTheme.colorScheme.onError else MaterialTheme.colorScheme.tertiary,
                             modifier = Modifier.size(32.dp)
                         )
                     }
@@ -138,7 +139,7 @@ fun NoScrollNewsDetailScreen(
                 item {
                     Text(
                         text = "오류: $errorMessage",
-                        color = Color.Red,
+                        color = MaterialTheme.colorScheme.tertiary,
                         modifier = Modifier.padding(20.dp)
                     )
                 }
@@ -151,14 +152,14 @@ fun NoScrollNewsDetailScreen(
                             modifier = Modifier
                                 .padding(horizontal = 20.dp, vertical = 16.dp)
                                 .background(
-                                    color = ColorsLight.secondaryColor,
+                                    color = MaterialTheme.colorScheme.primary,
                                     shape = RoundedCornerShape(8.dp)
                                 )
                                 .padding(horizontal = 12.dp, vertical = 8.dp)
                         ) {
                             Text(
                                 text = category,
-                                color = ColorsLight.primaryColor,
+                                color = MaterialTheme.colorScheme.onPrimary,
                                 fontWeight = FontWeight.SemiBold
                             )
                         }
@@ -169,6 +170,7 @@ fun NoScrollNewsDetailScreen(
                 item {
                     Text(
                         text = detailedNews.title,
+                        color = MaterialTheme.colorScheme.onSecondary,
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
                         modifier = Modifier.padding(horizontal = 20.dp)
@@ -186,15 +188,19 @@ fun NoScrollNewsDetailScreen(
                             Box(
                                 modifier = Modifier
                                     .background(
-                                        ColorsLight.lightGrayColor,
+                                        MaterialTheme.colorScheme.surface,
                                         shape = RoundedCornerShape(4.dp)
                                     )
                                     .padding(horizontal = 6.dp, vertical = 2.dp)
                             ) {
-                                Text("작성자", fontSize = 12.sp, color = ColorsLight.grayColor)
+                                Text("작성자", fontSize = 12.sp,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
                             }
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text(creator, fontSize = 14.sp, color = ColorsLight.grayColor)
+                            Text(creator, fontSize = 14.sp,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
                         }
                     }
                 }
@@ -206,11 +212,13 @@ fun NoScrollNewsDetailScreen(
                         text = "AI 뉴스 요약본",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = ColorsLight.primaryColor,
+                        color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.padding(horizontal = 20.dp)
                     )
                     Spacer(modifier = Modifier.height(12.dp))
-                    Text(detailedNews.description, fontSize = 18.sp, modifier = Modifier.padding(horizontal = 20.dp))
+                    Text(detailedNews.description,
+                        color = MaterialTheme.colorScheme.onSecondary,
+                        fontSize = 18.sp, modifier = Modifier.padding(horizontal = 20.dp))
                 }
 
                 // 이미지
@@ -238,7 +246,7 @@ fun NoScrollNewsDetailScreen(
                             .padding(horizontal = 20.dp)
                     ){
                         Text("뉴스 원문 보기",
-                            color =  ColorsLight.blueColor,
+                            color =  DanewColors.blueColor,
                             style = TextStyle(textDecoration = TextDecoration.Underline),
                             modifier = Modifier
                                 .clickable{
@@ -251,7 +259,7 @@ fun NoScrollNewsDetailScreen(
                         Text(
                             text = detailedNews.pubDate,
                             fontSize = 14.sp,
-                            color = ColorsLight.grayColor,
+                            color = MaterialTheme.colorScheme.onSurface,
                         )
                     }
                 }
