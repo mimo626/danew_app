@@ -32,6 +32,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -50,7 +51,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.danew_app.core.gloabals.formatDateToString
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.theme.DanewColors
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.presentation.viewmodel.DiaryViewModel
 import java.time.LocalDate
@@ -99,7 +100,7 @@ fun DiaryScreen(navController: NavHostController,) {
     }
 
     Scaffold(
-        containerColor = ColorsLight.whiteColor,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             MainTopAppBar(navController = navController, title = "기록",
                 icon = Icons.Default.Notifications,
@@ -118,7 +119,7 @@ fun DiaryScreen(navController: NavHostController,) {
             // 바텀시트
             if (showSheet) {
                 ModalBottomSheet(
-                    containerColor = ColorsLight.whiteColor,
+                    containerColor = MaterialTheme.colorScheme.background,
                     onDismissRequest = { showSheet = false },
                     sheetState = sheetState,
                 ) {
@@ -133,6 +134,7 @@ fun DiaryScreen(navController: NavHostController,) {
                     ) {
                         Text(
                             text = "월 선택하기",
+                            color = MaterialTheme.colorScheme.onSecondary,
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp,
                             textAlign = TextAlign.Start,
@@ -143,6 +145,7 @@ fun DiaryScreen(navController: NavHostController,) {
                             val formatted = month.format(DateTimeFormatter.ofPattern("yyyy년 M월"))
                             Text(
                                 text = formatted,
+                                color = MaterialTheme.colorScheme.onSecondary,
                                 fontSize = 18.sp,
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -166,11 +169,14 @@ fun DiaryScreen(navController: NavHostController,) {
             ) {
                 Text(
                     text = "${selectedDate.monthValue}월",
+                    color = MaterialTheme.colorScheme.onSecondary,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Icon(Icons.Default.ArrowDropDown, contentDescription = "월 선택")
+                Icon(Icons.Default.ArrowDropDown,
+                    tint = MaterialTheme.colorScheme.onSecondary,
+                    contentDescription = "월 선택")
             }
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -188,7 +194,7 @@ fun DiaryScreen(navController: NavHostController,) {
                         modifier = Modifier
                             .size(46.dp)
                             .clip(CircleShape)
-                            .background(if (isSelected) ColorsLight.secondaryColor else ColorsLight.whiteColor)
+                            .background(if (isSelected) MaterialTheme.colorScheme.onTertiary else MaterialTheme.colorScheme.background)
                             .clickable { selectedDate = thisDate }
                             .padding(12.dp),
                         contentAlignment = Alignment.Center
@@ -197,7 +203,7 @@ fun DiaryScreen(navController: NavHostController,) {
                             text = "$day",
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 16.sp,
-                            color = if (isSelected) ColorsLight.primaryColor else ColorsLight.grayColor
+                            color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
@@ -207,13 +213,16 @@ fun DiaryScreen(navController: NavHostController,) {
 
             // 날짜
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(formatDateToString(selectedDate), fontSize = 16.sp)
+                Text(formatDateToString(selectedDate),
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onSecondary
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 HorizontalDivider(
                     modifier = Modifier
                         .weight(1f)
                         .height(1.dp),
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSecondary
                 )
             }
 
@@ -242,7 +251,7 @@ fun DiaryScreen(navController: NavHostController,) {
                 ) {
                     Text(
                         contentText,
-                        color = ColorsLight.darkGrayColor,
+                        color = MaterialTheme.colorScheme.tertiary,
                         fontSize = 16.sp
                     )
                 }
