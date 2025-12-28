@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,7 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.theme.DanewColors
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.domain.model.DiaryModel
@@ -53,7 +54,7 @@ fun DiaryWriteScreen(diary: DiaryModel?, selectedDate:String, navHostController:
 
 
     Scaffold(
-        containerColor = ColorsLight.whiteColor,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             MainTopAppBar(
                 navController = navHostController,
@@ -65,8 +66,8 @@ fun DiaryWriteScreen(diary: DiaryModel?, selectedDate:String, navHostController:
             // 하단 고정 버튼
             BottomButton(
                 text = "입력 완료",
-                textColor = ColorsLight.whiteColor,
-                backgroundColor = ColorsLight.primaryColor
+                textColor = MaterialTheme.colorScheme.onPrimary,
+                backgroundColor = MaterialTheme.colorScheme.primary,
             ) {
                 diaryViewModel.diary = diary
                 diaryViewModel.content = inputText
@@ -90,13 +91,15 @@ fun DiaryWriteScreen(diary: DiaryModel?, selectedDate:String, navHostController:
             Spacer(Modifier.height(24.dp))
             // 날짜 표시
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(selectedDate, fontSize = 16.sp)
+                Text(selectedDate,
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    fontSize = 16.sp)
                 Spacer(modifier = Modifier.width(8.dp))
                 HorizontalDivider(
                     modifier = Modifier
                         .weight(1f)
                         .height(1.dp),
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSecondary,
                 )
             }
 
@@ -115,7 +118,7 @@ fun DiaryWriteScreen(diary: DiaryModel?, selectedDate:String, navHostController:
                     if (inputText.isEmpty()) {
                         Text(
                             "뉴스를 통해 어떤 것을 느끼셨나요?",
-                            color = Color.Gray,
+                            color = MaterialTheme.colorScheme.tertiary,
                             fontSize = 16.sp
                         )
                     }
