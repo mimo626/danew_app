@@ -33,7 +33,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.danew_app.R
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.theme.DanewColors
 
 @Composable
 fun CustomUnderlinedTextField(
@@ -56,7 +56,7 @@ fun CustomUnderlinedTextField(
             label = {
                 Text(
                     text = label,
-                    style = TextStyle(fontSize = 14.sp, color = ColorsLight.grayColor),
+                    style = TextStyle(fontSize = 14.sp, color = DanewColors.grayColor),
                     modifier = Modifier.padding(vertical = 16.dp)
                 )
             },
@@ -96,8 +96,8 @@ fun CustomUnderlinedTextField(
             colors = TextFieldDefaults.colors(
                 unfocusedContainerColor = Color.Transparent,
                 focusedContainerColor = Color.Transparent,
-                focusedIndicatorColor = ColorsLight.blueColor,
-                unfocusedIndicatorColor = ColorsLight.lightGrayColor,
+                focusedIndicatorColor = DanewColors.blueColor,
+                unfocusedIndicatorColor = DanewColors.lightGrayColor,
             ),
             visualTransformation = if (isPassword && !isPasswordVisible) {
                 PasswordVisualTransformation()
@@ -118,7 +118,7 @@ fun CustomUnderlinedTextField(
                         Icon(
                             painter = iconPainter,
                             contentDescription = "비밀번호 보기/숨기기",
-                            tint = ColorsLight.darkGrayColor,
+                            tint = DanewColors.darkGrayColor,
                             modifier = Modifier.padding(top = 8.dp).size(24.dp)
                         )
                     }
@@ -129,7 +129,7 @@ fun CustomUnderlinedTextField(
         if (isCapsLockOn) {
             Text(
                 text = "Caps Lock이 켜져 있습니다.",
-                color = ColorsLight.primaryColor,
+                color = DanewColors.primaryColor,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier.padding(top = 4.dp, start = 4.dp)
