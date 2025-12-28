@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
@@ -38,7 +39,7 @@ import com.example.danew_app.presentation.category.NewsCategory
 import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.theme.DanewColors
 import com.example.danew_app.core.widget.LazyLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.data.entity.NewsDetailType
@@ -65,7 +66,7 @@ fun CategoryScreen(navController: NavHostController, newsViewModel: NewsViewMode
     }
 
     Scaffold(
-        containerColor = ColorsLight.whiteColor,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             MainTopAppBar(
                 navController = navController,
@@ -86,7 +87,7 @@ fun CategoryScreen(navController: NavHostController, newsViewModel: NewsViewMode
             // 탭
             item {
                 ScrollableTabRow(
-                    containerColor = ColorsLight.whiteColor,
+                    containerColor = MaterialTheme.colorScheme.background,
                     selectedTabIndex = selectedTabIndex,
                     edgePadding = 0.dp,
                     indicator = { tabPositions ->
@@ -96,7 +97,7 @@ fun CategoryScreen(navController: NavHostController, newsViewModel: NewsViewMode
                                 .tabIndicatorOffset(currentTabPosition)
                                 .padding(horizontal = 16.dp)
                                 .height(2.dp)
-                                .background(ColorsLight.darkGrayColor, RoundedCornerShape(1.dp))
+                                .background(DanewColors.darkGrayColor, RoundedCornerShape(1.dp))
                         )
                     }
                 ) {
@@ -107,7 +108,7 @@ fun CategoryScreen(navController: NavHostController, newsViewModel: NewsViewMode
                             text = {
                                 Text(
                                     text = category,
-                                    color = if (selectedTabIndex == index) Color.Black else Color.Gray,
+                                    color = if (selectedTabIndex == index) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onSurface,
                                     fontWeight = if (selectedTabIndex == index) FontWeight.Bold else FontWeight.Normal
                                 )
                             }
@@ -139,8 +140,9 @@ fun CategoryScreen(navController: NavHostController, newsViewModel: NewsViewMode
                 Text(
                     "${newsCategoryKr[selectedTabIndex]} 이슈 뉴스",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    modifier = Modifier.padding(horizontal = 20.dp)
+                    fontSize = 18.sp,
+                    modifier = Modifier.padding(horizontal = 20.dp),
+                    color = MaterialTheme.colorScheme.onSecondary
                 )
                 Spacer(modifier = Modifier.height(8.dp))
             }
