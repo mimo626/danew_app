@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,7 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.theme.DanewColors
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.presentation.profile.TodayNews
 import com.example.danew_app.presentation.viewmodel.UserViewModel
@@ -75,7 +76,7 @@ fun MyPageScreen(navController: NavHostController,) {
 
 
     Scaffold(
-        containerColor = ColorsLight.whiteColor,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             MainTopAppBar(
                 navController = navController,
@@ -102,7 +103,7 @@ fun MyPageScreen(navController: NavHostController,) {
                 Icon(
                     imageVector = Icons.Default.AccountCircle,
                     contentDescription = "프로필",
-                    tint = ColorsLight.darkGrayColor,
+                    tint = MaterialTheme.colorScheme.tertiary,
                     modifier = Modifier
                         .size(56.dp)
                 )
@@ -112,6 +113,7 @@ fun MyPageScreen(navController: NavHostController,) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text("${user.name.ifEmpty { "로딩 중" }}님",
                         fontSize = 18.sp,
+                        color = MaterialTheme.colorScheme.onSecondary,
                         fontWeight = FontWeight.Bold,)
                 }
 
@@ -119,13 +121,13 @@ fun MyPageScreen(navController: NavHostController,) {
                     navController.navigate("profileEdit")
                 }) {
                     Icon(Icons.Default.Edit, contentDescription = "프로필 수정",
-                       tint = ColorsLight.grayColor)
+                        tint = MaterialTheme.colorScheme.tertiary,)
                 }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            HorizontalDivider(thickness = 6.dp, color = ColorsLight.lightGrayColor)
+            HorizontalDivider(thickness = 6.dp, color = MaterialTheme.colorScheme.surface,)
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -135,8 +137,12 @@ fun MyPageScreen(navController: NavHostController,) {
                     .padding(vertical = 8.dp, horizontal = 20.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text("${user.name}님의 관심사 키워드", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                Text("수정", color = Color.Blue, fontSize = 12.sp,
+                Text("${user.name}님의 관심사 키워드",
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                Text("수정",
+                    color = DanewColors.blueColor,
+                    fontSize = 12.sp,
                     modifier = Modifier.clickable{
                         navController.navigate("keywordUpdate")
                     })
@@ -148,7 +154,8 @@ fun MyPageScreen(navController: NavHostController,) {
             ) {
                 if(user.keywordList.isEmpty()){
                     item {
-                        Text("관심사 키워드를 선택해 보세요.")
+                        Text("관심사 키워드를 선택해 보세요.",
+                            color = MaterialTheme.colorScheme.surface,)
                     }
                 }
                 else{
@@ -157,10 +164,13 @@ fun MyPageScreen(navController: NavHostController,) {
                             modifier = Modifier
                                 .width(66.dp)
                                 .padding(end = 12.dp)
-                                .background(ColorsLight.lightGrayColor, shape = RoundedCornerShape(4.dp)),
+                                .background(
+                                    color = MaterialTheme.colorScheme.secondary,
+                                    shape = RoundedCornerShape(4.dp)),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(it, maxLines = 1,
+                                color = MaterialTheme.colorScheme.onSecondary,
                                 fontWeight = FontWeight.SemiBold,
                                 fontSize = 14.sp,
                                 modifier = Modifier.padding(vertical = 12.dp))
@@ -187,8 +197,8 @@ fun MyPageScreen(navController: NavHostController,) {
                 intent.putExtra("title", "오픈소스 라이센스") // 상단 타이틀 설정
                 context.startActivity(intent)
             }
-            MyPageMenuItem("버전 정보", trailing = { Text("1.0", color = ColorsLight.grayColor) }) { }
-            MyPageMenuItem("로그아웃", textColor = ColorsLight.grayColor) {
+            MyPageMenuItem("버전 정보", trailing = { Text("1.0", color = MaterialTheme.colorScheme.onSurface) }) { }
+            MyPageMenuItem("로그아웃", textColor = MaterialTheme.colorScheme.onSurface) {
                 userViewModel.logout()
             }
         }
