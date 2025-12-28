@@ -2,6 +2,7 @@ package com.example.danew.core.componet
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -11,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.theme.DanewColors
 
 
 @Composable
@@ -25,7 +26,7 @@ fun BottomNavBar(navController: NavHostController) {
     )
 
     NavigationBar(
-        containerColor = ColorsLight.whiteColor
+        containerColor = MaterialTheme.colorScheme.background,
     ) {
         items.forEach { item ->
             // 1. 현재 아이템이 선택되었는지 확인
@@ -52,11 +53,11 @@ fun BottomNavBar(navController: NavHostController) {
                 colors = NavigationBarItemDefaults.colors(
                     indicatorColor = Color.Transparent, // 선택 시 배경색 제거
 
-                    // 4. (추천) 선택 상태에 따라 아이콘 및 텍스트 색상 변경
-                    selectedIconColor = ColorsLight.primaryColor, // (예시) 선택된 아이콘 색
-                    unselectedIconColor = ColorsLight.darkGrayColor, // (예시) 선택 안 된 아이콘 색
-                    selectedTextColor = ColorsLight.primaryColor, // (예시) 선택된 텍스트 색
-                    unselectedTextColor = ColorsLight.darkGrayColor // (예시) 선택 안 된 텍스트 색
+                    // 4. 선택 상태에 따라 아이콘 및 텍스트 색상 변경
+                    selectedIconColor = MaterialTheme.colorScheme.primary, // 선택된 아이콘 색
+                    unselectedIconColor = MaterialTheme.colorScheme.tertiary, // 선택 안 된 아이콘 색
+                    selectedTextColor = MaterialTheme.colorScheme.primary, // 선택된 텍스트 색
+                    unselectedTextColor = MaterialTheme.colorScheme.tertiary,// 선택 안 된 텍스트 색
                 )
             )
         }
