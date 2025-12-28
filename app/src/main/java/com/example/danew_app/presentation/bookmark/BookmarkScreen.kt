@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.LazyLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.data.entity.NewsDetailType
@@ -39,7 +39,7 @@ fun BookmarkScreen(navController: NavHostController) {
     }
 
     Scaffold(
-        containerColor = ColorsLight.whiteColor,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             MainTopAppBar(
                 navController = navController,
@@ -75,7 +75,8 @@ fun BookmarkScreen(navController: NavHostController) {
                                 .padding(padding),
                             contentAlignment = Alignment.Center,
                         ) {
-                            Text("북마크가 없습니다")
+                            Text("북마크가 없습니다",
+                                color = MaterialTheme.colorScheme.onSurface)
                         }
                     }
                 }
