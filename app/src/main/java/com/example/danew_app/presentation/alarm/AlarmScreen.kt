@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,7 +19,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.theme.DanewColors
 import com.example.danew_app.core.widget.MainTopAppBar
 
 @Composable
@@ -28,7 +29,7 @@ fun AlarmScreen(navHostController: NavHostController,) {
         "알람1", "알람2", "알람3", "알람4"
     )
     Scaffold(
-        containerColor = ColorsLight.whiteColor,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             MainTopAppBar( navController = navHostController,
                 title = "알림",
@@ -60,10 +61,10 @@ fun AlarmScreen(navHostController: NavHostController,) {
                         "3시간 전",
                         fontWeight = FontWeight.Medium,
                         fontSize = 12.sp,
-                        color = ColorsLight.grayColor,
+                        color = DanewColors.grayColor,
                         modifier = Modifier.padding(horizontal = 20.dp).padding(bottom = 16.dp)
                     )
-                    HorizontalDivider(color = ColorsLight.lightGrayColor)
+                    HorizontalDivider(color = DanewColors.lightGrayColor)
                 }
             }
         }
