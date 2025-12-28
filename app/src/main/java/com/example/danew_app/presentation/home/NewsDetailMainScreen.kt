@@ -12,10 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.presentation.viewmodel.NewsViewModel
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.remember
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -54,16 +54,20 @@ fun NewsDetailMainScreen(
     when (newsPagingItems.loadState.refresh) {
         is LoadState.Loading -> {
             // 전체 목록이 로딩 중일 때
-            Scaffold(containerColor = ColorsLight.whiteColor) { padding ->
+            Scaffold(
+                containerColor = MaterialTheme.colorScheme.background,
+            ) { padding ->
                 CustomLoadingIndicator(padding)
             }
         }
         is LoadState.Error -> {
-            Scaffold(containerColor = ColorsLight.whiteColor) { padding ->
+            Scaffold(
+                containerColor = MaterialTheme.colorScheme.background,
+            ) { padding ->
                 Text(
                     text = "뉴스를 불러오는 데 실패했습니다.",
                     modifier = Modifier.padding(padding).fillMaxSize().padding(20.dp),
-                    color = Color.Red
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -100,7 +104,9 @@ fun NewsDetailMainScreen(
             }
             // 💡 추가: 로드는 성공했지만 아이템이 0개일 경우 Pager를 그리면 안 됩니다.
             if (newsPagingItems.itemCount == 0) {
-                Scaffold(containerColor = ColorsLight.whiteColor) { padding ->
+                Scaffold(
+                    containerColor = MaterialTheme.colorScheme.background,
+                ) { padding ->
                     Text(
                         text = "표시할 뉴스가 없습니다.",
                         modifier = Modifier.padding(padding).fillMaxSize().padding(20.dp),
