@@ -19,7 +19,7 @@ import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.widget.CustomLoadingIndicator
 import com.example.danew_app.core.widget.LazyLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.data.entity.NewsDetailType
@@ -67,7 +67,7 @@ fun HomeScreen(navController: NavHostController,newsViewModel: NewsViewModel) {
     }
 
     Scaffold(
-        containerColor = ColorsLight.whiteColor,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             MainTopAppBar(
                 navController = navController,
@@ -136,8 +136,9 @@ fun HomeScreen(navController: NavHostController,newsViewModel: NewsViewModel) {
                             Text(
                                 "${user.name}님을 위한 추천 뉴스",
                                 fontWeight = FontWeight.Bold,
-                                fontSize = 16.sp,
-                                modifier = Modifier.padding(horizontal = 20.dp)
+                                fontSize = 18.sp,
+                                modifier = Modifier.padding(horizontal = 20.dp),
+                                color = MaterialTheme.colorScheme.onSecondary
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                         }
@@ -194,13 +195,12 @@ fun HomeScreen(navController: NavHostController,newsViewModel: NewsViewModel) {
             newsPagingItems.apply {
                 when (loadState.append) {
                     is LoadState.Loading -> item {
-                        Box(modifier = Modifier.fillMaxWidth().padding(16.dp), contentAlignment = Alignment.Center) {
-                            CircularProgressIndicator()
-                        }
+                        CustomLoadingIndicator()
                     }
                     is LoadState.Error -> item {
                         Box(modifier = Modifier.fillMaxWidth().padding(16.dp), contentAlignment = Alignment.Center) {
-                            Text("오류 발생", color = ColorsLight.redColor)
+                            Text("오류 발생", color = MaterialTheme.colorScheme.onError,
+                            )
                         }
                     }
                     else -> {}
