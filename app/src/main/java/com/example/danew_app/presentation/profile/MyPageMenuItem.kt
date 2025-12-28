@@ -9,18 +9,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.theme.DanewColors
 
 @Composable
 fun MyPageMenuItem(
     title: String,
-    textColor: Color = Color.Black,
+    textColor: Color = MaterialTheme.colorScheme.onSecondary,
     trailing: @Composable (() -> Unit)? = null,
     fontSize: Int = 14,
     onClick: () -> Unit
@@ -30,7 +31,7 @@ fun MyPageMenuItem(
         .clickable(onClick = onClick)
         .padding(horizontal = 20.dp)
     ) {
-        HorizontalDivider(color = ColorsLight.lightGrayColor)
+        HorizontalDivider(color = MaterialTheme.colorScheme.secondary)
         Spacer(modifier = Modifier.height(16.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
