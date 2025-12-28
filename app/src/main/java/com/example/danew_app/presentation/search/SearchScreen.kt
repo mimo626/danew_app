@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -21,6 +20,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,18 +35,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onPreviewKeyEvent
-import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.theme.DanewColors
 import com.example.danew_app.presentation.viewmodel.SearchViewModel
 
 @Composable
@@ -64,7 +60,7 @@ fun SearchScreen(navHostController: NavHostController) {
     }
 
     Scaffold (
-        containerColor = ColorsLight.whiteColor,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             // 검색창
             Row (
@@ -82,7 +78,10 @@ fun SearchScreen(navHostController: NavHostController) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(ColorsLight.lightGrayColor, RoundedCornerShape(16.dp))
+                        .background(
+                            MaterialTheme.colorScheme.surface,
+                            RoundedCornerShape(16.dp),
+                            )
                         .padding(horizontal = 16.dp, vertical = 12.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -90,8 +89,10 @@ fun SearchScreen(navHostController: NavHostController) {
                     BasicTextField(
                         value = searchQuery,
                         onValueChange = { searchQuery = it },
-                        singleLine = true,
 
+                        singleLine = true,
+                        textStyle = TextStyle(color = MaterialTheme.colorScheme.onSecondary
+                        ),
                         // [핵심 1] 키보드 엔터 키를 '검색(돋보기)' 아이콘으로 변경
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Search
@@ -113,7 +114,9 @@ fun SearchScreen(navHostController: NavHostController) {
 
                         decorationBox = { innerTextField ->
                             if (searchQuery.isEmpty()) {
-                                Text("검색어를 입력해 주세요.", color = ColorsLight.grayColor)
+                                Text("검색어를 입력해 주세요.",
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
                             }
                             innerTextField()
                         },
@@ -121,7 +124,8 @@ fun SearchScreen(navHostController: NavHostController) {
                             .weight(1f)
                             .focusRequester(focusRequester)
                     )
-                    Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.Gray,
+                    Icon(Icons.Default.Search, contentDescription = "Search",
+                        tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.clickable{
                             viewModel.saveSearch(searchQuery)
                             navHostController.navigate("search/${searchQuery}")
@@ -147,10 +151,12 @@ fun SearchScreen(navHostController: NavHostController) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("최근 검색어", fontWeight = FontWeight.Bold)
+                Text("최근 검색어", fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSecondary
+                )
                 Text(
                     "전체 삭제",
-                    color = Color.Gray,
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.clickable {
                         viewModel.clearAll()
                     }
@@ -170,6 +176,7 @@ fun SearchScreen(navHostController: NavHostController) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(history.keyword,
+                            color = MaterialTheme.colorScheme.onSecondary,
                             modifier = Modifier
                                 .weight(1f)
                                 .clickable{
@@ -178,7 +185,7 @@ fun SearchScreen(navHostController: NavHostController) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "삭제",
-                            tint = Color.Gray,
+                            tint = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.clickable {
                                 viewModel.deleteSearch(history.keyword)
                             }
