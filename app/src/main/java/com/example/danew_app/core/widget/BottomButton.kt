@@ -11,13 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.theme.DanewColors
 
 @Composable
 fun BottomButton(
     text: String,
     textColor: Color = Color.White,
-    backgroundColor: Color = ColorsLight.primaryColor,
+    backgroundColor: Color = DanewColors.primaryColor,
     isEnabled:Boolean = true,
     onClick: () -> Unit,
 ) {
