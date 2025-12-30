@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -35,11 +36,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.theme.DanewColors
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.core.widget.CustomLinearProgressIndicator
 import com.example.danew_app.core.widget.CustomSnackbarHost
+import com.example.danew_app.core.widget.KeywordGrid
 import com.example.danew_app.core.widget.showImmediateSnackbar
 
 @SuppressLint("UnrememberedGetBackStackEntry")
@@ -65,7 +67,7 @@ fun KeywordScreen(navHostController: NavHostController, viewModel: UserViewModel
     val isNextEnabled = selectedKeywords.isNotEmpty()
 
     Scaffold(
-        containerColor = ColorsLight.whiteColor,
+        containerColor = MaterialTheme.colorScheme.background,
         snackbarHost = { CustomSnackbarHost(hostState = snackbarHostState) },
         topBar = {
             MainTopAppBar(navController = navHostController, title = "", isBackIcon = true)
@@ -75,7 +77,6 @@ fun KeywordScreen(navHostController: NavHostController, viewModel: UserViewModel
             BottomButton(text = "다음",
                 isEnabled = isNextEnabled
                 ) {
-                Log.d("KeywordSelect", "${selectedKeywords}")
                 viewModel.updateKeywordList(selectedKeywords)
                 viewModel.completeSignup()
                 navHostController.navigate("signupFinish")
@@ -91,63 +92,30 @@ fun KeywordScreen(navHostController: NavHostController, viewModel: UserViewModel
             CustomLinearProgressIndicator(progress = 3/4f)
             Spacer(Modifier.height(32.dp))
 
-            Text("관심 키워드 선택", fontSize = 22.sp,
+            Text("관심 키워드 선택",
+                color = MaterialTheme.colorScheme.onSecondary,
+                fontSize = 22.sp,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.padding(horizontal = 20.dp),
             )
             Text(
                 "최대 5개까지 선택할 수 있습니다.",
                 fontSize = 14.sp,
-                color = ColorsLight.grayColor,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(horizontal = 20.dp),
                 )
             Spacer(modifier = Modifier.weight(1f))
 
             // 키워드 그리드
-            LazyVerticalGrid(
-
-                columns = GridCells.Fixed(3),
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                content = {
-                    items(allKeywords) { keyword ->
-                        val isSelected = selectedKeywords.contains(keyword)
-
-                        Box(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(
-                                    if (isSelected) ColorsLight.darkGrayColor else ColorsLight.lightGrayColor
-                                )
-                                .clickable {
-                                    if (isSelected) {
-                                        selectedKeywords.remove(keyword) // 이미 있으면 제거
-                                    } else {
-                                        if (selectedKeywords.size < 5) {
-                                            selectedKeywords.add(keyword) // 5개 미만일 때만 추가
-                                        } else{
-                                            snackbarHostState.showImmediateSnackbar(
-                                                scope = scope,
-                                                message = "키워드는 최대 5개까지만 선택할 수 있습니다."
-                                            )
-                                        }
-                                    }
-                                }
-                                .weight(1f) // 가로를 3등분
-                                .aspectRatio(1f) // 가로 = 세로 → 정사각형
-                                .fillMaxHeight()                            ,
-                            contentAlignment = Alignment.Center
-                        ) {
-
-                            Text(
-                                text = keyword,
-                                color = if (isSelected) Color.White else Color.Black,
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 16.sp
-                            )
-                        }
-                    }
+            KeywordGrid(
+                allKeywords = allKeywords,
+                selectedKeywords = selectedKeywords, // remember { mutableStateListOf(...) } 전달
+                maxSelection = 5,
+                onMaxReached = {
+                    snackbarHostState.showImmediateSnackbar(
+                        scope = scope,
+                        message = "최대 5개까지 선택할 수 있습니다."
+                    )
                 }
             )
 
