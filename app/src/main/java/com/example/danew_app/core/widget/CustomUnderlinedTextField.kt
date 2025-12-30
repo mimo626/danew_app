@@ -9,6 +9,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -52,11 +53,11 @@ fun CustomUnderlinedTextField(
         TextField(
             value = value,
             onValueChange = onValueChange,
-            textStyle = TextStyle(fontSize = 16.sp),
+            textStyle = TextStyle(fontSize = 16.sp, color = MaterialTheme.colorScheme.onSecondary),
             label = {
                 Text(
                     text = label,
-                    style = TextStyle(fontSize = 14.sp, color = DanewColors.grayColor),
+                    style = TextStyle(fontSize = 14.sp, color = MaterialTheme.colorScheme.onSecondary),
                     modifier = Modifier.padding(vertical = 16.dp)
                 )
             },
@@ -97,7 +98,7 @@ fun CustomUnderlinedTextField(
                 unfocusedContainerColor = Color.Transparent,
                 focusedContainerColor = Color.Transparent,
                 focusedIndicatorColor = DanewColors.blueColor,
-                unfocusedIndicatorColor = DanewColors.lightGrayColor,
+                unfocusedIndicatorColor = MaterialTheme.colorScheme.surface,
             ),
             visualTransformation = if (isPassword && !isPasswordVisible) {
                 PasswordVisualTransformation()
@@ -118,7 +119,7 @@ fun CustomUnderlinedTextField(
                         Icon(
                             painter = iconPainter,
                             contentDescription = "비밀번호 보기/숨기기",
-                            tint = DanewColors.darkGrayColor,
+                            tint = MaterialTheme.colorScheme.tertiary,
                             modifier = Modifier.padding(top = 8.dp).size(24.dp)
                         )
                     }
