@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -28,9 +29,11 @@ fun NowTopNews(
     val otherNews = newsList.filter { it != topNews }
 
     Column (
-        modifier = Modifier.padding(vertical = 24.dp, horizontal = 20.dp)
+        modifier = Modifier.padding(vertical = 32.dp, horizontal = 20.dp)
     ){
-        Text(title, fontWeight = FontWeight.Bold, fontSize = 16.sp,
+        Text(title,
+            color = MaterialTheme.colorScheme.onSecondary,
+            fontWeight = FontWeight.Bold, fontSize = 18.sp,
             modifier = Modifier
                 .fillMaxWidth()
         )
@@ -53,7 +56,7 @@ fun NowTopNews(
             }
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         // 이미지 있는 뉴스가 있으면 TopImageCard로 표시
         topNews?.let { topNewsItem -> // (변수명 'it' -> 'topNewsItem'으로 변경)
@@ -69,6 +72,5 @@ fun NowTopNews(
                 }
             )
         }
-        Spacer(modifier = Modifier.height(16.dp))
     }
 }
