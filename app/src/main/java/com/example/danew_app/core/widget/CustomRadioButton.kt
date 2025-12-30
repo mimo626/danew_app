@@ -1,5 +1,6 @@
 package com.example.danew_app.core.widget
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonColors
 import androidx.compose.material3.Text
@@ -13,9 +14,9 @@ fun CustomRadioButton(text:String, selected:Boolean, onCLick: () -> Unit){
         onClick =  onCLick,
         colors = RadioButtonColors(
             selectedColor = DanewColors.blueColor,
-            unselectedColor = DanewColors.grayColor,
-            disabledSelectedColor = DanewColors.grayColor,
-            disabledUnselectedColor = DanewColors.grayColor,)
+            unselectedColor = MaterialTheme.colorScheme.onSurface,
+            disabledSelectedColor = MaterialTheme.colorScheme.onSurface,
+            disabledUnselectedColor = MaterialTheme.colorScheme.onSurface,)
 
     )
     Text(text)
