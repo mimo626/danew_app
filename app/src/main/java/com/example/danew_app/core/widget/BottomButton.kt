@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,8 +17,8 @@ import com.example.danew_app.core.theme.DanewColors
 @Composable
 fun BottomButton(
     text: String,
-    textColor: Color = Color.White,
-    backgroundColor: Color = DanewColors.primaryColor,
+    textColor: Color = MaterialTheme.colorScheme.onPrimary,
+    backgroundColor: Color = MaterialTheme.colorScheme.primary,
     isEnabled:Boolean = true,
     onClick: () -> Unit,
 ) {
