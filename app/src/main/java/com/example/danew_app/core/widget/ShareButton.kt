@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.danew_app.core.theme.DanewColors
 
 @Composable
 fun ShareButton(newsLink:String?){

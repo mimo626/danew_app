@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.theme.DanewColors
 import com.example.danew_app.core.widget.LazyLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.presentation.viewmodel.AnnounceViewModel

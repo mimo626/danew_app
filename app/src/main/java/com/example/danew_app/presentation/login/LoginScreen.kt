@@ -14,7 +14,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.theme.DanewColors
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.CustomUnderlinedTextField
 import com.example.danew_app.core.widget.MainTopAppBar
