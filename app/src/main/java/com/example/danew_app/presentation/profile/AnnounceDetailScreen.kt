@@ -2,10 +2,10 @@ package com.example.danew.presentation.profile
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -16,10 +16,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.theme.DanewColors
 import com.example.danew_app.core.widget.LazyLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
-import com.example.danew_app.presentation.profile.MyPageMenuItem
 import com.example.danew_app.presentation.viewmodel.AnnounceViewModel
 
 @Composable
@@ -34,7 +33,7 @@ fun AnnounceDetailScreen(announceId:String, navController: NavHostController) {
     }
 
     Scaffold(
-        containerColor = ColorsLight.whiteColor,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             if (announce != null) {
                 MainTopAppBar(
@@ -74,16 +73,18 @@ fun AnnounceDetailScreen(announceId:String, navController: NavHostController) {
                         ){
                             Text(
                                 text = announce.title,
+                                color = MaterialTheme.colorScheme.onSecondary,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 20.sp,
                             )
                             Spacer(modifier = Modifier.height(8.dp))
-                            Text(announce.createdAt, fontSize = 14.sp, color = ColorsLight.grayColor)
+                            Text(announce.createdAt, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
                             Spacer(modifier = Modifier.height(8.dp))
-                            HorizontalDivider(color = ColorsLight.lightGrayColor)
+                            HorizontalDivider(color = MaterialTheme.colorScheme.surface)
                             Spacer(modifier = Modifier.height(24.dp))
                             Text(
                                 text = announce.content,
+                                color = MaterialTheme.colorScheme.onSecondary,
                                 fontSize = 16.sp,
                                 lineHeight = 26.sp,
                             )
@@ -100,7 +101,9 @@ fun AnnounceDetailScreen(announceId:String, navController: NavHostController) {
                                 .padding(padding),
                             contentAlignment = Alignment.Center,
                         ) {
-                            Text("공지사항이 없습니다")
+                            Text("공지사항이 없습니다",
+                                color = MaterialTheme.colorScheme.onSurface,
+                            )
                         }
                     }
                 }
