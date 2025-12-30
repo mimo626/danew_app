@@ -8,23 +8,20 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.theme.DanewColors
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.CustomRadioButton
 import com.example.danew_app.core.widget.CustomUnderlinedTextField
@@ -54,7 +51,7 @@ fun ProfileEditScreen(navHostController: NavHostController) {
     }
 
     Scaffold(
-        containerColor = ColorsLight.whiteColor,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             MainTopAppBar(navController = navHostController, title = "프로필 수정", isBackIcon = true)
         },
@@ -87,13 +84,13 @@ fun ProfileEditScreen(navHostController: NavHostController) {
                     modifier = Modifier
                         .size(80.dp)
                         .clip(CircleShape)
-                        .background(ColorsLight.lightGrayColor),
+                        .background(MaterialTheme.colorScheme.surface),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Default.Person,
                         contentDescription = null,
-                        tint = ColorsLight.grayColor,
+                        tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(36.dp)
                     )
                 }
@@ -101,11 +98,11 @@ fun ProfileEditScreen(navHostController: NavHostController) {
                     modifier = Modifier
                         .size(28.dp)
                         .clip(CircleShape)
-                        .background(ColorsLight.darkGrayColor)
+                        .background(MaterialTheme.colorScheme.onSurface)
                         .clickable { /* 이미지 변경 */ },
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Default.Edit, contentDescription = "이미지 변경", tint = Color.White, modifier = Modifier.size(16.dp))
+                    Icon(Icons.Default.Edit, contentDescription = "이미지 변경", tint = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.size(16.dp))
                 }
             }
             Spacer(Modifier.height(24.dp))
@@ -126,7 +123,7 @@ fun ProfileEditScreen(navHostController: NavHostController) {
                     text = "성별",
                     style = TextStyle(
                         fontSize = 14.sp,
-                        color = ColorsLight.grayColor
+                        color = MaterialTheme.colorScheme.onSecondary
                     ),
                     modifier = Modifier.padding(vertical = 16.dp)
                 )
