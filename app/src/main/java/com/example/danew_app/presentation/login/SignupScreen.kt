@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.theme.DanewColors
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.CustomLinearProgressIndicator
 import com.example.danew_app.core.widget.CustomUnderlinedTextField
@@ -66,7 +66,7 @@ fun SignupScreen(navHostController: NavHostController, viewModel: UserViewModel)
     }
 
     Scaffold(
-        containerColor = ColorsLight.whiteColor,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             MainTopAppBar(navController = navHostController, title = "", isBackIcon = true)
         },
@@ -90,6 +90,7 @@ fun SignupScreen(navHostController: NavHostController, viewModel: UserViewModel)
 
             Text(
                 "회원 정보 입력",
+                color = MaterialTheme.colorScheme.onSecondary,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.padding(horizontal = 20.dp),
@@ -125,26 +126,27 @@ fun SignupScreen(navHostController: NavHostController, viewModel: UserViewModel)
                     )
                 )
                 Button(
-                    colors = ButtonDefaults.buttonColors(containerColor = ColorsLight.darkGrayColor),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary),
                     onClick = {
                         viewModel.checkUserId(id)
                         isIdChecked = true
                     },
                     modifier = Modifier.height(56.dp)
                 ) {
-                    Text("중복확인")
+                    Text("중복확인",
+                        color = MaterialTheme.colorScheme.onPrimary)
                 }
             }
 
             when (viewModel.isUserIdAvailable) {
                 true -> Text(
                     "사용 가능한 아이디입니다.",
-                    color = ColorsLight.primaryColor,
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(start = 20.dp, top = 4.dp)
                 )
                 false -> Text(
                     "이미 사용 중인 아이디입니다.",
-                    color = ColorsLight.redColor,
+                    color = MaterialTheme.colorScheme.onError,
                     modifier = Modifier.padding(start = 20.dp, top = 4.dp)
                 )
                 else -> {}
@@ -195,7 +197,7 @@ fun SignupScreen(navHostController: NavHostController, viewModel: UserViewModel)
             if (confirmPassword.isNotEmpty() && password != confirmPassword) {
                 Text(
                     "비밀번호가 일치하지 않습니다.",
-                    color = Color.Red,
+                    color = MaterialTheme.colorScheme.onError,
                     modifier = Modifier.padding(start = 20.dp, top = 4.dp)
                 )
             }
