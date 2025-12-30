@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.theme.DanewColors
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.CustomLinearProgressIndicator
 import com.example.danew_app.core.widget.CustomRadioButton
@@ -60,7 +60,7 @@ fun SignupAddScreen(navHostController: NavHostController, viewModel: UserViewMod
     }
 
     Scaffold(
-        containerColor = ColorsLight.whiteColor,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             MainTopAppBar(navController = navHostController, title = "", isBackIcon = true)
         },
@@ -84,6 +84,7 @@ fun SignupAddScreen(navHostController: NavHostController, viewModel: UserViewMod
             Spacer(Modifier.height(32.dp))
 
             Text("추가 정보 입력", fontSize = 22.sp,
+                color = MaterialTheme.colorScheme.onSecondary,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.padding(horizontal = 20.dp),)
 
@@ -129,7 +130,7 @@ fun SignupAddScreen(navHostController: NavHostController, viewModel: UserViewMod
                     text = "성별",
                     style = TextStyle(
                         fontSize = 14.sp,
-                        color = ColorsLight.grayColor
+                        color = MaterialTheme.colorScheme.onSecondary,
                     ),
                     modifier = Modifier.padding(vertical = 16.dp)
                 )
