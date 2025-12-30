@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,7 +22,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.domain.model.NewsModel
 
 //현재 Top뉴스의 첫번째 카드
@@ -47,14 +47,18 @@ fun TopImageCard(newsModel: NewsModel, onClick: () -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(180.dp)
-                    .background(ColorsLight.lightGrayColor, shape = RoundedCornerShape(8.dp)),
+                    .background(color = MaterialTheme.colorScheme.secondary, shape = RoundedCornerShape(8.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(Icons.Default.Warning, contentDescription = "썸네일")
+                Icon(Icons.Default.Warning,
+                    tint = MaterialTheme.colorScheme.onSecondary,
+                    contentDescription = "썸네일")
             }
         }
 
         Spacer(modifier = Modifier.height(8.dp))
-        Text(newsModel.title, fontWeight = FontWeight.Bold,)
+        Text(newsModel.title,
+            color = MaterialTheme.colorScheme.onSecondary,
+            fontWeight = FontWeight.SemiBold,)
     }
 }
