@@ -12,13 +12,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.theme.DanewColors
 
 @Composable
 fun SplashScreen() {
 
     Scaffold(
-        containerColor = ColorsLight.whiteColor,
+        containerColor = DanewColors.whiteColor,
     ) {
             padding ->
         Column(
@@ -30,7 +30,7 @@ fun SplashScreen() {
         {
             Text("DANEW", style = TextStyle(fontSize = 40.sp,
                 fontWeight = FontWeight.Bold,
-                color = ColorsLight.primaryColor,),
+                color = DanewColors.primaryColor,),
                 modifier = Modifier.align(Alignment.CenterHorizontally) // Column 안에서는 가로 정렬
             )
         }
