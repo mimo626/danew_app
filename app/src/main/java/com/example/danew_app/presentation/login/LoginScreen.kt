@@ -14,7 +14,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.theme.DanewColors
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.CustomUnderlinedTextField
 import com.example.danew_app.core.widget.MainTopAppBar
@@ -39,7 +39,7 @@ fun LoginScreen(navHostController: NavHostController, viewModel: UserViewModel =
     }
 
     Scaffold(
-        containerColor = ColorsLight.whiteColor,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             MainTopAppBar(navController = navHostController, title = "로그인", isBackIcon = true)
         },
@@ -103,7 +103,7 @@ fun LoginScreen(navHostController: NavHostController, viewModel: UserViewModel =
             errorMessage?.let {
                 Text(
                     text = it,
-                    color = ColorsLight.redColor,
+                    color = MaterialTheme.colorScheme.onError,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
             }
