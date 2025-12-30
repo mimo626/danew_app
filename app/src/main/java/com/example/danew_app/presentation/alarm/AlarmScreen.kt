@@ -51,6 +51,7 @@ fun AlarmScreen(navHostController: NavHostController,) {
                     Text(
                         alarm,
                         maxLines = 2,
+                        color = MaterialTheme.colorScheme.onSecondary,
                         fontWeight = FontWeight.Medium,
                         fontSize = 14.sp,
                         overflow = TextOverflow.Ellipsis,
@@ -61,10 +62,10 @@ fun AlarmScreen(navHostController: NavHostController,) {
                         "3시간 전",
                         fontWeight = FontWeight.Medium,
                         fontSize = 12.sp,
-                        color = DanewColors.grayColor,
+                        color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.padding(horizontal = 20.dp).padding(bottom = 16.dp)
                     )
-                    HorizontalDivider(color = DanewColors.lightGrayColor)
+                    HorizontalDivider(color = MaterialTheme.colorScheme.secondary)
                 }
             }
         }
