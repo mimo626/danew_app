@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.LazyLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.data.entity.NewsDetailType
@@ -40,7 +40,7 @@ fun TodayNewsScreen(navHostController: NavHostController) {
     }
 
     Scaffold(
-        containerColor = ColorsLight.whiteColor,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             MainTopAppBar(
                 navController = navHostController,
@@ -78,7 +78,7 @@ fun TodayNewsScreen(navHostController: NavHostController) {
                                 .padding(padding),
                             contentAlignment = Alignment.Center,
                         ) {
-                            Text("오늘 본 뉴스가 없습니다")
+                            Text("오늘 본 뉴스가 없습니다", color = MaterialTheme.colorScheme.onSurface)
                         }
                     }
                 }
