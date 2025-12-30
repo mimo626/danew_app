@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.theme.ColorsLight
 import com.example.danew_app.core.widget.LazyLoadingIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
 import com.example.danew_app.presentation.viewmodel.QuestionViewModel
@@ -40,7 +39,7 @@ fun QuestionScreen(navController: NavHostController) {
     }
 
     Scaffold(
-        containerColor = ColorsLight.whiteColor,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             MainTopAppBar(
                 navController = navController,
@@ -99,13 +98,14 @@ fun QuestionScreen(navController: NavHostController) {
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(horizontal = 20.dp)
-                                        .background(ColorsLight.lightGrayColor) // 약간 회색 배경으로 구분
+                                        .background(color = MaterialTheme.colorScheme.secondary,
+                                        ) // 약간 회색 배경으로 구분
                                         .padding(16.dp)
                                 ) {
                                     // 답변 내용 표시 (announce.answer는 실제 답변 변수명으로 변경)
                                     Text(
                                         text = question.answer,
-                                        color = ColorsLight.blackColor,
+                                        color = MaterialTheme.colorScheme.onSecondary,
                                         style = MaterialTheme.typography.bodyMedium
                                     )
                                 }
@@ -122,7 +122,9 @@ fun QuestionScreen(navController: NavHostController) {
                                 .padding(padding),
                             contentAlignment = Alignment.Center,
                         ) {
-                            Text("자주 묻는 질문이 없습니다")
+                            Text("자주 묻는 질문이 없습니다",
+                                color = MaterialTheme.colorScheme.onSurface,
+                            )
                         }
                     }
                 }
