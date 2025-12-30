@@ -15,7 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.theme.ColorsLight
+import com.example.danew_app.core.theme.DanewColors
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.CustomLinearProgressIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
@@ -26,7 +26,7 @@ fun SignupFinishScreen(navHostController: NavHostController, viewModel: UserView
 
     val signUpResult = viewModel.signUpResult
     val errorMessage = viewModel.errorMessage
-    val iconColor = if(signUpResult == "success") ColorsLight.grayColor else ColorsLight.redColor
+    val iconColor = if(signUpResult == "success") MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error
     val icon = if(signUpResult == "success") Icons.Default.Done else Icons.Default.Close
     var infoText by remember { mutableStateOf("") }
 
@@ -36,7 +36,7 @@ fun SignupFinishScreen(navHostController: NavHostController, viewModel: UserView
     }
 
     Scaffold(
-        containerColor = ColorsLight.whiteColor,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             MainTopAppBar(navController = navHostController, title = "", isBackIcon = true)
         },
@@ -58,6 +58,7 @@ fun SignupFinishScreen(navHostController: NavHostController, viewModel: UserView
             Spacer(Modifier.weight(1f))
 
             Text(infoText, fontSize = 22.sp,
+                color = MaterialTheme.colorScheme.onSecondary,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.padding(horizontal = 20.dp),
             )
@@ -67,7 +68,7 @@ fun SignupFinishScreen(navHostController: NavHostController, viewModel: UserView
                 modifier = Modifier
                     .size(80.dp)
                     .clip(CircleShape)
-                    .background(ColorsLight.lightGrayColor),
+                    .background(MaterialTheme.colorScheme.surface),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
