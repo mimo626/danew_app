@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.danew_app.core.theme.DanewColors
 import com.example.danew_app.data.entity.NewsDetailType
 import com.example.danew_app.data.mapper.toDomain
 import com.example.danew_app.presentation.viewmodel.TodayNewsViewModel
@@ -49,8 +51,10 @@ fun TodayNews(sectionTitle:String, navController: NavHostController){
                 .padding(vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(sectionTitle, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            Text("전체보기", color = Color.Blue, fontSize = 12.sp,
+            Text(sectionTitle,
+                color = MaterialTheme.colorScheme.onSecondary,
+                fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Text("전체보기", color = DanewColors.blueColor, fontSize = 12.sp,
                 modifier = Modifier.clickable{
                     navController.navigate("todayNews")
                 })
@@ -60,7 +64,8 @@ fun TodayNews(sectionTitle:String, navController: NavHostController){
         LazyRow {
             if(todayNews.isEmpty()){
                 item {
-                    Text("아직 오늘 본 뉴스가 없습니다.")
+                    Text("아직 오늘 본 뉴스가 없습니다.",
+                        color = MaterialTheme.colorScheme.onSurface,)
                 }
             }
             else{
