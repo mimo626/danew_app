@@ -97,7 +97,7 @@ fun CategoryScreen(navController: NavHostController, newsViewModel: NewsViewMode
                                 .tabIndicatorOffset(currentTabPosition)
                                 .padding(horizontal = 16.dp)
                                 .height(2.dp)
-                                .background(DanewColors.darkGrayColor, RoundedCornerShape(1.dp))
+                                .background(MaterialTheme.colorScheme.onSecondary, RoundedCornerShape(1.dp))
                         )
                     }
                 ) {
