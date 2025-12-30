@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.theme.DanewColors
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.CustomLinearProgressIndicator
 import com.example.danew_app.core.widget.CustomRadioButton

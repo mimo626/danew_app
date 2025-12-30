@@ -13,7 +13,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.theme.DanewColors
 import com.example.danew_app.core.widget.BottomButton
 
 @Composable

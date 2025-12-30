@@ -15,7 +15,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.theme.DanewColors
 import com.example.danew_app.core.widget.BottomButton
 import com.example.danew_app.core.widget.CustomLinearProgressIndicator
 import com.example.danew_app.core.widget.MainTopAppBar
