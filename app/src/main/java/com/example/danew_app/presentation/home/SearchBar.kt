@@ -11,13 +11,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.danew_app.core.theme.ColorsLight
 
 //검색바
 @Composable
@@ -29,16 +29,23 @@ fun SearchBar(navHostController: NavHostController) {
             .clickable {
                 navHostController.navigate("search")
             }
-            .background(ColorsLight.lightGrayColor, RoundedCornerShape(16.dp))
+            .background(
+                MaterialTheme.colorScheme.surface
+                , RoundedCornerShape(16.dp)
+            )
             .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
         Row( modifier = Modifier
             .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,)
         {
-            Text("검색어를 입력해 주세요.", color = ColorsLight.grayColor)
-            Icon(Icons.Default.Search, contentDescription = "검색", tint = Color.Gray)
+            Text("검색어를 입력해 주세요.",
+                color = MaterialTheme.colorScheme.onSurface
 
+            )
+            Icon(Icons.Default.Search, contentDescription = "검색",
+                tint = MaterialTheme.colorScheme.onSurface
+            )
         }
     }
 
